@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maya Nova — Still Canvas</title>
+  <title>Maya Nova — Exhale</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
-
-    #bg { position: fixed; inset: 0; background: #fffef8; z-index: 0; }
 
     .panel { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; pointer-events: none; }
     .panel.active { pointer-events: auto; }
@@ -33,21 +31,18 @@
     .service-desc { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 18px; }
     .service-from { font-size: 12px; letter-spacing: 0.15em; color: #1e1408; }
 
-    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; opacity: 1; }
+    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; }
     #arrow-up { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; display: none; opacity: 0; }
     #arrow-down:hover, #arrow-up:hover { border-color: #C8A882; color: #C8A882; }
-
-    /* s1 — Still Canvas: opacity only, no transform */
-    #panel-about, #panel-services { will-change: opacity; transition: opacity 0ms; }
 
     #demo-nav { position: fixed; bottom: 28px; right: 32px; z-index: 300; display: flex; align-items: center; gap: 4px; background: rgba(30,20,8,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; }
     .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); text-decoration: none; padding: 4px 8px; border-radius: 20px; transition: all 0.2s; }
     .dn-link:hover, .dn-link.active { color: #fff; background: rgba(200,168,130,0.3); }
+
+    .label { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(90,90,82,0.4); z-index: 0; pointer-events: none; }
   </style>
 </head>
 <body>
-
-<div id="bg"></div>
 
 <nav id="nav">
   <span class="nav-logo">Maya Nova</span>
@@ -59,21 +54,21 @@
   <div class="about-inner">
     <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
     <h1 class="about-heading">Light finds<br>its own way</h1>
-    <p class="about-body">Maya Nova captures honest, unguarded moments — the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
+    <p class="about-body">Maya Nova captures honest, unguarded moments -- the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
     <a class="about-cta">Book a session</a>
   </div>
 </div>
 
-<div class="panel" id="panel-services">
+<div class="panel" id="panel-services" style="opacity:0;">
   <div class="services-inner">
-    <h2 class="services-heading">What we offer</h2>
+    <h2 class="services-heading" id="svc-h">What we offer</h2>
     <div class="services-grid">
-      <div class="service-item">
+      <div class="service-item" id="svc-1">
         <p class="service-name">Portrait Sessions</p>
         <p class="service-desc">One-on-one sessions focused on natural light and authentic expression. Studio or location, half or full day.</p>
         <p class="service-from">From $450</p>
       </div>
-      <div class="service-item">
+      <div class="service-item" id="svc-2">
         <p class="service-name">Editorial &amp; Brand</p>
         <p class="service-desc">Campaign and brand storytelling for businesses, creatives, and wellness practitioners who want imagery with soul.</p>
         <p class="service-from">From $1,200</p>
@@ -82,104 +77,165 @@
   </div>
 </div>
 
-<button id="arrow-down" aria-label="Next section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
-</button>
-<button id="arrow-up" aria-label="Previous section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg>
-</button>
+<button id="arrow-down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+<button id="arrow-up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></button>
 
 <div id="demo-nav">
-  <a href="s1.html" class="dn-link active">1 Still</a>
-  <a href="s2.html" class="dn-link">2 Drift</a>
-  <a href="s3.html" class="dn-link">3 Breathe</a>
-  <a href="s4.html" class="dn-link">4 Venetian</a>
+  <a href="s1.html" class="dn-link active">1 Exhale</a>
+  <a href="s2.html" class="dn-link">2 Aperture</a>
+  <a href="s3.html" class="dn-link">3 Limelight</a>
+  <a href="s4.html" class="dn-link">4 Drift</a>
 </div>
 
 <script>
-  var panelAbout = document.getElementById('panel-about');
-  var panelServices = document.getElementById('panel-services');
+(function() {
+  'use strict';
+  var E = 'cubic-bezier(0.4, 0, 0.2, 1)';
+  var DUR = 560;
+  var STAGGER = 70;
 
-  // Set initial states
-  panelAbout.style.opacity = '1';
-  panelServices.style.opacity = '0';
+  var pA = document.getElementById('panel-about');
+  var pS = document.getElementById('panel-services');
+  var aDn = document.getElementById('arrow-down');
+  var aUp = document.getElementById('arrow-up');
 
-  var atServices = false;
-  var transitioning = false;
-  var arrowDown = document.getElementById('arrow-down');
-  var arrowUp = document.getElementById('arrow-up');
+  var aEls = [
+    document.querySelector('.eyebrow'),
+    document.querySelector('.about-heading'),
+    document.querySelector('.about-body'),
+    document.querySelector('.about-cta')
+  ];
+  var sEls = [
+    document.getElementById('svc-h'),
+    document.getElementById('svc-1'),
+    document.getElementById('svc-2')
+  ];
 
-  function transitionToServices(done) {
-    // Fade about out over 600ms ease-in
-    panelAbout.style.transition = 'opacity 600ms ease-in';
-    panelAbout.style.opacity = '0';
-    panelAbout.classList.remove('active');
-
-    // At 300ms crossover: start fading services in over 700ms ease-out
-    setTimeout(function() {
-      panelServices.style.transition = 'opacity 700ms ease-out';
-      panelServices.style.opacity = '1';
-      panelServices.classList.add('active');
-    }, 300);
-
-    // Done after the longer of the two (300 + 700 = 1000ms)
-    setTimeout(function() {
-      done();
-    }, 1000);
+  function tr(el, dur, ease) {
+    el.style.transition = 'opacity ' + dur + 'ms ' + ease + ', transform ' + dur + 'ms ' + ease;
   }
 
-  function transitionToAbout(done) {
-    // Fade services out over 600ms ease-in
-    panelServices.style.transition = 'opacity 600ms ease-in';
-    panelServices.style.opacity = '0';
-    panelServices.classList.remove('active');
-
-    // At 300ms crossover: start fading about in over 700ms ease-out
-    setTimeout(function() {
-      panelAbout.style.transition = 'opacity 700ms ease-out';
-      panelAbout.style.opacity = '1';
-      panelAbout.classList.add('active');
-    }, 300);
-
-    setTimeout(function() {
-      done();
-    }, 1000);
-  }
-
-  function goToServices() {
-    if (transitioning || atServices) return;
-    transitioning = true;
-    atServices = true;
-    arrowDown.style.opacity = '0';
-    arrowDown.style.pointerEvents = 'none';
-    transitionToServices(function() {
-      arrowDown.style.display = 'none';
-      arrowUp.style.display = 'flex';
-      setTimeout(function() { arrowUp.style.opacity = '1'; }, 20);
-      transitioning = false;
-    });
-  }
-
-  function goToAbout() {
-    if (transitioning || !atServices) return;
-    transitioning = true;
-    atServices = false;
-    arrowUp.style.opacity = '0';
-    arrowUp.style.pointerEvents = 'none';
-    transitionToAbout(function() {
-      arrowUp.style.display = 'none';
-      arrowDown.style.display = 'flex';
-      setTimeout(function() { arrowDown.style.opacity = '1'; arrowDown.style.pointerEvents = 'auto'; }, 20);
-      transitioning = false;
-    });
-  }
-
-  arrowDown.addEventListener('click', goToServices);
-  arrowUp.addEventListener('click', goToAbout);
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToServices(); }
-    if (e.key === 'ArrowUp') { e.preventDefault(); goToAbout(); }
+  sEls.forEach(function(el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.willChange = 'transform, opacity';
   });
+  aEls.forEach(function(el) { el.style.willChange = 'transform, opacity'; });
+
+  var atS = false, busy = false;
+
+  function toServices(done) {
+    busy = true;
+    // Exhale about up
+    aEls.forEach(function(el, i) {
+      setTimeout(function() {
+        tr(el, DUR, E);
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-18px)';
+      }, i * STAGGER);
+    });
+
+    var mid = (aEls.length - 1) * STAGGER + 260;
+
+    setTimeout(function() {
+      pS.style.opacity = '1';
+      pS.classList.add('active');
+      // Inhale services up from below
+      sEls.forEach(function(el, i) {
+        setTimeout(function() {
+          tr(el, DUR, E);
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, i * STAGGER);
+      });
+      var fin = (sEls.length - 1) * STAGGER + DUR;
+      setTimeout(function() {
+        pA.classList.remove('active');
+        busy = false;
+        done();
+      }, fin);
+    }, mid);
+  }
+
+  function toAbout(done) {
+    busy = true;
+    // Reset about elements to enter from below
+    aEls.forEach(function(el) {
+      el.style.transition = 'none';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+    });
+
+    // Exhale services up
+    sEls.forEach(function(el, i) {
+      setTimeout(function() {
+        tr(el, DUR, E);
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-18px)';
+      }, i * STAGGER);
+    });
+
+    var mid = (sEls.length - 1) * STAGGER + 260;
+
+    setTimeout(function() {
+      pA.style.opacity = '1';
+      pA.classList.add('active');
+      // Inhale about up from below
+      aEls.forEach(function(el, i) {
+        setTimeout(function() {
+          tr(el, DUR, E);
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }, i * STAGGER);
+      });
+      var fin = (aEls.length - 1) * STAGGER + DUR;
+      setTimeout(function() {
+        pS.style.opacity = '0';
+        pS.classList.remove('active');
+        sEls.forEach(function(el) {
+          el.style.transition = 'none';
+          el.style.opacity = '0';
+          el.style.transform = 'translateY(20px)';
+        });
+        busy = false;
+        done();
+      }, fin);
+    }, mid);
+  }
+
+  function goDown() {
+    if (busy || atS) return;
+    atS = true;
+    aDn.style.opacity = '0'; aDn.style.pointerEvents = 'none';
+    toServices(function() {
+      aDn.style.display = 'none';
+      aUp.style.display = 'flex';
+      setTimeout(function() { aUp.style.opacity = '1'; }, 20);
+    });
+  }
+  function goUp() {
+    if (busy || !atS) return;
+    atS = false;
+    aUp.style.opacity = '0'; aUp.style.pointerEvents = 'none';
+    toAbout(function() {
+      aUp.style.display = 'none';
+      aDn.style.display = 'flex';
+      setTimeout(function() { aDn.style.opacity = '1'; aDn.style.pointerEvents = 'auto'; }, 20);
+    });
+  }
+
+  aDn.addEventListener('click', goDown);
+  aUp.addEventListener('click', goUp);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goDown(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); goUp(); }
+  });
+  var lastW = 0;
+  document.addEventListener('wheel', function(e) {
+    var now = Date.now(); if (now - lastW < 900) return; lastW = now;
+    if (e.deltaY > 0) goDown(); else goUp();
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>

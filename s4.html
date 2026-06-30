@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maya Nova — Venetian</title>
+  <title>Maya Nova — Drift</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
-
-    #bg { position: fixed; inset: 0; background: #fffef8; z-index: 0; }
 
     .panel { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; pointer-events: none; }
     .panel.active { pointer-events: auto; }
@@ -20,45 +18,23 @@
     .nav-links { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #5a5a52; margin-left: auto; }
     .nav-book { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; border: 1px solid #C8A882; padding: 8px 20px; }
 
-    .about-inner { padding: 0 10vw; max-width: 600px; }
+    .about-inner { padding: 0 10vw; max-width: 600px; will-change: transform, opacity; }
     .eyebrow { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 28px; }
     .about-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(52px, 6vw, 84px); color: #1e1408; line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 28px; }
     .about-body { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
     .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; text-decoration: none; cursor: pointer; }
 
     .services-inner { padding: 0 10vw; width: 100%; }
-    .services-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(42px, 5vw, 68px); color: #1e1408; margin-bottom: 48px; letter-spacing: 0.02em; }
+    .services-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(42px, 5vw, 68px); color: #1e1408; margin-bottom: 48px; letter-spacing: 0.02em; will-change: transform, opacity; }
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 800px; }
     .service-name { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 14px; }
     .service-desc { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 18px; }
     .service-from { font-size: 12px; letter-spacing: 0.15em; color: #1e1408; }
+    .service-item { will-change: transform, opacity; }
 
-    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; opacity: 1; }
+    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; }
     #arrow-up { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; display: none; opacity: 0; }
     #arrow-down:hover, #arrow-up:hover { border-color: #C8A882; color: #C8A882; }
-
-    /* s4 — Venetian blind strips */
-    .venetian-strip {
-      opacity: 0;
-      transform: translateY(10px);
-      will-change: opacity, transform;
-    }
-    .venetian-strip.in {
-      animation: venetianIn 450ms ease-out forwards;
-    }
-    .venetian-strip.out {
-      animation: venetianOut 300ms ease-in forwards;
-    }
-    @keyframes venetianIn {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes venetianOut {
-      to { opacity: 0; transform: translateY(-8px); }
-    }
-
-    /* Panel-level fades for about */
-    #panel-about { will-change: opacity; }
-    #panel-services { will-change: opacity; }
 
     #demo-nav { position: fixed; bottom: 28px; right: 32px; z-index: 300; display: flex; align-items: center; gap: 4px; background: rgba(30,20,8,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; }
     .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); text-decoration: none; padding: 4px 8px; border-radius: 20px; transition: all 0.2s; }
@@ -67,8 +43,6 @@
 </head>
 <body>
 
-<div id="bg"></div>
-
 <nav id="nav">
   <span class="nav-logo">Maya Nova</span>
   <span class="nav-links">Gallery &nbsp;&nbsp; Services</span>
@@ -76,28 +50,24 @@
 </nav>
 
 <div class="panel active" id="panel-about">
-  <div class="about-inner">
+  <div class="about-inner" id="about-inner">
     <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
     <h1 class="about-heading">Light finds<br>its own way</h1>
-    <p class="about-body">Maya Nova captures honest, unguarded moments — the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
+    <p class="about-body">Maya Nova captures honest, unguarded moments -- the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
     <a class="about-cta">Book a session</a>
   </div>
 </div>
 
-<div class="panel" id="panel-services" style="opacity: 0;">
+<div class="panel" id="panel-services" style="opacity:0;">
   <div class="services-inner">
-    <!-- Strip 1: heading -->
-    <div class="venetian-strip" id="strip-1">
-      <h2 class="services-heading">What we offer</h2>
-    </div>
-    <!-- Strips 2 & 3: service items inside the grid -->
+    <h2 class="services-heading" id="svc-h">What we offer</h2>
     <div class="services-grid">
-      <div class="venetian-strip service-item" id="strip-2">
+      <div class="service-item" id="svc-1">
         <p class="service-name">Portrait Sessions</p>
         <p class="service-desc">One-on-one sessions focused on natural light and authentic expression. Studio or location, half or full day.</p>
         <p class="service-from">From $450</p>
       </div>
-      <div class="venetian-strip service-item" id="strip-3">
+      <div class="service-item" id="svc-2">
         <p class="service-name">Editorial &amp; Brand</p>
         <p class="service-desc">Campaign and brand storytelling for businesses, creatives, and wellness practitioners who want imagery with soul.</p>
         <p class="service-from">From $1,200</p>
@@ -106,150 +76,144 @@
   </div>
 </div>
 
-<button id="arrow-down" aria-label="Next section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
-</button>
-<button id="arrow-up" aria-label="Previous section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg>
-</button>
+<button id="arrow-down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+<button id="arrow-up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></button>
 
 <div id="demo-nav">
-  <a href="s1.html" class="dn-link">1 Still</a>
-  <a href="s2.html" class="dn-link">2 Drift</a>
-  <a href="s3.html" class="dn-link">3 Breathe</a>
-  <a href="s4.html" class="dn-link active">4 Venetian</a>
+  <a href="s1.html" class="dn-link">1 Exhale</a>
+  <a href="s2.html" class="dn-link">2 Aperture</a>
+  <a href="s3.html" class="dn-link">3 Limelight</a>
+  <a href="s4.html" class="dn-link active">4 Drift</a>
 </div>
 
 <script>
-  var panelAbout = document.getElementById('panel-about');
-  var panelServices = document.getElementById('panel-services');
-  var strips = [
-    document.getElementById('strip-1'),
-    document.getElementById('strip-2'),
-    document.getElementById('strip-3')
+(function() {
+  'use strict';
+  var E = 'cubic-bezier(0.4, 0, 0.2, 1)';
+  var DUR = 680;
+
+  var pA = document.getElementById('panel-about');
+  var pS = document.getElementById('panel-services');
+  var aInner = document.getElementById('about-inner');
+  var sH = document.getElementById('svc-h');
+  var s1 = document.getElementById('svc-1');
+  var s2 = document.getElementById('svc-2');
+  var aDn = document.getElementById('arrow-down');
+  var aUp = document.getElementById('arrow-up');
+  var atS = false, busy = false;
+
+  // Parallax amounts: heading biggest (most "forward"), items smaller
+  var svcEntries = [
+    { el: sH, x: 72 },
+    { el: s1, x: 52, delay: 60 },
+    { el: s2, x: 52, delay: 120 }
   ];
 
-  var STAGGER = 70;        // ms between each strip
-  var STRIP_DUR = 450;     // ms each strip's in-animation takes
-  var FADE_OUT = 300;      // ms for about panel fade-out
-  var PAUSE = 200;         // ms gap between fade-out finish and strips starting
-
-  // Reset all strips to their initial hidden state
-  function resetStrips() {
-    strips.forEach(function(s) {
-      s.classList.remove('in', 'out');
-      s.style.animation = 'none';
-      s.style.opacity = '0';
-      s.style.transform = 'translateY(10px)';
+  function initSvc() {
+    svcEntries.forEach(function(e) {
+      e.el.style.transition = 'none';
+      e.el.style.opacity = '0';
+      e.el.style.transform = 'translateX(' + e.x + 'px)';
     });
   }
-  resetStrips();
+  initSvc();
 
-  var atServices = false;
-  var transitioning = false;
-  var arrowDown = document.getElementById('arrow-down');
-  var arrowUp = document.getElementById('arrow-up');
+  function tEl(el, dur, delay, x, opacity, ease) {
+    el.style.transition = 'opacity ' + dur + 'ms ' + ease + ' ' + (delay || 0) + 'ms, transform ' + dur + 'ms ' + ease + ' ' + (delay || 0) + 'ms';
+    el.style.opacity = String(opacity);
+    el.style.transform = 'translateX(' + x + 'px)';
+  }
 
-  function transitionToServices(done) {
-    // 1. Fade about out (300ms)
-    panelAbout.style.transition = 'opacity 300ms ease';
-    panelAbout.style.opacity = '0';
-    panelAbout.classList.remove('active');
-
-    // 2. After 200ms gap: reveal the services panel container instantly, then stagger strips
-    setTimeout(function() {
-      panelServices.style.transition = 'none';
-      panelServices.style.opacity = '1';
-      panelServices.classList.add('active');
-
-      // Force reflow
-      void panelServices.offsetWidth;
-
-      strips.forEach(function(strip, i) {
-        // Clear any previous animation so re-triggering works cleanly
-        strip.style.animation = 'none';
-        strip.style.opacity = '0';
-        strip.style.transform = 'translateY(10px)';
-        void strip.offsetWidth;
-
-        var delay = i * STAGGER;
-        strip.style.animationDelay = delay + 'ms';
-        strip.classList.remove('out');
-        strip.classList.add('in');
-      });
-
-      // Done after last strip finishes: PAUSE + (n-1)*STAGGER + STRIP_DUR
-      var totalStripTime = (strips.length - 1) * STAGGER + STRIP_DUR;
+  function toServices(done) {
+    busy = true;
+    // About inner slides left + fades
+    tEl(aInner, DUR, 0, -55, 0, E);
+    pS.style.opacity = '1';
+    pS.classList.add('active');
+    // Services elements arrive from right with parallax stagger
+    svcEntries.forEach(function(e) {
       setTimeout(function() {
-        done();
-      }, totalStripTime);
-
-    }, FADE_OUT + PAUSE);
-  }
-
-  function transitionToAbout(done) {
-    // Reverse-fade strips out simultaneously (simple fade, no stagger)
-    strips.forEach(function(strip) {
-      strip.classList.remove('in');
-      strip.style.animation = 'none';
-      void strip.offsetWidth;
-      strip.classList.add('out');
+        e.el.style.transition = 'opacity ' + DUR + 'ms ' + E + ', transform ' + DUR + 'ms ' + E;
+        e.el.style.opacity = '1';
+        e.el.style.transform = 'translateX(0)';
+      }, e.delay || 0);
     });
-
-    // After strips fade (300ms), fade in about
     setTimeout(function() {
-      panelServices.style.transition = 'opacity 200ms ease';
-      panelServices.style.opacity = '0';
-      panelServices.classList.remove('active');
+      pA.classList.remove('active');
+      busy = false;
+      done();
+    }, DUR + 120);
+  }
 
-      // Fade about back in
-      panelAbout.style.transition = 'opacity 500ms ease-out';
-      panelAbout.style.opacity = '1';
-      panelAbout.classList.add('active');
+  function toAbout(done) {
+    busy = true;
+    // Reset about inner
+    aInner.style.transition = 'none';
+    aInner.style.opacity = '0';
+    aInner.style.transform = 'translateX(-55px)';
 
-      // Reset strips so they're clean for next forward trip
+    // Services slides left + fades
+    svcEntries.forEach(function(e, i) {
       setTimeout(function() {
-        resetStrips();
-        done();
-      }, 500);
+        e.el.style.transition = 'opacity ' + DUR + 'ms ' + E + ', transform ' + DUR + 'ms ' + E;
+        e.el.style.opacity = '0';
+        e.el.style.transform = 'translateX(-' + e.x + 'px)';
+      }, i * 50);
+    });
 
-    }, 300);
+    // About arrives from right
+    setTimeout(function() {
+      pA.style.opacity = '1';
+      pA.classList.add('active');
+      // Snap to right offset, then transition in
+      void aInner.offsetWidth;
+      aInner.style.transform = 'translateX(55px)';
+      void aInner.offsetWidth;
+      tEl(aInner, DUR, 0, 0, 1, E);
+    }, 200);
+
+    setTimeout(function() {
+      pS.style.opacity = '0';
+      pS.classList.remove('active');
+      initSvc();
+      busy = false;
+      done();
+    }, DUR + 220);
   }
 
-  function goToServices() {
-    if (transitioning || atServices) return;
-    transitioning = true;
-    atServices = true;
-    arrowDown.style.opacity = '0';
-    arrowDown.style.pointerEvents = 'none';
-    transitionToServices(function() {
-      arrowDown.style.display = 'none';
-      arrowUp.style.display = 'flex';
-      setTimeout(function() { arrowUp.style.opacity = '1'; }, 20);
-      transitioning = false;
+  function goDown() {
+    if (busy || atS) return;
+    atS = true;
+    aDn.style.opacity = '0'; aDn.style.pointerEvents = 'none';
+    toServices(function() {
+      aDn.style.display = 'none';
+      aUp.style.display = 'flex';
+      setTimeout(function() { aUp.style.opacity = '1'; }, 20);
+    });
+  }
+  function goUp() {
+    if (busy || !atS) return;
+    atS = false;
+    aUp.style.opacity = '0'; aUp.style.pointerEvents = 'none';
+    toAbout(function() {
+      aUp.style.display = 'none';
+      aDn.style.display = 'flex';
+      setTimeout(function() { aDn.style.opacity = '1'; aDn.style.pointerEvents = 'auto'; }, 20);
     });
   }
 
-  function goToAbout() {
-    if (transitioning || !atServices) return;
-    transitioning = true;
-    atServices = false;
-    arrowUp.style.opacity = '0';
-    arrowUp.style.pointerEvents = 'none';
-    transitionToAbout(function() {
-      arrowUp.style.display = 'none';
-      arrowDown.style.display = 'flex';
-      setTimeout(function() { arrowDown.style.opacity = '1'; arrowDown.style.pointerEvents = 'auto'; }, 20);
-      transitioning = false;
-    });
-  }
-
-  arrowDown.addEventListener('click', goToServices);
-  arrowUp.addEventListener('click', goToAbout);
+  aDn.addEventListener('click', goDown);
+  aUp.addEventListener('click', goUp);
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToServices(); }
-    if (e.key === 'ArrowUp') { e.preventDefault(); goToAbout(); }
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goDown(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); goUp(); }
   });
+  var lastW = 0;
+  document.addEventListener('wheel', function(e) {
+    var now = Date.now(); if (now - lastW < 900) return; lastW = now;
+    if (e.deltaY > 0) goDown(); else goUp();
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>

@@ -2073,11 +2073,28 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 (function () {
   var pre = document.getElementById('preloader');
   if (!pre) return;
-  // Animations finish around 2.4s; hold briefly then fade out
+  var initSection = document.getElementById('section-3');
+  if (initSection) {
+    initSection.style.opacity = '0';
+    initSection.style.transform = 'scale(0.97)';
+  }
   setTimeout(function () {
-    pre.style.transition = 'opacity 1s cubic-bezier(0.4, 0, 0.2, 1)';
+    pre.style.transition = 'opacity 1000ms ease-out, transform 1000ms ease-out';
+    pre.style.transform = 'scale(1.05)';
     pre.style.opacity = '0';
-    setTimeout(function () { pre.style.display = 'none'; }, 1000);
+    if (initSection) {
+      initSection.style.transition = 'opacity 1000ms ease-out, transform 1000ms ease-out';
+      initSection.style.opacity = '1';
+      initSection.style.transform = 'scale(1)';
+    }
+    setTimeout(function () {
+      pre.style.display = 'none';
+      if (initSection) {
+        initSection.style.transition = '';
+        initSection.style.transform = '';
+        initSection.style.opacity = '';
+      }
+    }, 1050);
   }, 2600);
 })();
 
