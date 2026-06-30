@@ -1,13 +1,13 @@
 {
   "images": [
-    { "src": "photos/p8.jpg", "alt": "Creative portrait" },
-    { "src": "photos/p2.jpg", "alt": "Artistic portrait" },
-    { "src": "photos/p3.jpg", "alt": "Outdoor portrait" },
-    { "src": "photos/p6.jpg", "alt": "Natural light portrait" },
-    { "src": "photos/p1.jpg", "alt": "Portrait" },
-    { "src": "photos/p5.jpg", "alt": "Wellness portrait" },
-    { "src": "photos/p7.jpg", "alt": "Documentary portrait" },
-    { "src": "photos/p4.jpg", "alt": "Portrait session" },
-    { "src": "photos/avatar.jpg", "alt": "Silhouette" }
+    { "src": "photos/p8.jpg", "alt": "Creative portrait", "category": "portrait" },
+    { "src": "photos/p2.jpg", "alt": "Artistic portrait", "category": "portrait" },
+    { "src": "photos/p3.jpg", "alt": "Outdoor portrait", "category": "portrait" },
+    { "src": "photos/p6.jpg", "alt": "Natural light portrait", "category": "portrait" },
+    { "src": "photos/p1.jpg", "alt": "Portrait", "category": "portrait" },
+    { "src": "photos/p5.jpg", "alt": "Wellness portrait", "category": "portrait" },
+    { "src": "photos/p7.jpg", "alt": "Documentary portrait", "category": "portrait" },
+    { "src": "photos/p4.jpg", "alt": "Portrait session", "category": "portrait" },
+    { "src": "photos/avatar.jpg", "alt": "Silhouette", "category": "portrait" }
   ]
 }

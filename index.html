@@ -1182,10 +1182,48 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 /* ============================================================
    GALLERY: INSTAGRAM GRID (section-1)
    ============================================================ */
+.gallery-cats {
+  position: absolute;
+  top: 72px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  z-index: 10;
+  padding: 0 40px;
+  border-bottom: 1px solid rgba(138,88,32,0.1);
+}
+.gallery-cat {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(30,20,8,0.38);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 14px 22px 12px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+.gallery-cat:hover { color: rgba(30,20,8,0.7); }
+.gallery-cat.active { color: #1e1408; border-bottom-color: #C8A882; }
+.gallery-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 0;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 14px;
+  color: rgba(30,20,8,0.35);
+  letter-spacing: 0.05em;
+}
 #galleryScroll {
   position: absolute;
   inset: 0;
-  top: 72px;
+  top: 130px;
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
@@ -1757,6 +1795,13 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      SECTION 1: PORTFOLIO
      ============================================================ -->
 <section class="section" id="section-1" aria-label="Portfolio">
+  <div class="gallery-cats" id="galleryCats">
+    <button class="gallery-cat active" data-cat="all">All</button>
+    <button class="gallery-cat" data-cat="portrait">Portrait Sessions</button>
+    <button class="gallery-cat" data-cat="social">Social Media Content</button>
+    <button class="gallery-cat" data-cat="events">Events</button>
+    <button class="gallery-cat" data-cat="commercial">Commercial</button>
+  </div>
   <div id="galleryScroll">
     <div class="insta-grid" id="galleryGrid">
       <!-- populated by gallery-order.json via JS; fallback cells below render only if fetch fails -->
@@ -1857,22 +1902,22 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         </div>
       </div>
       <div class="services-grid">
-        <div class="service-card">
+        <div class="service-card" data-cat="portrait">
           <h3 class="service-title">Portrait Sessions</h3>
           <div class="service-rule" aria-hidden="true"></div>
           <p class="service-desc">One-on-one sessions designed to capture you authentically. Studio or location. 1-2 hours.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" data-cat="social">
           <h3 class="service-title">Social Media Content</h3>
           <div class="service-rule" aria-hidden="true"></div>
           <p class="service-desc">Working with brands and publications to create images with intention and edge.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" data-cat="events">
           <h3 class="service-title">Events</h3>
           <div class="service-rule" aria-hidden="true"></div>
           <p class="service-desc">Weddings, celebrations, milestone moments. Documentary approach, no stiff poses.</p>
         </div>
-        <div class="service-card">
+        <div class="service-card" data-cat="commercial">
           <h3 class="service-title">Commercial</h3>
           <div class="service-rule" aria-hidden="true"></div>
           <p class="service-desc">Product, lifestyle, brand. Images that work as hard as your business does.</p>
@@ -2197,6 +2242,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     if (index === 4) animateServiceCards();
   }
 
+  window.__goTo = goTo;
+
   /* ============================================================
      3. WHEEL CAPTURE
      ============================================================ */
@@ -2487,29 +2534,55 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      ============================================================ */
   (function () {
     var FALLBACK = [
-      { src: 'photos/p8.jpg', alt: 'Creative portrait' },
-      { src: 'photos/p2.jpg', alt: 'Artistic portrait' },
-      { src: 'photos/p3.jpg', alt: 'Outdoor portrait' },
-      { src: 'photos/p6.jpg', alt: 'Natural light portrait' },
-      { src: 'photos/p1.jpg', alt: 'Portrait' },
-      { src: 'photos/p5.jpg', alt: 'Wellness portrait' },
-      { src: 'photos/p7.jpg', alt: 'Documentary portrait' },
-      { src: 'photos/p4.jpg', alt: 'Portrait session' },
-      { src: 'photos/avatar.jpg', alt: 'Silhouette' }
+      { src: 'photos/p8.jpg', alt: 'Creative portrait', category: 'portrait' },
+      { src: 'photos/p2.jpg', alt: 'Artistic portrait', category: 'portrait' },
+      { src: 'photos/p3.jpg', alt: 'Outdoor portrait', category: 'portrait' },
+      { src: 'photos/p6.jpg', alt: 'Natural light portrait', category: 'portrait' },
+      { src: 'photos/p1.jpg', alt: 'Portrait', category: 'portrait' },
+      { src: 'photos/p5.jpg', alt: 'Wellness portrait', category: 'portrait' },
+      { src: 'photos/p7.jpg', alt: 'Documentary portrait', category: 'portrait' },
+      { src: 'photos/p4.jpg', alt: 'Portrait session', category: 'portrait' },
+      { src: 'photos/avatar.jpg', alt: 'Silhouette', category: 'portrait' }
     ];
 
-    function renderGallery(images) {
+    var allImages = [];
+    var currentCat = 'all';
+
+    function renderFiltered() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) return;
-      grid.innerHTML = images.map(function (img) {
+      var list = currentCat === 'all' ? allImages : allImages.filter(function (img) { return img.category === currentCat; });
+      if (!list.length) {
+        grid.innerHTML = '<p class="gallery-empty">No images in this category yet.</p>';
+        return;
+      }
+      grid.innerHTML = list.map(function (img) {
         return '<div class="insta-cell"><img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy"></div>';
       }).join('');
     }
 
+    window.setGalleryCategory = function (cat) {
+      currentCat = cat;
+      document.querySelectorAll('.gallery-cat').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.cat === cat);
+      });
+      renderFiltered();
+      var scroll = document.getElementById('galleryScroll');
+      if (scroll) scroll.scrollTop = 0;
+    };
+
+    var cats = document.getElementById('galleryCats');
+    if (cats) {
+      cats.addEventListener('click', function (e) {
+        var btn = e.target.closest('.gallery-cat');
+        if (btn) window.setGalleryCategory(btn.dataset.cat);
+      });
+    }
+
     fetch('gallery-order.json?v=' + Date.now())
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (data) { renderGallery(data.images && data.images.length ? data.images : FALLBACK); })
-      .catch(function () { renderGallery(FALLBACK); });
+      .then(function (data) { allImages = (data.images && data.images.length) ? data.images : FALLBACK; renderFiltered(); })
+      .catch(function () { allImages = FALLBACK; renderFiltered(); });
   })();
 
   (function () {
@@ -2549,6 +2622,20 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   (function () {
     var s = document.getElementById('servicesScroll');
     if (s) s.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+  })();
+
+  /* ============================================================
+     11c. SERVICE CARD -> GALLERY CATEGORY NAV
+     ============================================================ */
+  (function () {
+    document.querySelectorAll('.service-card[data-cat]').forEach(function (card) {
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', function () {
+        var cat = card.dataset.cat;
+        if (window.setGalleryCategory) window.setGalleryCategory(cat);
+        if (window.__goTo) window.__goTo(1);
+      });
+    });
   })();
 
   /* ============================================================
