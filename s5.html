@@ -3,30 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maya Nova — Aperture</title>
+  <title>Maya Nova — Scroll</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-    .panel { position: fixed; inset: 0; display: flex; align-items: center; pointer-events: none; }
+    .panel { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; pointer-events: none; }
     .panel.active { pointer-events: auto; }
-    #panel-about { z-index: 2; }
-    #panel-services { z-index: 3; clip-path: circle(0% at 50% 50%); will-change: clip-path; }
 
     #nav { position: fixed; top: 0; left: 0; right: 0; padding: 28px 40px; display: flex; align-items: center; gap: 40px; z-index: 100; }
     .nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: 22px; color: #1e1408; letter-spacing: 0.05em; }
     .nav-links { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #5a5a52; margin-left: auto; }
     .nav-book { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; border: 1px solid #C8A882; padding: 8px 20px; }
 
-    .about-inner { padding: 0 10vw; max-width: 600px; }
+    .about-inner { padding: 0 10vw; max-width: 600px; will-change: transform, opacity; }
     .eyebrow { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 28px; }
     .about-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(52px, 6vw, 84px); color: #1e1408; line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 28px; }
     .about-body { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
-    .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; text-decoration: none; cursor: pointer; }
+    .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; cursor: pointer; }
 
-    .services-inner { padding: 0 10vw; width: 100%; background: #fffef8; }
+    .services-inner { padding: 0 10vw; width: 100%; will-change: transform, opacity; }
     .services-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(42px, 5vw, 68px); color: #1e1408; margin-bottom: 48px; letter-spacing: 0.02em; }
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 800px; }
     .service-name { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 14px; }
@@ -40,6 +38,7 @@
     #demo-nav { position: fixed; bottom: 28px; right: 32px; z-index: 300; display: flex; align-items: center; gap: 4px; background: rgba(30,20,8,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; }
     .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); text-decoration: none; padding: 4px 8px; border-radius: 20px; transition: all 0.2s; }
     .dn-link:hover, .dn-link.active { color: #fff; background: rgba(200,168,130,0.3); }
+    .dn-sep { color: rgba(255,255,255,0.2); font-size: 10px; padding: 0 2px; }
   </style>
 </head>
 <body>
@@ -51,7 +50,7 @@
 </nav>
 
 <div class="panel active" id="panel-about">
-  <div class="about-inner">
+  <div class="about-inner" id="about-inner">
     <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
     <h1 class="about-heading">Light finds<br>its own way</h1>
     <p class="about-body">Maya Nova captures honest, unguarded moments -- the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
@@ -60,7 +59,7 @@
 </div>
 
 <div class="panel" id="panel-services">
-  <div class="services-inner">
+  <div class="services-inner" id="svc-inner">
     <h2 class="services-heading">What we offer</h2>
     <div class="services-grid">
       <div class="service-item">
@@ -81,66 +80,91 @@
 <button id="arrow-up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></button>
 
 <div id="demo-nav">
-  <a href="s5.html" class="dn-link">5&ndash;8</a>
+  <a href="s1.html" class="dn-link">1</a>
+  <a href="s2.html" class="dn-link">2</a>
+  <a href="s3.html" class="dn-link">3</a>
+  <a href="s4.html" class="dn-link">4</a>
   <span class="dn-sep">|</span>
-  <a href="s1.html" class="dn-link">1 Exhale</a>
-  <a href="s2.html" class="dn-link active">2 Aperture</a>
-  <a href="s3.html" class="dn-link">3 Limelight</a>
-  <a href="s4.html" class="dn-link">4 Drift</a>
+  <a href="s5.html" class="dn-link active">5 Scroll</a>
+  <a href="s6.html" class="dn-link">6 Focus</a>
+  <a href="s7.html" class="dn-link">7 Scan</a>
+  <a href="s8.html" class="dn-link">8 Depth</a>
 </div>
 
 <script>
 (function() {
   'use strict';
+  var EASE_OUT = 'cubic-bezier(0.0, 0, 0.2, 1)';
+  var EASE_IN  = 'cubic-bezier(0.4, 0, 1, 1)';
+  var DUR = 620;
+  var DIST = 38;
+
   var pA = document.getElementById('panel-about');
   var pS = document.getElementById('panel-services');
+  var aI = document.getElementById('about-inner');
+  var sI = document.getElementById('svc-inner');
   var aDn = document.getElementById('arrow-down');
   var aUp = document.getElementById('arrow-up');
   var atS = false, busy = false;
 
-  var OPEN_DUR = 720;
-  var CLOSE_DUR = 620;
-  var EASE_OPEN = 'cubic-bezier(0.25, 0, 0.2, 1)';
-  var EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.6, 1)';
+  // Services starts shifted down, invisible
+  sI.style.opacity = '0';
+  sI.style.transform = 'translateY(' + DIST + 'px)';
+  pS.style.opacity = '1';
 
   function toServices(done) {
     busy = true;
     pS.classList.add('active');
-    // Fade about out
-    pA.style.transition = 'opacity 400ms ease 80ms';
-    pA.style.opacity = '0';
-    // Open aperture
-    pS.style.transition = 'clip-path ' + OPEN_DUR + 'ms ' + EASE_OPEN;
-    pS.style.clipPath = 'circle(150% at 50% 50%)';
+
+    // About scrolls up and fades
+    aI.style.transition = 'transform ' + DUR + 'ms ' + EASE_IN + ', opacity ' + DUR + 'ms ' + EASE_IN;
+    aI.style.transform = 'translateY(-' + DIST + 'px)';
+    aI.style.opacity = '0';
+
+    // Services scrolls up into position and fades in, slight delay for natural feel
+    setTimeout(function() {
+      sI.style.transition = 'transform ' + DUR + 'ms ' + EASE_OUT + ', opacity ' + DUR + 'ms ' + EASE_OUT;
+      sI.style.transform = 'translateY(0)';
+      sI.style.opacity = '1';
+    }, 60);
+
     setTimeout(function() {
       pA.classList.remove('active');
       busy = false;
       done();
-    }, OPEN_DUR + 80);
+    }, DUR + 80);
   }
 
   function toAbout(done) {
     busy = true;
-    // Show about (fade in near end of close)
-    pA.style.transition = 'none';
-    pA.style.opacity = '0';
     pA.classList.add('active');
 
-    // Close aperture
-    pS.style.transition = 'clip-path ' + CLOSE_DUR + 'ms ' + EASE_CLOSE;
-    pS.style.clipPath = 'circle(0% at 50% 50%)';
+    // Reset about below
+    aI.style.transition = 'none';
+    aI.style.transform = 'translateY(' + DIST + 'px)';
+    aI.style.opacity = '0';
 
-    // About fades in as circle nearly closes
+    // Services scrolls further up and fades
+    sI.style.transition = 'transform ' + DUR + 'ms ' + EASE_IN + ', opacity ' + DUR + 'ms ' + EASE_IN;
+    sI.style.transform = 'translateY(-' + DIST + 'px)';
+    sI.style.opacity = '0';
+
+    // About scrolls up into position
     setTimeout(function() {
-      pA.style.transition = 'opacity 350ms ease-out';
-      pA.style.opacity = '1';
-    }, CLOSE_DUR - 200);
+      aI.style.transition = 'transform ' + DUR + 'ms ' + EASE_OUT + ', opacity ' + DUR + 'ms ' + EASE_OUT;
+      aI.style.transform = 'translateY(0)';
+      aI.style.opacity = '1';
+    }, 60);
 
     setTimeout(function() {
       pS.classList.remove('active');
+      // Reset services
+      sI.style.transition = 'none';
+      sI.style.transform = 'translateY(' + DIST + 'px)';
+      sI.style.opacity = '0';
       busy = false;
       done();
-    }, CLOSE_DUR + 50);
+    }, DUR + 80);
   }
 
   function goDown() {

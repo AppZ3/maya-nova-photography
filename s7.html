@@ -3,19 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maya Nova — Aperture</title>
+  <title>Maya Nova — Scan</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-    .panel { position: fixed; inset: 0; display: flex; align-items: center; pointer-events: none; }
-    .panel.active { pointer-events: auto; }
-    #panel-about { z-index: 2; }
-    #panel-services { z-index: 3; clip-path: circle(0% at 50% 50%); will-change: clip-path; }
+    /* Services sits on top so its clip reveals over about */
+    #panel-about { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; pointer-events: none; }
+    #panel-about.active { pointer-events: auto; }
+    #panel-services { position: fixed; inset: 0; z-index: 2; display: flex; align-items: center; pointer-events: none; will-change: clip-path; }
+    #panel-services.active { pointer-events: auto; }
 
-    #nav { position: fixed; top: 0; left: 0; right: 0; padding: 28px 40px; display: flex; align-items: center; gap: 40px; z-index: 100; }
+    /* Thin scan line sweeps across - positioned via JS */
+    #scan-line {
+      position: fixed; left: 0; right: 0; height: 1px; z-index: 10;
+      background: linear-gradient(90deg, transparent 0%, rgba(200,168,130,0.6) 20%, rgba(200,168,130,0.8) 50%, rgba(200,168,130,0.6) 80%, transparent 100%);
+      opacity: 0; pointer-events: none;
+    }
+
+    #nav { position: fixed; top: 0; left: 0; right: 0; padding: 28px 40px; display: flex; align-items: center; gap: 40px; z-index: 200; }
     .nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: 22px; color: #1e1408; letter-spacing: 0.05em; }
     .nav-links { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #5a5a52; margin-left: auto; }
     .nav-book { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; border: 1px solid #C8A882; padding: 8px 20px; }
@@ -24,25 +32,28 @@
     .eyebrow { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 28px; }
     .about-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(52px, 6vw, 84px); color: #1e1408; line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 28px; }
     .about-body { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
-    .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; text-decoration: none; cursor: pointer; }
+    .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; cursor: pointer; }
 
-    .services-inner { padding: 0 10vw; width: 100%; background: #fffef8; }
+    .services-inner { padding: 0 10vw; width: 100%; }
     .services-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(42px, 5vw, 68px); color: #1e1408; margin-bottom: 48px; letter-spacing: 0.02em; }
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 800px; }
     .service-name { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 14px; }
     .service-desc { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 18px; }
     .service-from { font-size: 12px; letter-spacing: 0.15em; color: #1e1408; }
 
-    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; }
-    #arrow-up { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; display: none; opacity: 0; }
+    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 300; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; }
+    #arrow-up { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 300; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; display: none; opacity: 0; }
     #arrow-down:hover, #arrow-up:hover { border-color: #C8A882; color: #C8A882; }
 
     #demo-nav { position: fixed; bottom: 28px; right: 32px; z-index: 300; display: flex; align-items: center; gap: 4px; background: rgba(30,20,8,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; }
     .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); text-decoration: none; padding: 4px 8px; border-radius: 20px; transition: all 0.2s; }
     .dn-link:hover, .dn-link.active { color: #fff; background: rgba(200,168,130,0.3); }
+    .dn-sep { color: rgba(255,255,255,0.2); font-size: 10px; padding: 0 2px; }
   </style>
 </head>
 <body>
+
+<div id="scan-line"></div>
 
 <nav id="nav">
   <span class="nav-logo">Maya Nova</span>
@@ -50,7 +61,7 @@
   <span class="nav-book">Book a session</span>
 </nav>
 
-<div class="panel active" id="panel-about">
+<div id="panel-about" class="active">
   <div class="about-inner">
     <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
     <h1 class="about-heading">Light finds<br>its own way</h1>
@@ -59,7 +70,7 @@
   </div>
 </div>
 
-<div class="panel" id="panel-services">
+<div id="panel-services">
   <div class="services-inner">
     <h2 class="services-heading">What we offer</h2>
     <div class="services-grid">
@@ -81,73 +92,100 @@
 <button id="arrow-up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></button>
 
 <div id="demo-nav">
-  <a href="s5.html" class="dn-link">5&ndash;8</a>
+  <a href="s1.html" class="dn-link">1</a>
+  <a href="s2.html" class="dn-link">2</a>
+  <a href="s3.html" class="dn-link">3</a>
+  <a href="s4.html" class="dn-link">4</a>
   <span class="dn-sep">|</span>
-  <a href="s1.html" class="dn-link">1 Exhale</a>
-  <a href="s2.html" class="dn-link active">2 Aperture</a>
-  <a href="s3.html" class="dn-link">3 Limelight</a>
-  <a href="s4.html" class="dn-link">4 Drift</a>
+  <a href="s5.html" class="dn-link">5 Scroll</a>
+  <a href="s6.html" class="dn-link">6 Focus</a>
+  <a href="s7.html" class="dn-link active">7 Scan</a>
+  <a href="s8.html" class="dn-link">8 Depth</a>
 </div>
 
 <script>
 (function() {
   'use strict';
+  var DUR = 680; // ms for the full sweep
+  var EASE = 'linear';
+
   var pA = document.getElementById('panel-about');
   var pS = document.getElementById('panel-services');
+  var scanLine = document.getElementById('scan-line');
   var aDn = document.getElementById('arrow-down');
   var aUp = document.getElementById('arrow-up');
   var atS = false, busy = false;
 
-  var OPEN_DUR = 720;
-  var CLOSE_DUR = 620;
-  var EASE_OPEN = 'cubic-bezier(0.25, 0, 0.2, 1)';
-  var EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.6, 1)';
+  // Services starts fully clipped (hidden)
+  pS.style.clipPath = 'inset(0 0 100% 0)';
 
-  function toServices(done) {
+  function animateScan(direction, done) {
+    // direction: 'down' = revealing services (scan top→bottom)
+    //            'up'   = revealing about (scan top→bottom again, but inverse clips)
     busy = true;
-    pS.classList.add('active');
-    // Fade about out
-    pA.style.transition = 'opacity 400ms ease 80ms';
-    pA.style.opacity = '0';
-    // Open aperture
-    pS.style.transition = 'clip-path ' + OPEN_DUR + 'ms ' + EASE_OPEN;
-    pS.style.clipPath = 'circle(150% at 50% 50%)';
-    setTimeout(function() {
-      pA.classList.remove('active');
-      busy = false;
-      done();
-    }, OPEN_DUR + 80);
-  }
+    var vh = window.innerHeight;
 
-  function toAbout(done) {
-    busy = true;
-    // Show about (fade in near end of close)
-    pA.style.transition = 'none';
-    pA.style.opacity = '0';
-    pA.classList.add('active');
+    if (direction === 'down') {
+      pS.classList.add('active');
+      // Services reveals top-to-bottom: clip-path bottom shrinks from 100% to 0%
+      pS.style.transition = 'clip-path ' + DUR + 'ms ' + EASE;
+      // About gets "overwritten" by services clip - no need to clip about separately since services is on top
+      pS.style.clipPath = 'inset(0 0 0% 0)';
 
-    // Close aperture
-    pS.style.transition = 'clip-path ' + CLOSE_DUR + 'ms ' + EASE_CLOSE;
-    pS.style.clipPath = 'circle(0% at 50% 50%)';
+      // Scan line sweeps from 0 to vh
+      scanLine.style.top = '0px';
+      scanLine.style.opacity = '1';
+      scanLine.style.transition = 'top ' + DUR + 'ms ' + EASE + ', opacity 150ms ease';
 
-    // About fades in as circle nearly closes
-    setTimeout(function() {
-      pA.style.transition = 'opacity 350ms ease-out';
-      pA.style.opacity = '1';
-    }, CLOSE_DUR - 200);
+      // Animate line position manually for smooth movement
+      var startTime = null;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var progress = Math.min((ts - startTime) / DUR, 1);
+        scanLine.style.top = (progress * vh) + 'px';
+        if (progress < 1) requestAnimationFrame(step);
+        else {
+          scanLine.style.opacity = '0';
+          scanLine.style.top = '0';
+          pA.classList.remove('active');
+          busy = false;
+          done();
+        }
+      }
+      requestAnimationFrame(step);
 
-    setTimeout(function() {
-      pS.classList.remove('active');
-      busy = false;
-      done();
-    }, CLOSE_DUR + 50);
+    } else {
+      pA.classList.add('active');
+      // Reverse: about is behind, services collapses top-to-bottom (clip bottom grows from 0% to 100%)
+      pS.style.transition = 'clip-path ' + DUR + 'ms ' + EASE;
+      pS.style.clipPath = 'inset(0 0 100% 0)';
+
+      scanLine.style.top = '0px';
+      scanLine.style.opacity = '1';
+
+      var startTime2 = null;
+      function step2(ts) {
+        if (!startTime2) startTime2 = ts;
+        var progress = Math.min((ts - startTime2) / DUR, 1);
+        scanLine.style.top = (progress * vh) + 'px';
+        if (progress < 1) requestAnimationFrame(step2);
+        else {
+          scanLine.style.opacity = '0';
+          scanLine.style.top = '0';
+          pS.classList.remove('active');
+          busy = false;
+          done();
+        }
+      }
+      requestAnimationFrame(step2);
+    }
   }
 
   function goDown() {
     if (busy || atS) return;
     atS = true;
     aDn.style.opacity = '0'; aDn.style.pointerEvents = 'none';
-    toServices(function() {
+    animateScan('down', function() {
       aDn.style.display = 'none';
       aUp.style.display = 'flex';
       setTimeout(function() { aUp.style.opacity = '1'; }, 20);
@@ -157,7 +195,7 @@
     if (busy || !atS) return;
     atS = false;
     aUp.style.opacity = '0'; aUp.style.pointerEvents = 'none';
-    toAbout(function() {
+    animateScan('up', function() {
       aUp.style.display = 'none';
       aDn.style.display = 'flex';
       setTimeout(function() { aDn.style.opacity = '1'; aDn.style.pointerEvents = 'auto'; }, 20);
