@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transition 3: Breathe — Maya Nova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
+
+    /* ── Preloader ── */
+    #preloader {
+      position: fixed; inset: 0; z-index: 99999;
+      background: #fffef8;
+      display: flex; align-items: center; justify-content: center;
+      will-change: transform, opacity;
+      transform-origin: center;
+      transition: opacity 1000ms ease-out, transform 1000ms ease-out;
+    }
+    #preloader.exit { opacity: 0; transform: scale(1.05); pointer-events: none; }
+    .pre-inner { display: flex; flex-direction: column; align-items: center; gap: 24px; }
+    .pre-line { width: 0; height: 1px; background: #C8A882; animation: preLineIn 1s cubic-bezier(0.4,0,0.2,1) 0.2s forwards; }
+    .pre-name { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(68px, 8vw, 108px); color: #1e1408; letter-spacing: 0.06em; margin: 0; }
+    .pre-letter { display: inline-block; opacity: 0; transform: translateY(14px); animation: preLetterIn 0.55s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .pre-sp { width: 0.28em; }
+    .pre-sub { font-family: 'DM Sans', sans-serif; font-weight: 300; font-size: 15px; letter-spacing: 0.32em; text-transform: uppercase; color: #7a6450; opacity: 0; animation: preSubIn 0.9s ease 1.95s forwards; margin: 0; }
+    @keyframes preLineIn   { to { width: 180px; } }
+    @keyframes preLetterIn { to { opacity: 1; transform: translateY(0); } }
+    @keyframes preSubIn    { to { opacity: 1; } }
+
+    /* ── Site ── */
+    #site {
+      position: fixed; inset: 0; background: #fffef8;
+      opacity: 0;
+      transform: scale(0.97);
+      will-change: transform, opacity;
+      transition: opacity 1000ms ease-out, transform 1000ms ease-out;
+    }
+    #site.reveal { opacity: 1; transform: scale(1); }
+    #nav { position: absolute; top: 0; left: 0; right: 0; padding: 28px 40px; display: flex; align-items: center; gap: 40px; z-index: 10; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: 22px; color: #1e1408; letter-spacing: 0.05em; }
+    .nav-links { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #5a5a52; margin-left: auto; }
+    .nav-book { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #C8A882; border: 1px solid #C8A882; padding: 8px 20px; }
+    .about-content { position: absolute; inset: 0; display: flex; align-items: center; padding: 0 10vw; }
+    .about-text { max-width: 520px; }
+    .eyebrow { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 28px; }
+    .about-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(52px, 6vw, 84px); color: #1e1408; line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 28px; }
+    .about-body { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
+    .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; text-decoration: none; }
+
+    /* ── Demo nav ── */
+    #demo-nav { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); z-index: 100000; display: flex; align-items: center; gap: 6px; background: rgba(30,20,8,0.85); backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 40px; white-space: nowrap; }
+    .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.12em; color: rgba(255,255,255,0.6); text-decoration: none; padding: 4px 10px; border-radius: 20px; transition: all 0.2s; }
+    .dn-link:hover, .dn-link.active { color: #fff; background: rgba(200,168,130,0.3); }
+    .dn-hint { font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.3); margin-left: 8px; border-left: 1px solid rgba(255,255,255,0.15); padding-left: 12px; }
+  </style>
+</head>
+<body>
+
+  <div id="preloader" aria-hidden="true">
+    <div class="pre-inner">
+      <div class="pre-line"></div>
+      <p class="pre-name">
+        <span class="pre-letter" style="animation-delay:0.60s">M</span><span class="pre-letter" style="animation-delay:0.70s">a</span><span class="pre-letter" style="animation-delay:0.80s">y</span><span class="pre-letter" style="animation-delay:0.90s">a</span><span class="pre-letter pre-sp" style="animation-delay:0.95s">&nbsp;</span><span class="pre-letter" style="animation-delay:1.05s">N</span><span class="pre-letter" style="animation-delay:1.15s">o</span><span class="pre-letter" style="animation-delay:1.25s">v</span><span class="pre-letter" style="animation-delay:1.35s">a</span>
+      </p>
+      <p class="pre-sub">Photography</p>
+    </div>
+  </div>
+
+  <div id="site">
+    <nav id="nav">
+      <span class="nav-logo">Maya Nova</span>
+      <span class="nav-links">Gallery &nbsp;&nbsp; Services</span>
+      <span class="nav-book">Book a session</span>
+    </nav>
+    <div class="about-content">
+      <div class="about-text">
+        <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
+        <h1 class="about-heading">Light finds<br>its own way</h1>
+        <p class="about-body">Maya Nova captures honest, unguarded moments — the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
+        <a class="about-cta" href="#">Book a session</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="demo-nav">
+    <a href="t1.html" class="dn-link">1 Dissolve</a>
+    <a href="t2.html" class="dn-link">2 Lift</a>
+    <a href="t3.html" class="dn-link active">3 Breathe</a>
+    <a href="t4.html" class="dn-link">4 Iris</a>
+    <span class="dn-hint">Click to replay: refresh the page</span>
+  </div>
+
+  <script>
+    setTimeout(function() {
+      document.getElementById('preloader').classList.add('exit');
+      document.getElementById('site').classList.add('reveal');
+      setTimeout(function() { document.getElementById('preloader').style.display = 'none'; }, 1050);
+    }, 2600);
+  </script>
+
+</body>
+</html>
