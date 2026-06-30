@@ -3,458 +3,599 @@
     {
       "src": "photos/p8.jpg",
       "alt": "Creative portrait",
-      "category": "portrait",
+      "category": [
+        "portrait"
+      ],
       "hidden": true
     },
     {
       "src": "photos/p2.jpg",
       "alt": "Artistic portrait",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/p3.jpg",
       "alt": "Outdoor portrait",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/p6.jpg",
       "alt": "Natural light portrait",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/p1.jpg",
       "alt": "Portrait",
-      "category": "portrait",
+      "category": [
+        "portrait"
+      ],
       "hidden": true
     },
     {
       "src": "photos/p5.jpg",
       "alt": "Wellness portrait",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/p7.jpg",
       "alt": "Documentary portrait",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/p4.jpg",
       "alt": "Portrait session",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/avatar.jpg",
       "alt": "Silhouette",
-      "category": "portrait",
+      "category": [
+        "portrait"
+      ],
       "hidden": true
     },
     {
       "src": "photos/397a2663.jpg",
       "alt": "397a2663",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a2713.jpg",
       "alt": "397a2713",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a2782.jpg",
       "alt": "397a2782",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a2789.jpg",
-      "alt": "397a2789"
+      "alt": "397a2789",
+      "category": []
     },
     {
       "src": "photos/397a3126.jpg",
       "alt": "397a3126",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a3214-2.jpg",
       "alt": "397a3214 2",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a3217-2.jpg",
-      "alt": "397a3217 2"
+      "alt": "397a3217 2",
+      "category": []
     },
     {
       "src": "photos/397a3328.jpg",
       "alt": "397a3328",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a3422.jpg",
-      "alt": "397a3422"
+      "alt": "397a3422",
+      "category": []
     },
     {
       "src": "photos/397a3438.jpg",
-      "alt": "397a3438"
+      "alt": "397a3438",
+      "category": []
     },
     {
       "src": "photos/397a3451.jpg",
       "alt": "397a3451",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a3485.jpg",
       "alt": "397a3485",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a3847.jpg",
       "alt": "397a3847",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a4325.jpg",
-      "alt": "397a4325"
+      "alt": "397a4325",
+      "category": []
     },
     {
       "src": "photos/397a4429.jpg",
-      "alt": "397a4429"
+      "alt": "397a4429",
+      "category": []
     },
     {
       "src": "photos/397a4481.jpg",
-      "alt": "397a4481"
+      "alt": "397a4481",
+      "category": []
     },
     {
       "src": "photos/397a4509.jpg",
       "alt": "397a4509",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a4519.jpg",
-      "alt": "397a4519"
+      "alt": "397a4519",
+      "category": []
     },
     {
       "src": "photos/397a4549.jpg",
       "alt": "397a4549",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a4625.jpg",
-      "alt": "397a4625"
+      "alt": "397a4625",
+      "category": []
     },
     {
       "src": "photos/397a4911.jpg",
       "alt": "397a4911",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a5012.jpg",
       "alt": "397a5012",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a5030.jpg",
       "alt": "397a5030",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a5223.jpg",
-      "alt": "397a5223"
+      "alt": "397a5223",
+      "category": []
     },
     {
       "src": "photos/397a5355.jpg",
-      "alt": "397a5355"
+      "alt": "397a5355",
+      "category": []
     },
     {
       "src": "photos/397a5541.jpg",
       "alt": "397a5541",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a5553.jpg",
       "alt": "397a5553",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a5982.jpg",
       "alt": "397a5982",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a6350.jpg",
       "alt": "397a6350",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6352.jpg",
       "alt": "397a6352",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6363.jpg",
       "alt": "397a6363",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6377.jpg",
       "alt": "397a6377",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6391.jpg",
       "alt": "397a6391",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6399.jpg",
       "alt": "397a6399",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6483.jpg",
       "alt": "397a6483",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6528.jpg",
       "alt": "397a6528",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6531.jpg",
       "alt": "397a6531",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6720.jpg",
       "alt": "397a6720",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6722.jpg",
       "alt": "397a6722",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6777.jpg",
       "alt": "397a6777",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6851.jpg",
       "alt": "397a6851",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6888.jpg",
       "alt": "397a6888",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a6957.jpg",
       "alt": "397a6957",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a6977.jpg",
       "alt": "397a6977",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a7190.jpg",
       "alt": "397a7190",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a7513.jpg",
       "alt": "397a7513",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a7560.jpg",
       "alt": "397a7560",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a7586.jpg",
       "alt": "397a7586",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a7682.jpg",
       "alt": "397a7682",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a7730.jpg",
       "alt": "397a7730",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8000.jpg",
       "alt": "397a8000",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8039.jpg",
       "alt": "397a8039",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8050.jpg",
       "alt": "397a8050",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8218.jpg",
       "alt": "397a8218",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/397a8222.jpg",
       "alt": "397a8222",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8302.jpg",
       "alt": "397a8302",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8433.jpg",
       "alt": "397a8433",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/397a8537.jpg",
       "alt": "397a8537",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/397a8577.jpg",
       "alt": "397a8577",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited.jpg",
       "alt": "edited",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-2.jpg",
       "alt": "edited 2",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-4.jpg",
       "alt": "edited 4",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/edited-5.jpg",
       "alt": "edited 5",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-6.jpg",
       "alt": "edited 6",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-7.jpg",
       "alt": "edited 7",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-9.jpg",
       "alt": "edited 9",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-10.jpg",
-      "alt": "edited 10"
+      "alt": "edited 10",
+      "category": []
     },
     {
       "src": "photos/edited-12.jpg",
       "alt": "edited 12",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-13.jpg",
       "alt": "edited 13",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-14.jpg",
       "alt": "edited 14",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-15.jpg",
       "alt": "edited 15",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-16.jpg",
       "alt": "edited 16",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-17.jpg",
       "alt": "edited 17",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-18.jpg",
       "alt": "edited 18",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/edited-19.jpg",
       "alt": "edited 19",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/edited-20.jpg",
       "alt": "edited 20",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/helenatom-3.jpg",
       "alt": "helenatom 3",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/helenatom-6.jpg",
       "alt": "helenatom 6",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/helenatom-11.jpg",
       "alt": "helenatom 11",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/helenatom-16.jpg",
       "alt": "helenatom 16",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/helenatom-18.jpg",
       "alt": "helenatom 18",
-      "category": "portrait"
+      "category": [
+        "portrait"
+      ]
     },
     {
       "src": "photos/helenatom-46.jpg",
       "alt": "helenatom 46",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     },
     {
       "src": "photos/helenatom-51.jpg",
       "alt": "helenatom 51",
-      "hidden": true
+      "hidden": true,
+      "category": []
     },
     {
       "src": "photos/helenatom-72.jpg",
       "alt": "helenatom 72",
-      "category": "events"
+      "category": [
+        "events"
+      ]
     }
   ]
 }
