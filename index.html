@@ -1228,6 +1228,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   padding: 0 172px 48px;
+  will-change: scroll-position;
 }
 
 .insta-grid {
@@ -1243,7 +1244,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   cursor: pointer;
   background: rgba(138,88,32,0.06);
   border-radius: 2px;
-  transition: box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 300px;
 }
 
 .insta-cell img {
@@ -1251,14 +1253,16 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: opacity 0.35s;
+  transition: opacity 0.2s;
+  will-change: opacity;
 }
 
 .insta-cell:hover {
-  box-shadow: 0 0 0 2px rgba(200,168,130,0.7), 0 0 22px rgba(200,168,130,0.45), 0 0 48px rgba(200,168,130,0.2);
+  outline: 2px solid rgba(200,168,130,0.65);
+  outline-offset: -1px;
 }
 
-.insta-cell:hover img { opacity: 0.88; }
+.insta-cell:hover img { opacity: 0.84; }
 
 /* ============================================================
    ABOUT: LANDING PAGE LAYOUT (no polaroids)
@@ -2561,7 +2565,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         return;
       }
       grid.innerHTML = list.map(function (img) {
-        return '<div class="insta-cell"><img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy"></div>';
+        return '<div class="insta-cell"><img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy" decoding="async"></div>';
       }).join('');
     }
 
