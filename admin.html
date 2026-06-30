@@ -723,7 +723,15 @@
       catPicker.querySelectorAll('.cat-option').forEach(function (b) {
         b.classList.toggle('selected', cats.indexOf(b.dataset.cat) !== -1);
       });
-      render();
+      var activeCell = gridEl.querySelector('[data-index="' + activePickerIdx + '"]');
+      if (activeCell) {
+        var badge = activeCell.querySelector('.cat-badge');
+        if (badge) {
+          badge.className = 'cat-badge' + (cats.length ? '' : ' unset');
+          var catLabels = cats.map(function (c) { return CAT_LABELS[c] || c; });
+          badge.textContent = cats.length ? catLabels.slice(0, 2).join(' · ') + (catLabels.length > 2 ? ' +' + (catLabels.length - 2) : '') : 'Uncategorised';
+        }
+      }
     });
   });
 
