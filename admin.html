@@ -356,12 +356,22 @@
       <a href="/" target="_blank">View site &rarr;</a>
       <label class="btn-upload-label" for="file-input">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        Upload Image
+        Images
         <input type="file" id="file-input" accept="image/*" multiple style="display:none">
+      </label>
+      <label class="btn-upload-label" for="folder-input">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Folder
+        <input type="file" id="folder-input" multiple style="display:none" webkitdirectory>
+      </label>
+      <label class="btn-upload-label" for="zip-input">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M9 9h6M9 15h6"/></svg>
+        ZIP
+        <input type="file" id="zip-input" accept=".zip,application/zip" style="display:none">
       </label>
       <button class="btn-publish" id="publish-btn">Publish Changes</button>
     </div>
-    <p class="hint">Drag to reorder &middot; Hover to delete &middot; Changes go live ~30s after publishing</p>
+    <p class="hint">Drag to reorder &middot; Hover to delete &middot; Upload: individual images, a whole folder, or a ZIP &middot; Changes go live ~30s after publishing</p>
   </header>
 
   <div id="status"></div>
@@ -386,6 +396,7 @@
   <div id="grid"></div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function () {
   /* ---- Config ---- */
@@ -419,8 +430,10 @@
   var patInput   = document.getElementById('pat-input');
   var patSaveBtn = document.getElementById('pat-save-btn');
   var patErr     = document.getElementById('pat-err');
-  var fileInput  = document.getElementById('file-input');
-  var publishBtn = document.getElementById('publish-btn');
+  var fileInput   = document.getElementById('file-input');
+  var folderInput = document.getElementById('folder-input');
+  var zipInput    = document.getElementById('zip-input');
+  var publishBtn  = document.getElementById('publish-btn');
   var gridEl     = document.getElementById('grid');
 
   /* ---- Utilities ---- */
@@ -668,6 +681,8 @@
     }
   }
 
+  var IMAGE_EXTS = /\.(jpe?g|png|gif|webp|avif|bmp|tiff?)$/i;
+
   /* ---- Upload ---- */
   fileInput.addEventListener('change', async function () {
     var files = Array.from(fileInput.files);
@@ -675,6 +690,24 @@
     for (var i = 0; i < files.length; i++) {
       await uploadFile(files[i]);
     }
+  });
+
+  folderInput.addEventListener('change', async function () {
+    var files = Array.from(folderInput.files).filter(function (f) { return IMAGE_EXTS.test(f.name); });
+    folderInput.value = '';
+    if (!files.length) { setStatus('No image files found in that folder.', 'err'); return; }
+    setStatus('Uploading ' + files.length + ' image' + (files.length !== 1 ? 's' : '') + ' from folder...');
+    for (var i = 0; i < files.length; i++) {
+      await uploadFile(files[i]);
+    }
+    setStatus(files.length + ' image' + (files.length !== 1 ? 's' : '') + ' uploaded. Click Publish to go live.', 'ok');
+  });
+
+  zipInput.addEventListener('change', async function () {
+    var file = zipInput.files[0];
+    zipInput.value = '';
+    if (!file) return;
+    await handleZip(file);
   });
 
   async function uploadFile(file) {
@@ -707,6 +740,68 @@
       placeholder.remove();
       render();
     }
+  }
+
+  /* ---- ZIP upload ---- */
+  async function handleZip(file) {
+    if (typeof JSZip === 'undefined') {
+      setStatus('ZIP library not loaded. Check your internet connection and refresh.', 'err');
+      return;
+    }
+    setStatus('Reading ZIP...');
+    var zip;
+    try {
+      zip = await JSZip.loadAsync(file);
+    } catch (e) {
+      setStatus('Could not read ZIP file: ' + e.message, 'err');
+      return;
+    }
+
+    var entries = [];
+    zip.forEach(function (path, entry) {
+      if (!entry.dir && IMAGE_EXTS.test(path)) {
+        entries.push({ path: path, entry: entry });
+      }
+    });
+
+    if (!entries.length) {
+      setStatus('No image files found inside the ZIP.', 'err');
+      return;
+    }
+
+    setStatus('Found ' + entries.length + ' image' + (entries.length !== 1 ? 's' : '') + ' in ZIP. Uploading...');
+    var uploaded = 0;
+
+    for (var i = 0; i < entries.length; i++) {
+      var filename = entries[i].path.split('/').pop();
+      var sfilename = sanitizeFilename(filename);
+      if (!sfilename) continue;
+
+      var placeholder = document.createElement('div');
+      placeholder.className = 'admin-cell uploading';
+      placeholder.textContent = 'Uploading ' + filename + '...';
+      gridEl.appendChild(placeholder);
+
+      setStatus('Uploading ' + (i + 1) + ' / ' + entries.length + ': ' + filename);
+
+      try {
+        var b64 = await entries[i].entry.async('base64');
+        var src = PHOTOS_DIR + '/' + sfilename;
+        var existing = await ghGet(PHOTOS_DIR + '/' + sfilename);
+        var sha = existing ? existing.sha : null;
+        await ghPut(PHOTOS_DIR + '/' + sfilename, b64, sha, 'Upload photo: ' + sfilename);
+        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') });
+        dirty = true;
+        uploaded++;
+      } catch (e) {
+        setStatus('Failed to upload ' + filename + ': ' + e.message, 'err');
+      } finally {
+        placeholder.remove();
+        render();
+      }
+    }
+
+    setStatus(uploaded + ' of ' + entries.length + ' image' + (entries.length !== 1 ? 's' : '') + ' uploaded from ZIP. Click Publish to go live.', uploaded ? 'ok' : 'err');
   }
 
   /* ---- Publish ---- */
