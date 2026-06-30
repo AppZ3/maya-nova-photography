@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery Admin - Maya Nova Photography</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #fffef8;
+      --gold: #C8A882;
+      --dark: #1a1a18;
+      --mid: #5a5a52;
+      --border: rgba(0,0,0,0.1);
+      --danger: #c0392b;
+      --radius: 4px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      min-height: 100vh;
+    }
+
+    /* ---- GATE ---- */
+    #gate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .gate-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .gate-box h1 {
+      font-size: 22px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+
+    .gate-box p {
+      font-size: 13px;
+      color: var(--mid);
+      margin-bottom: 24px;
+    }
+
+    .gate-box input[type="password"] {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .gate-box input[type="password"]:focus { border-color: var(--gold); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 10px 20px;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.82; }
+
+    .error-msg {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--danger);
+      min-height: 18px;
+    }
+
+    /* ---- APP ---- */
+    #app { display: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+    }
+
+    .header-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .header-row h1 {
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      flex: 1;
+    }
+
+    .header-row a {
+      font-size: 13px;
+      color: var(--mid);
+      text-decoration: none;
+    }
+
+    .header-row a:hover { color: var(--dark); }
+
+    .btn-upload-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      background: #fff;
+      transition: border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-upload-label:hover { border-color: var(--gold); }
+
+    .btn-publish {
+      padding: 8px 20px;
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-publish:hover { opacity: 0.85; }
+    .btn-publish:disabled { opacity: 0.4; cursor: default; }
+
+    .hint {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--mid);
+    }
+
+    /* ---- STATUS ---- */
+    #status {
+      padding: 0 32px;
+      font-size: 13px;
+      color: var(--mid);
+      min-height: 32px;
+      line-height: 32px;
+    }
+
+    #status.ok { color: #2e7d32; }
+    #status.err { color: var(--danger); }
+
+    /* ---- PAT SETUP ---- */
+    #pat-setup {
+      margin: 32px auto;
+      max-width: 520px;
+      padding: 0 32px;
+    }
+
+    .pat-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+    }
+
+    .pat-box h2 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .pat-box p { font-size: 13px; color: var(--mid); margin-bottom: 16px; line-height: 1.6; }
+    .pat-box code { background: #f0ede8; padding: 1px 5px; border-radius: 3px; font-size: 12px; }
+
+    .pat-row { display: flex; gap: 8px; }
+
+    .pat-row input {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      font-family: monospace;
+      outline: none;
+    }
+
+    .pat-row input:focus { border-color: var(--gold); }
+
+    .btn-sm {
+      padding: 8px 16px;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius);
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-sm:hover { opacity: 0.82; }
+
+    /* ---- GRID ---- */
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      padding: 24px 32px 48px;
+    }
+
+    .admin-cell {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: var(--radius);
+      background: rgba(138,88,32,0.06);
+      cursor: grab;
+      transition: box-shadow 0.2s, opacity 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .admin-cell:active { cursor: grabbing; }
+
+    .admin-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .admin-cell .delete-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 28px;
+      height: 28px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 2;
+      line-height: 1;
+    }
+
+    .admin-cell:hover .delete-btn { opacity: 1; }
+    .admin-cell .delete-btn:hover { background: var(--danger); }
+
+    .admin-cell .img-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 8px 6px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.55));
+      color: #fff;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity 0.15s;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .admin-cell:hover .img-label { opacity: 1; }
+
+    /* Drag states */
+    .admin-cell.dragging { opacity: 0.35; cursor: grabbing; }
+    .admin-cell.drag-over { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+
+    /* Uploading placeholder */
+    .admin-cell.uploading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--mid);
+      font-size: 12px;
+      cursor: default;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--mid);
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 12px 16px; }
+      #grid { gap: 8px; padding: 16px 16px 48px; grid-template-columns: repeat(2, 1fr); }
+      #status { padding: 0 16px; }
+      #pat-setup { padding: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- =========================================================
+     GATE
+     ========================================================= -->
+<div id="gate">
+  <div class="gate-box">
+    <h1>Gallery Admin</h1>
+    <p>Maya Nova Photography</p>
+    <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
+    <button class="btn-primary" id="pw-btn">Enter</button>
+    <p class="error-msg" id="pw-err"></p>
+  </div>
+</div>
+
+<!-- =========================================================
+     APP
+     ========================================================= -->
+<div id="app">
+  <header>
+    <div class="header-row">
+      <h1>Gallery Admin</h1>
+      <a href="/" target="_blank">View site &rarr;</a>
+      <label class="btn-upload-label" for="file-input">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Upload Image
+        <input type="file" id="file-input" accept="image/*" multiple style="display:none">
+      </label>
+      <button class="btn-publish" id="publish-btn">Publish Changes</button>
+    </div>
+    <p class="hint">Drag to reorder &middot; Hover to delete &middot; Changes go live ~30s after publishing</p>
+  </header>
+
+  <div id="status"></div>
+
+  <!-- GitHub PAT setup (shown on first use) -->
+  <div id="pat-setup" style="display:none">
+    <div class="pat-box">
+      <h2>GitHub Setup</h2>
+      <p>
+        A GitHub Personal Access Token with <code>repo</code> scope is needed to upload images and publish changes.
+        Create one at <strong>github.com &rarr; Settings &rarr; Developer settings &rarr; Personal access tokens</strong>.
+        Your token is stored only in this browser.
+      </p>
+      <div class="pat-row">
+        <input type="password" id="pat-input" placeholder="ghp_...">
+        <button class="btn-sm" id="pat-save-btn">Save Token</button>
+      </div>
+      <p class="error-msg" id="pat-err"></p>
+    </div>
+  </div>
+
+  <div id="grid"></div>
+</div>
+
+<script>
+(function () {
+  /* ---- Config ---- */
+  var REPO_OWNER  = 'AppZ3';
+  var REPO_NAME   = 'maya-nova-photography';
+  var REPO_BRANCH = 'main';
+  var ORDER_FILE  = 'gallery-order.json';
+  var PHOTOS_DIR  = 'photos';
+  /* SHA-256 of "maya2024" -- change by editing this value to the hash of your new password.
+     To get the hash: open browser console and run:
+       crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-password'))
+         .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+  */
+  var PW_HASH = '115d3edebd34374fc5e962bd4b0a02bc3f05cf9d4ae8b1e67cb8d913e52d05aa';
+
+  /* ---- State ---- */
+  var images = [];        // [{src, alt}]
+  var orderSha = null;    // current SHA of gallery-order.json on GitHub
+  var pat = '';           // GitHub PAT
+  var dirty = false;      // unsaved changes
+  var draggingIdx = null;
+
+  /* ---- Elements ---- */
+  var gateEl     = document.getElementById('gate');
+  var appEl      = document.getElementById('app');
+  var pwInput    = document.getElementById('pw-input');
+  var pwBtn      = document.getElementById('pw-btn');
+  var pwErr      = document.getElementById('pw-err');
+  var statusEl   = document.getElementById('status');
+  var patSetup   = document.getElementById('pat-setup');
+  var patInput   = document.getElementById('pat-input');
+  var patSaveBtn = document.getElementById('pat-save-btn');
+  var patErr     = document.getElementById('pat-err');
+  var fileInput  = document.getElementById('file-input');
+  var publishBtn = document.getElementById('publish-btn');
+  var gridEl     = document.getElementById('grid');
+
+  /* ---- Utilities ---- */
+  function setStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = type || '';
+  }
+
+  async function sha256(str) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+
+  function b64Encode(str) { return btoa(unescape(encodeURIComponent(str))); }
+  function b64Decode(b64) { return decodeURIComponent(escape(atob(b64))); }
+
+  function sanitizeFilename(name) {
+    return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-_]/g, '');
+  }
+
+  function fileToBase64(file) {
+    return new Promise(function (resolve, reject) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var dataUrl = e.target.result;
+        resolve(dataUrl.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---- GitHub API ---- */
+  function ghFetch(path, opts) {
+    return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + path, Object.assign({
+      headers: {
+        'Authorization': 'Bearer ' + pat,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+    }, opts));
+  }
+
+  async function ghGet(path) {
+    var r = await ghFetch(path);
+    if (!r.ok) return null;
+    return r.json();
+  }
+
+  async function ghPut(path, content, sha, message) {
+    var body = { message: message, content: content, branch: REPO_BRANCH };
+    if (sha) body.sha = sha;
+    var r = await ghFetch(path, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'Bearer ' + pat,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) {
+      var err = await r.json().catch(function () { return {}; });
+      throw new Error(err.message || ('GitHub API error: ' + r.status));
+    }
+    return r.json();
+  }
+
+  async function ghDelete(path, sha, message) {
+    var r = await ghFetch(path, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'Bearer ' + pat,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ message: message, sha: sha, branch: REPO_BRANCH })
+    });
+    if (!r.ok) {
+      var err = await r.json().catch(function () { return {}; });
+      throw new Error(err.message || ('GitHub API error: ' + r.status));
+    }
+    return r.json();
+  }
+
+  /* ---- Auth ---- */
+  async function unlock() {
+    var hash = await sha256(pwInput.value);
+    if (hash === PW_HASH) {
+      gateEl.style.display = 'none';
+      appEl.style.display = 'block';
+      init();
+    } else {
+      pwErr.textContent = 'Incorrect password.';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+
+  pwBtn.addEventListener('click', unlock);
+  pwInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') unlock(); });
+
+  /* ---- PAT ---- */
+  function loadPAT() {
+    pat = localStorage.getItem('mnp_admin_pat') || '';
+    return !!pat;
+  }
+
+  function savePAT() {
+    var val = patInput.value.trim();
+    if (!val) { patErr.textContent = 'Token cannot be empty.'; return; }
+    localStorage.setItem('mnp_admin_pat', val);
+    pat = val;
+    patSetup.style.display = 'none';
+    patErr.textContent = '';
+    loadGallery();
+  }
+
+  patSaveBtn.addEventListener('click', savePAT);
+  patInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') savePAT(); });
+
+  /* ---- Load gallery from GitHub ---- */
+  async function loadGallery() {
+    setStatus('Loading gallery...');
+    var data = await ghGet(ORDER_FILE);
+    if (!data) {
+      setStatus('Could not load gallery-order.json from GitHub. Check your token has repo access.', 'err');
+      return;
+    }
+    orderSha = data.sha;
+    try {
+      var parsed = JSON.parse(b64Decode(data.content));
+      images = parsed.images || [];
+    } catch (e) {
+      images = [];
+    }
+    dirty = false;
+    setStatus(images.length + ' image' + (images.length !== 1 ? 's' : '') + ' in gallery');
+    render();
+  }
+
+  /* ---- Render grid ---- */
+  function render() {
+    if (!images.length) {
+      gridEl.innerHTML = '<div class="empty-state">No images yet. Upload some to get started.</div>';
+      return;
+    }
+
+    gridEl.innerHTML = '';
+    images.forEach(function (img, i) {
+      var cell = document.createElement('div');
+      cell.className = 'admin-cell';
+      cell.setAttribute('draggable', 'true');
+      cell.dataset.index = i;
+
+      var imgEl = document.createElement('img');
+      imgEl.src = img.src;
+      imgEl.alt = img.alt || '';
+      imgEl.loading = 'lazy';
+
+      var label = document.createElement('div');
+      label.className = 'img-label';
+      label.textContent = img.src.replace(/^photos\//, '');
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.title = 'Remove from gallery';
+      delBtn.innerHTML = '&times;';
+      delBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        confirmDelete(i, img);
+      });
+
+      cell.appendChild(imgEl);
+      cell.appendChild(label);
+      cell.appendChild(delBtn);
+
+      /* Drag events */
+      cell.addEventListener('dragstart', function (e) {
+        draggingIdx = i;
+        cell.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(i));
+      });
+
+      cell.addEventListener('dragend', function () {
+        cell.classList.remove('dragging');
+        draggingIdx = null;
+        document.querySelectorAll('.admin-cell').forEach(function (c) { c.classList.remove('drag-over'); });
+      });
+
+      cell.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        if (draggingIdx !== null && draggingIdx !== i) {
+          document.querySelectorAll('.admin-cell').forEach(function (c) { c.classList.remove('drag-over'); });
+          cell.classList.add('drag-over');
+        }
+      });
+
+      cell.addEventListener('dragleave', function () {
+        cell.classList.remove('drag-over');
+      });
+
+      cell.addEventListener('drop', function (e) {
+        e.preventDefault();
+        cell.classList.remove('drag-over');
+        var from = parseInt(e.dataTransfer.getData('text/plain'), 10);
+        var to = i;
+        if (from === to || isNaN(from)) return;
+        var moved = images.splice(from, 1)[0];
+        images.splice(to, 0, moved);
+        dirty = true;
+        setStatus('Order changed. Click Publish to go live.');
+        render();
+      });
+
+      gridEl.appendChild(cell);
+    });
+  }
+
+  /* ---- Delete ---- */
+  function confirmDelete(i, img) {
+    var filename = img.src.replace(/^photos\//, '');
+    var isUploaded = !img.src.startsWith('photos/p') || img.src === 'photos/avatar.jpg';
+    var msg = 'Remove "' + filename + '" from the gallery?';
+    if (isUploaded) msg += '\n\nThis will also permanently delete the file from GitHub.';
+    if (!confirm(msg)) return;
+    images.splice(i, 1);
+    dirty = true;
+    if (isUploaded) deleteFile(img.src, filename);
+    setStatus('Image removed. Click Publish to go live.');
+    render();
+  }
+
+  async function deleteFile(src, filename) {
+    var data = await ghGet(PHOTOS_DIR + '/' + filename);
+    if (!data) return;
+    try {
+      await ghDelete(PHOTOS_DIR + '/' + filename, data.sha, 'Remove photo: ' + filename);
+    } catch (e) {
+      setStatus('Warning: could not delete file from GitHub: ' + e.message, 'err');
+    }
+  }
+
+  /* ---- Upload ---- */
+  fileInput.addEventListener('change', async function () {
+    var files = Array.from(fileInput.files);
+    fileInput.value = '';
+    for (var i = 0; i < files.length; i++) {
+      await uploadFile(files[i]);
+    }
+  });
+
+  async function uploadFile(file) {
+    var filename = sanitizeFilename(file.name);
+    var src = PHOTOS_DIR + '/' + filename;
+
+    /* Add uploading placeholder */
+    var placeholder = document.createElement('div');
+    placeholder.className = 'admin-cell uploading';
+    placeholder.textContent = 'Uploading ' + filename + '...';
+    gridEl.appendChild(placeholder);
+
+    setStatus('Uploading ' + filename + '...');
+
+    try {
+      var b64 = await fileToBase64(file);
+
+      /* Check if file already exists (need SHA to overwrite) */
+      var existing = await ghGet(PHOTOS_DIR + '/' + filename);
+      var sha = existing ? existing.sha : null;
+
+      await ghPut(PHOTOS_DIR + '/' + filename, b64, sha, 'Upload photo: ' + filename);
+
+      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') });
+      dirty = true;
+      setStatus(filename + ' uploaded. Click Publish to add to the live gallery.');
+    } catch (e) {
+      setStatus('Upload failed: ' + e.message, 'err');
+    } finally {
+      placeholder.remove();
+      render();
+    }
+  }
+
+  /* ---- Publish ---- */
+  publishBtn.addEventListener('click', async function () {
+    if (!pat) { setStatus('Set up your GitHub token first.', 'err'); return; }
+
+    publishBtn.disabled = true;
+    setStatus('Publishing...');
+
+    try {
+      /* Re-fetch current SHA in case it changed */
+      var current = await ghGet(ORDER_FILE);
+      var sha = current ? current.sha : null;
+
+      var content = b64Encode(JSON.stringify({ images: images }, null, 2));
+      await ghPut(ORDER_FILE, content, sha, 'Update gallery order');
+      dirty = false;
+      orderSha = null;
+      setStatus('Published! Site will update in ~30 seconds.', 'ok');
+    } catch (e) {
+      setStatus('Publish failed: ' + e.message, 'err');
+    } finally {
+      publishBtn.disabled = false;
+    }
+  });
+
+  /* ---- Init ---- */
+  function init() {
+    if (!loadPAT()) {
+      patSetup.style.display = 'block';
+      setStatus('Enter your GitHub token to continue.');
+      return;
+    }
+    loadGallery();
+  }
+
+  /* ---- Warn on unsaved changes ---- */
+  window.addEventListener('beforeunload', function (e) {
+    if (dirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
+})();
+</script>
+</body>
+</html>
