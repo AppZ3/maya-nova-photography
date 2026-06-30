@@ -1414,7 +1414,14 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 /* ============================================================
    BOOKING FORM
    ============================================================ */
-.book-form { display: flex; flex-direction: column; gap: 16px; }
+.book-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.book-form .book-label { margin-bottom: 4px; }
+.book-form .book-input { padding: 8px 12px; }
+.book-row-2 { grid-column: 1 / -1; }
+.book-field:has(textarea) { grid-column: 1 / -1; }
+.book-field:has([name="purpose"]) { grid-column: 1 / -1; }
+.book-field:has([name="exchange"]) { grid-column: 1 / -1; }
+.book-submit { grid-column: 1 / -1; }
 
 .book-field { display: flex; flex-direction: column; }
 
@@ -1897,13 +1904,13 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           </div>
 
           <div class="book-field">
-            <label class="book-label" for="bf-vision">What is your vision?</label>
-            <textarea class="book-input book-textarea" id="bf-vision" name="vision" placeholder="The feeling, the story, the moment you want to capture..." rows="3"></textarea>
+            <label class="book-label" for="bf-date">Preferred date / time</label>
+            <input class="book-input" type="text" id="bf-date" name="date" placeholder="e.g. Late March, weekend mornings">
           </div>
 
           <div class="book-field">
-            <label class="book-label" for="bf-date">Preferred date / time</label>
-            <input class="book-input" type="text" id="bf-date" name="date" placeholder="e.g. Late March, weekend mornings">
+            <label class="book-label" for="bf-vision">What is your vision?</label>
+            <textarea class="book-input book-textarea" id="bf-vision" name="vision" placeholder="The feeling, the story, the moment you want to capture..." rows="2"></textarea>
           </div>
 
           <div class="book-field">
