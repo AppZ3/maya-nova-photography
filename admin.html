@@ -667,7 +667,11 @@
     orderSha = data.sha;
     try {
       var parsed = JSON.parse(b64Decode(data.content));
-      images = parsed.images || [];
+      images = (parsed.images || []).map(function (img) {
+        if (!img.category) img.category = [];
+        else if (!Array.isArray(img.category)) img.category = [img.category];
+        return img;
+      });
     } catch (e) {
       images = [];
     }
@@ -689,9 +693,10 @@
       catPicker.style.top = 'auto';
     }
     catPicker.style.left = Math.min(rect.left, window.innerWidth - 210) + 'px';
-    var cur = images[idx].category || '';
+    var cur = images[idx].category;
+    if (!Array.isArray(cur)) cur = cur ? [cur] : [];
     catPicker.querySelectorAll('.cat-option').forEach(function (btn) {
-      btn.classList.toggle('selected', btn.dataset.cat === cur);
+      btn.classList.toggle('selected', cur.indexOf(btn.dataset.cat) !== -1);
     });
     catPicker.classList.add('open');
   }
@@ -704,10 +709,20 @@
   catPicker.querySelectorAll('.cat-option').forEach(function (btn) {
     btn.addEventListener('click', function () {
       if (activePickerIdx === null) return;
-      images[activePickerIdx].category = btn.dataset.cat;
+      var cats = images[activePickerIdx].category;
+      if (!Array.isArray(cats)) cats = cats ? [cats] : [];
+      var idx = cats.indexOf(btn.dataset.cat);
+      if (idx === -1) {
+        cats.push(btn.dataset.cat);
+      } else {
+        cats.splice(idx, 1);
+      }
+      images[activePickerIdx].category = cats;
       dirty = true;
-      setStatus('Category set to "' + btn.textContent + '". Click Publish to go live.');
-      hideCatPicker();
+      setStatus('Categories updated. Click Publish to go live.');
+      catPicker.querySelectorAll('.cat-option').forEach(function (b) {
+        b.classList.toggle('selected', cats.indexOf(b.dataset.cat) !== -1);
+      });
       render();
     });
   });
@@ -751,8 +766,14 @@
       });
 
       var badge = document.createElement('div');
-      badge.className = 'cat-badge' + (img.category ? '' : ' unset');
-      badge.textContent = img.category ? (CAT_LABELS[img.category] || img.category) : 'Uncategorised';
+      var imgCats = Array.isArray(img.category) ? img.category : (img.category ? [img.category] : []);
+      badge.className = 'cat-badge' + (imgCats.length ? '' : ' unset');
+      if (!imgCats.length) {
+        badge.textContent = 'Uncategorised';
+      } else {
+        var catLabels = imgCats.map(function (c) { return CAT_LABELS[c] || c; });
+        badge.textContent = catLabels.slice(0, 2).join(' · ') + (catLabels.length > 2 ? ' +' + (catLabels.length - 2) : '');
+      }
 
       var hideBtn = document.createElement('button');
       hideBtn.className = 'hide-btn';
@@ -903,7 +924,7 @@
 
       await ghPut(PHOTOS_DIR + '/' + filename, b64, sha, 'Upload photo: ' + filename);
 
-      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: '' });
+      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] });
       dirty = true;
       setStatus(filename + ' uploaded. Click photo to assign a category, then Publish.');
     } catch (e) {
@@ -962,7 +983,7 @@
         var existing = await ghGet(PHOTOS_DIR + '/' + sfilename);
         var sha = existing ? existing.sha : null;
         await ghPut(PHOTOS_DIR + '/' + sfilename, b64, sha, 'Upload photo: ' + sfilename);
-        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: '' });
+        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] });
         dirty = true;
         uploaded++;
       } catch (e) {
