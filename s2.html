@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maya Nova — Drift</title>
+  <title>Maya Nova — Aperture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #fffef8; font-family: 'DM Sans', sans-serif; height: 100vh; overflow: hidden; }
 
-    #bg { position: fixed; inset: 0; background: #fffef8; z-index: 0; }
-
-    .panel { position: fixed; inset: 0; z-index: 1; display: flex; align-items: center; pointer-events: none; }
+    .panel { position: fixed; inset: 0; display: flex; align-items: center; pointer-events: none; }
     .panel.active { pointer-events: auto; }
+    #panel-about { z-index: 2; }
+    #panel-services { z-index: 3; clip-path: circle(0% at 50% 50%); will-change: clip-path; }
 
     #nav { position: fixed; top: 0; left: 0; right: 0; padding: 28px 40px; display: flex; align-items: center; gap: 40px; z-index: 100; }
     .nav-logo { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: 22px; color: #1e1408; letter-spacing: 0.05em; }
@@ -26,19 +26,16 @@
     .about-body { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 36px; max-width: 380px; }
     .about-cta { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: #1e1408; border-bottom: 1px solid #C8A882; padding-bottom: 3px; text-decoration: none; cursor: pointer; }
 
-    .services-inner { padding: 0 10vw; width: 100%; }
+    .services-inner { padding: 0 10vw; width: 100%; background: #fffef8; }
     .services-heading { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(42px, 5vw, 68px); color: #1e1408; margin-bottom: 48px; letter-spacing: 0.02em; }
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 800px; }
     .service-name { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #7a6450; margin-bottom: 14px; }
     .service-desc { font-size: 15px; font-weight: 300; color: #5a5a52; line-height: 1.75; margin-bottom: 18px; }
     .service-from { font-size: 12px; letter-spacing: 0.15em; color: #1e1408; }
 
-    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; opacity: 1; }
+    #arrow-down { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; }
     #arrow-up { position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%); z-index: 200; background: none; border: 1px solid rgba(30,20,8,0.2); width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #1e1408; transition: border-color 0.2s, opacity 0.3s; display: none; opacity: 0; }
     #arrow-down:hover, #arrow-up:hover { border-color: #C8A882; color: #C8A882; }
-
-    /* s2 — Drift: translateY + opacity */
-    #panel-about, #panel-services { will-change: transform, opacity; }
 
     #demo-nav { position: fixed; bottom: 28px; right: 32px; z-index: 300; display: flex; align-items: center; gap: 4px; background: rgba(30,20,8,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 40px; }
     .dn-link { font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.55); text-decoration: none; padding: 4px 8px; border-radius: 20px; transition: all 0.2s; }
@@ -46,8 +43,6 @@
   </style>
 </head>
 <body>
-
-<div id="bg"></div>
 
 <nav id="nav">
   <span class="nav-logo">Maya Nova</span>
@@ -59,7 +54,7 @@
   <div class="about-inner">
     <p class="eyebrow">Portrait &middot; Editorial &middot; Wellness</p>
     <h1 class="about-heading">Light finds<br>its own way</h1>
-    <p class="about-body">Maya Nova captures honest, unguarded moments — the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
+    <p class="about-body">Maya Nova captures honest, unguarded moments -- the light that falls just right, the quiet before the laugh. Based in Northern NSW, available worldwide.</p>
     <a class="about-cta">Book a session</a>
   </div>
 </div>
@@ -82,118 +77,103 @@
   </div>
 </div>
 
-<button id="arrow-down" aria-label="Next section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg>
-</button>
-<button id="arrow-up" aria-label="Previous section">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg>
-</button>
+<button id="arrow-down"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="6 9 12 15 18 9"/></svg></button>
+<button id="arrow-up"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="18 15 12 9 6 15"/></svg></button>
 
 <div id="demo-nav">
-  <a href="s1.html" class="dn-link">1 Still</a>
-  <a href="s2.html" class="dn-link active">2 Drift</a>
-  <a href="s3.html" class="dn-link">3 Breathe</a>
-  <a href="s4.html" class="dn-link">4 Venetian</a>
+  <a href="s1.html" class="dn-link">1 Exhale</a>
+  <a href="s2.html" class="dn-link active">2 Aperture</a>
+  <a href="s3.html" class="dn-link">3 Limelight</a>
+  <a href="s4.html" class="dn-link">4 Drift</a>
 </div>
 
 <script>
-  var panelAbout = document.getElementById('panel-about');
-  var panelServices = document.getElementById('panel-services');
+(function() {
+  'use strict';
+  var pA = document.getElementById('panel-about');
+  var pS = document.getElementById('panel-services');
+  var aDn = document.getElementById('arrow-down');
+  var aUp = document.getElementById('arrow-up');
+  var atS = false, busy = false;
 
-  // Set initial states — about visible at rest, services ready below
-  panelAbout.style.opacity = '1';
-  panelAbout.style.transform = 'translateY(0)';
-  panelServices.style.opacity = '0';
-  panelServices.style.transform = 'translateY(28px)';
+  var OPEN_DUR = 720;
+  var CLOSE_DUR = 620;
+  var EASE_OPEN = 'cubic-bezier(0.25, 0, 0.2, 1)';
+  var EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.6, 1)';
 
-  var atServices = false;
-  var transitioning = false;
-  var arrowDown = document.getElementById('arrow-down');
-  var arrowUp = document.getElementById('arrow-up');
-
-  function transitionToServices(done) {
-    // About: drift up -28px and fade out, 650ms ease-in
-    panelAbout.style.transition = 'transform 650ms ease-in, opacity 650ms ease-in';
-    panelAbout.style.transform = 'translateY(-28px)';
-    panelAbout.style.opacity = '0';
-    panelAbout.classList.remove('active');
-
-    // Services: start from +28px below, drift to 0 and fade in, 100ms delay
+  function toServices(done) {
+    busy = true;
+    pS.classList.add('active');
+    // Fade about out
+    pA.style.transition = 'opacity 400ms ease 80ms';
+    pA.style.opacity = '0';
+    // Open aperture
+    pS.style.transition = 'clip-path ' + OPEN_DUR + 'ms ' + EASE_OPEN;
+    pS.style.clipPath = 'circle(150% at 50% 50%)';
     setTimeout(function() {
-      panelServices.style.transition = 'transform 700ms ease-out, opacity 700ms ease-out';
-      panelServices.style.transform = 'translateY(0)';
-      panelServices.style.opacity = '1';
-      panelServices.classList.add('active');
-    }, 100);
-
-    // Done after out + in complete (100 + 700 = 800ms)
-    setTimeout(function() {
+      pA.classList.remove('active');
+      busy = false;
       done();
-    }, 800);
+    }, OPEN_DUR + 80);
   }
 
-  function transitionToAbout(done) {
-    // Services: drift down +28px and fade out, 650ms ease-in
-    panelServices.style.transition = 'transform 650ms ease-in, opacity 650ms ease-in';
-    panelServices.style.transform = 'translateY(28px)';
-    panelServices.style.opacity = '0';
-    panelServices.classList.remove('active');
+  function toAbout(done) {
+    busy = true;
+    // Show about (fade in near end of close)
+    pA.style.transition = 'none';
+    pA.style.opacity = '0';
+    pA.classList.add('active');
 
-    // About: arrives from -28px above, settles to 0 and fades in, 100ms delay
+    // Close aperture
+    pS.style.transition = 'clip-path ' + CLOSE_DUR + 'ms ' + EASE_CLOSE;
+    pS.style.clipPath = 'circle(0% at 50% 50%)';
+
+    // About fades in as circle nearly closes
     setTimeout(function() {
-      // Snap to top offset without transition, then animate in
-      panelAbout.style.transition = 'none';
-      panelAbout.style.transform = 'translateY(-28px)';
-      panelAbout.style.opacity = '0';
-
-      // Force reflow so the snap takes effect
-      void panelAbout.offsetWidth;
-
-      panelAbout.style.transition = 'transform 700ms ease-out, opacity 700ms ease-out';
-      panelAbout.style.transform = 'translateY(0)';
-      panelAbout.style.opacity = '1';
-      panelAbout.classList.add('active');
-    }, 100);
+      pA.style.transition = 'opacity 350ms ease-out';
+      pA.style.opacity = '1';
+    }, CLOSE_DUR - 200);
 
     setTimeout(function() {
+      pS.classList.remove('active');
+      busy = false;
       done();
-    }, 800);
+    }, CLOSE_DUR + 50);
   }
 
-  function goToServices() {
-    if (transitioning || atServices) return;
-    transitioning = true;
-    atServices = true;
-    arrowDown.style.opacity = '0';
-    arrowDown.style.pointerEvents = 'none';
-    transitionToServices(function() {
-      arrowDown.style.display = 'none';
-      arrowUp.style.display = 'flex';
-      setTimeout(function() { arrowUp.style.opacity = '1'; }, 20);
-      transitioning = false;
+  function goDown() {
+    if (busy || atS) return;
+    atS = true;
+    aDn.style.opacity = '0'; aDn.style.pointerEvents = 'none';
+    toServices(function() {
+      aDn.style.display = 'none';
+      aUp.style.display = 'flex';
+      setTimeout(function() { aUp.style.opacity = '1'; }, 20);
+    });
+  }
+  function goUp() {
+    if (busy || !atS) return;
+    atS = false;
+    aUp.style.opacity = '0'; aUp.style.pointerEvents = 'none';
+    toAbout(function() {
+      aUp.style.display = 'none';
+      aDn.style.display = 'flex';
+      setTimeout(function() { aDn.style.opacity = '1'; aDn.style.pointerEvents = 'auto'; }, 20);
     });
   }
 
-  function goToAbout() {
-    if (transitioning || !atServices) return;
-    transitioning = true;
-    atServices = false;
-    arrowUp.style.opacity = '0';
-    arrowUp.style.pointerEvents = 'none';
-    transitionToAbout(function() {
-      arrowUp.style.display = 'none';
-      arrowDown.style.display = 'flex';
-      setTimeout(function() { arrowDown.style.opacity = '1'; arrowDown.style.pointerEvents = 'auto'; }, 20);
-      transitioning = false;
-    });
-  }
-
-  arrowDown.addEventListener('click', goToServices);
-  arrowUp.addEventListener('click', goToAbout);
+  aDn.addEventListener('click', goDown);
+  aUp.addEventListener('click', goUp);
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goToServices(); }
-    if (e.key === 'ArrowUp') { e.preventDefault(); goToAbout(); }
+    if (e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); goDown(); }
+    if (e.key === 'ArrowUp') { e.preventDefault(); goUp(); }
   });
+  var lastW = 0;
+  document.addEventListener('wheel', function(e) {
+    var now = Date.now(); if (now - lastW < 900) return; lastW = now;
+    if (e.deltaY > 0) goDown(); else goUp();
+  }, { passive: true });
+})();
 </script>
 </body>
 </html>
