@@ -3,7 +3,8 @@
     {
       "src": "photos/p8.jpg",
       "alt": "Creative portrait",
-      "category": "portrait"
+      "category": "portrait",
+      "hidden": true
     },
     {
       "src": "photos/p2.jpg",
@@ -23,7 +24,8 @@
     {
       "src": "photos/p1.jpg",
       "alt": "Portrait",
-      "category": "portrait"
+      "category": "portrait",
+      "hidden": true
     },
     {
       "src": "photos/p5.jpg",
@@ -43,19 +45,23 @@
     {
       "src": "photos/avatar.jpg",
       "alt": "Silhouette",
-      "category": "portrait"
+      "category": "portrait",
+      "hidden": true
     },
     {
       "src": "photos/397a2663.jpg",
-      "alt": "397a2663"
+      "alt": "397a2663",
+      "hidden": true
     },
     {
       "src": "photos/397a2713.jpg",
-      "alt": "397a2713"
+      "alt": "397a2713",
+      "category": "portrait"
     },
     {
       "src": "photos/397a2782.jpg",
-      "alt": "397a2782"
+      "alt": "397a2782",
+      "hidden": true
     },
     {
       "src": "photos/397a2789.jpg",
@@ -63,11 +69,13 @@
     },
     {
       "src": "photos/397a3126.jpg",
-      "alt": "397a3126"
+      "alt": "397a3126",
+      "category": "events"
     },
     {
       "src": "photos/397a3214-2.jpg",
-      "alt": "397a3214 2"
+      "alt": "397a3214 2",
+      "category": "events"
     },
     {
       "src": "photos/397a3217-2.jpg",
@@ -75,7 +83,8 @@
     },
     {
       "src": "photos/397a3328.jpg",
-      "alt": "397a3328"
+      "alt": "397a3328",
+      "category": "portrait"
     },
     {
       "src": "photos/397a3422.jpg",
@@ -87,15 +96,18 @@
     },
     {
       "src": "photos/397a3451.jpg",
-      "alt": "397a3451"
+      "alt": "397a3451",
+      "category": "portrait"
     },
     {
       "src": "photos/397a3485.jpg",
-      "alt": "397a3485"
+      "alt": "397a3485",
+      "category": "portrait"
     },
     {
       "src": "photos/397a3847.jpg",
-      "alt": "397a3847"
+      "alt": "397a3847",
+      "category": "portrait"
     },
     {
       "src": "photos/397a4325.jpg",
@@ -111,7 +123,8 @@
     },
     {
       "src": "photos/397a4509.jpg",
-      "alt": "397a4509"
+      "alt": "397a4509",
+      "category": "portrait"
     },
     {
       "src": "photos/397a4519.jpg",
@@ -119,7 +132,8 @@
     },
     {
       "src": "photos/397a4549.jpg",
-      "alt": "397a4549"
+      "alt": "397a4549",
+      "category": "portrait"
     },
     {
       "src": "photos/397a4625.jpg",
@@ -127,15 +141,18 @@
     },
     {
       "src": "photos/397a4911.jpg",
-      "alt": "397a4911"
+      "alt": "397a4911",
+      "category": "portrait"
     },
     {
       "src": "photos/397a5012.jpg",
-      "alt": "397a5012"
+      "alt": "397a5012",
+      "category": "events"
     },
     {
       "src": "photos/397a5030.jpg",
-      "alt": "397a5030"
+      "alt": "397a5030",
+      "category": "events"
     },
     {
       "src": "photos/397a5223.jpg",
@@ -147,167 +164,208 @@
     },
     {
       "src": "photos/397a5541.jpg",
-      "alt": "397a5541"
+      "alt": "397a5541",
+      "hidden": true
     },
     {
       "src": "photos/397a5553.jpg",
-      "alt": "397a5553"
+      "alt": "397a5553",
+      "category": "events"
     },
     {
       "src": "photos/397a5982.jpg",
-      "alt": "397a5982"
+      "alt": "397a5982",
+      "category": "events"
     },
     {
       "src": "photos/397a6350.jpg",
-      "alt": "397a6350"
+      "alt": "397a6350",
+      "hidden": true
     },
     {
       "src": "photos/397a6352.jpg",
-      "alt": "397a6352"
+      "alt": "397a6352",
+      "hidden": true
     },
     {
       "src": "photos/397a6363.jpg",
-      "alt": "397a6363"
+      "alt": "397a6363",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6377.jpg",
-      "alt": "397a6377"
+      "alt": "397a6377",
+      "hidden": true
     },
     {
       "src": "photos/397a6391.jpg",
-      "alt": "397a6391"
+      "alt": "397a6391",
+      "hidden": true
     },
     {
       "src": "photos/397a6399.jpg",
-      "alt": "397a6399"
+      "alt": "397a6399",
+      "hidden": true
     },
     {
       "src": "photos/397a6483.jpg",
-      "alt": "397a6483"
+      "alt": "397a6483",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6528.jpg",
-      "alt": "397a6528"
+      "alt": "397a6528",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6531.jpg",
-      "alt": "397a6531"
+      "alt": "397a6531",
+      "hidden": true
     },
     {
       "src": "photos/397a6720.jpg",
-      "alt": "397a6720"
+      "alt": "397a6720",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6722.jpg",
-      "alt": "397a6722"
+      "alt": "397a6722",
+      "hidden": true
     },
     {
       "src": "photos/397a6777.jpg",
-      "alt": "397a6777"
+      "alt": "397a6777",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6851.jpg",
-      "alt": "397a6851"
+      "alt": "397a6851",
+      "hidden": true
     },
     {
       "src": "photos/397a6888.jpg",
-      "alt": "397a6888"
+      "alt": "397a6888",
+      "category": "portrait"
     },
     {
       "src": "photos/397a6957.jpg",
-      "alt": "397a6957"
+      "alt": "397a6957",
+      "hidden": true
     },
     {
       "src": "photos/397a6977.jpg",
-      "alt": "397a6977"
+      "alt": "397a6977",
+      "hidden": true
     },
     {
       "src": "photos/397a7190.jpg",
-      "alt": "397a7190"
+      "alt": "397a7190",
+      "category": "portrait"
     },
     {
       "src": "photos/397a7513.jpg",
-      "alt": "397a7513"
+      "alt": "397a7513",
+      "category": "events"
     },
     {
       "src": "photos/397a7560.jpg",
-      "alt": "397a7560"
+      "alt": "397a7560",
+      "category": "events"
     },
     {
       "src": "photos/397a7586.jpg",
-      "alt": "397a7586"
+      "alt": "397a7586",
+      "category": "events"
     },
     {
       "src": "photos/397a7682.jpg",
-      "alt": "397a7682"
+      "alt": "397a7682",
+      "hidden": true
     },
     {
       "src": "photos/397a7730.jpg",
-      "alt": "397a7730"
+      "alt": "397a7730",
+      "hidden": true
     },
     {
       "src": "photos/397a8000.jpg",
-      "alt": "397a8000"
+      "alt": "397a8000",
+      "hidden": true
     },
     {
       "src": "photos/397a8039.jpg",
-      "alt": "397a8039"
+      "alt": "397a8039",
+      "hidden": true
     },
     {
       "src": "photos/397a8050.jpg",
-      "alt": "397a8050"
+      "alt": "397a8050",
+      "hidden": true
     },
     {
       "src": "photos/397a8218.jpg",
-      "alt": "397a8218"
+      "alt": "397a8218",
+      "category": "portrait"
     },
     {
       "src": "photos/397a8222.jpg",
-      "alt": "397a8222"
+      "alt": "397a8222",
+      "hidden": true
     },
     {
       "src": "photos/397a8302.jpg",
-      "alt": "397a8302"
+      "alt": "397a8302",
+      "hidden": true
     },
     {
       "src": "photos/397a8433.jpg",
-      "alt": "397a8433"
+      "alt": "397a8433",
+      "hidden": true
     },
     {
       "src": "photos/397a8537.jpg",
-      "alt": "397a8537"
+      "alt": "397a8537",
+      "category": "events"
     },
     {
       "src": "photos/397a8577.jpg",
-      "alt": "397a8577"
+      "alt": "397a8577",
+      "hidden": true
     },
     {
       "src": "photos/edited.jpg",
-      "alt": "edited"
+      "alt": "edited",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-2.jpg",
-      "alt": "edited 2"
+      "alt": "edited 2",
+      "hidden": true
     },
     {
       "src": "photos/edited-4.jpg",
-      "alt": "edited 4"
+      "alt": "edited 4",
+      "category": "events"
     },
     {
       "src": "photos/edited-5.jpg",
-      "alt": "edited 5"
+      "alt": "edited 5",
+      "hidden": true
     },
     {
       "src": "photos/edited-6.jpg",
-      "alt": "edited 6"
+      "alt": "edited 6",
+      "hidden": true
     },
     {
       "src": "photos/edited-7.jpg",
-      "alt": "edited 7"
+      "alt": "edited 7",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-9.jpg",
-      "alt": "edited 9"
+      "alt": "edited 9",
+      "hidden": true
     },
     {
       "src": "photos/edited-10.jpg",
@@ -315,71 +373,88 @@
     },
     {
       "src": "photos/edited-12.jpg",
-      "alt": "edited 12"
+      "alt": "edited 12",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-13.jpg",
-      "alt": "edited 13"
+      "alt": "edited 13",
+      "hidden": true
     },
     {
       "src": "photos/edited-14.jpg",
-      "alt": "edited 14"
+      "alt": "edited 14",
+      "hidden": true
     },
     {
       "src": "photos/edited-15.jpg",
-      "alt": "edited 15"
+      "alt": "edited 15",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-16.jpg",
-      "alt": "edited 16"
+      "alt": "edited 16",
+      "hidden": true
     },
     {
       "src": "photos/edited-17.jpg",
-      "alt": "edited 17"
+      "alt": "edited 17",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-18.jpg",
-      "alt": "edited 18"
+      "alt": "edited 18",
+      "hidden": true
     },
     {
       "src": "photos/edited-19.jpg",
-      "alt": "edited 19"
+      "alt": "edited 19",
+      "category": "portrait"
     },
     {
       "src": "photos/edited-20.jpg",
-      "alt": "edited 20"
+      "alt": "edited 20",
+      "category": "portrait"
     },
     {
       "src": "photos/helenatom-3.jpg",
-      "alt": "helenatom 3"
+      "alt": "helenatom 3",
+      "category": "events"
     },
     {
       "src": "photos/helenatom-6.jpg",
-      "alt": "helenatom 6"
+      "alt": "helenatom 6",
+      "category": "events"
     },
     {
       "src": "photos/helenatom-11.jpg",
-      "alt": "helenatom 11"
+      "alt": "helenatom 11",
+      "hidden": true
     },
     {
       "src": "photos/helenatom-16.jpg",
-      "alt": "helenatom 16"
+      "alt": "helenatom 16",
+      "hidden": true
     },
     {
       "src": "photos/helenatom-18.jpg",
-      "alt": "helenatom 18"
+      "alt": "helenatom 18",
+      "category": "portrait"
     },
     {
       "src": "photos/helenatom-46.jpg",
-      "alt": "helenatom 46"
+      "alt": "helenatom 46",
+      "category": "events"
     },
     {
       "src": "photos/helenatom-51.jpg",
-      "alt": "helenatom 51"
+      "alt": "helenatom 51",
+      "hidden": true
     },
     {
       "src": "photos/helenatom-72.jpg",
-      "alt": "helenatom 72"
+      "alt": "helenatom 72",
+      "category": "events"
     }
   ]
 }
