@@ -323,6 +323,63 @@
       font-size: 14px;
     }
 
+    /* ---- Category badge ---- */
+    .cat-badge {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      padding: 3px 8px;
+      background: rgba(0,0,0,0.62);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 3px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .cat-badge.unset { opacity: 0.45; }
+
+    /* ---- Category picker ---- */
+    #cat-picker {
+      position: fixed;
+      z-index: 1000;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.13);
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 190px;
+    }
+    #cat-picker.open { display: flex; }
+    .cat-picker-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      padding: 4px 10px 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2px;
+    }
+    .cat-option {
+      padding: 8px 12px;
+      border: none;
+      background: none;
+      text-align: left;
+      font-size: 13px;
+      color: var(--dark);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .cat-option:hover { background: #f0ede8; }
+    .cat-option.selected { background: rgba(200,168,130,0.18); color: #8a5820; font-weight: 600; }
+
     @media (max-width: 640px) {
       header { padding: 12px 16px; }
       #grid { gap: 8px; padding: 16px 16px 48px; grid-template-columns: repeat(2, 1fr); }
@@ -371,7 +428,7 @@
       </label>
       <button class="btn-publish" id="publish-btn">Publish Changes</button>
     </div>
-    <p class="hint">Drag to reorder &middot; Hover to delete &middot; Upload: individual images, a whole folder, or a ZIP &middot; Changes go live ~30s after publishing</p>
+    <p class="hint">Drag to reorder &middot; Click photo to assign category &middot; Hover to delete &middot; Changes go live ~30s after publishing</p>
   </header>
 
   <div id="status"></div>
@@ -396,6 +453,14 @@
   <div id="grid"></div>
 </div>
 
+<div id="cat-picker">
+  <div class="cat-picker-title">Assign Category</div>
+  <button class="cat-option" data-cat="portrait">Portrait Sessions</button>
+  <button class="cat-option" data-cat="social">Social Media Content</button>
+  <button class="cat-option" data-cat="events">Events</button>
+  <button class="cat-option" data-cat="commercial">Commercial</button>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function () {
@@ -413,13 +478,23 @@
   var PW_HASH = '115d3edebd34374fc5e962bd4b0a02bc3f05cf9d4ae8b1e67cb8d913e52d05aa';
 
   /* ---- State ---- */
-  var images = [];        // [{src, alt}]
+  var images = [];        // [{src, alt, category}]
   var orderSha = null;    // current SHA of gallery-order.json on GitHub
   var pat = '';           // GitHub PAT
   var dirty = false;      // unsaved changes
   var draggingIdx = null;
+  var wasDragged = false;
+  var activePickerIdx = null;
+
+  var CAT_LABELS = {
+    portrait: 'Portrait',
+    social: 'Social',
+    events: 'Events',
+    commercial: 'Commercial'
+  };
 
   /* ---- Elements ---- */
+  var catPicker  = document.getElementById('cat-picker');
   var gateEl     = document.getElementById('gate');
   var appEl      = document.getElementById('app');
   var pwInput    = document.getElementById('pw-input');
@@ -577,6 +652,48 @@
     render();
   }
 
+  /* ---- Category picker ---- */
+  function showCatPicker(idx, cellEl) {
+    activePickerIdx = idx;
+    var rect = cellEl.getBoundingClientRect();
+    var pickerH = 200;
+    if (window.innerHeight - rect.bottom > pickerH) {
+      catPicker.style.top = (rect.bottom + 6) + 'px';
+      catPicker.style.bottom = 'auto';
+    } else {
+      catPicker.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+      catPicker.style.top = 'auto';
+    }
+    catPicker.style.left = Math.min(rect.left, window.innerWidth - 210) + 'px';
+    var cur = images[idx].category || '';
+    catPicker.querySelectorAll('.cat-option').forEach(function (btn) {
+      btn.classList.toggle('selected', btn.dataset.cat === cur);
+    });
+    catPicker.classList.add('open');
+  }
+
+  function hideCatPicker() {
+    catPicker.classList.remove('open');
+    activePickerIdx = null;
+  }
+
+  catPicker.querySelectorAll('.cat-option').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      if (activePickerIdx === null) return;
+      images[activePickerIdx].category = btn.dataset.cat;
+      dirty = true;
+      setStatus('Category set to "' + btn.textContent + '". Click Publish to go live.');
+      hideCatPicker();
+      render();
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    if (catPicker.classList.contains('open') && !catPicker.contains(e.target) && !e.target.closest('.admin-cell')) {
+      hideCatPicker();
+    }
+  });
+
   /* ---- Render grid ---- */
   function render() {
     if (!images.length) {
@@ -609,13 +726,26 @@
         confirmDelete(i, img);
       });
 
+      var badge = document.createElement('div');
+      badge.className = 'cat-badge' + (img.category ? '' : ' unset');
+      badge.textContent = img.category ? (CAT_LABELS[img.category] || img.category) : 'Uncategorised';
+
       cell.appendChild(imgEl);
       cell.appendChild(label);
+      cell.appendChild(badge);
       cell.appendChild(delBtn);
+
+      /* Click to assign category */
+      cell.addEventListener('click', function (e) {
+        if (e.target.closest('.delete-btn')) return;
+        if (wasDragged) { wasDragged = false; return; }
+        showCatPicker(i, cell);
+      });
 
       /* Drag events */
       cell.addEventListener('dragstart', function (e) {
         draggingIdx = i;
+        wasDragged = false;
         cell.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', String(i));
@@ -646,6 +776,7 @@
         var from = parseInt(e.dataTransfer.getData('text/plain'), 10);
         var to = i;
         if (from === to || isNaN(from)) return;
+        wasDragged = true;
         var moved = images.splice(from, 1)[0];
         images.splice(to, 0, moved);
         dirty = true;
@@ -731,9 +862,9 @@
 
       await ghPut(PHOTOS_DIR + '/' + filename, b64, sha, 'Upload photo: ' + filename);
 
-      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') });
+      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: '' });
       dirty = true;
-      setStatus(filename + ' uploaded. Click Publish to add to the live gallery.');
+      setStatus(filename + ' uploaded. Click photo to assign a category, then Publish.');
     } catch (e) {
       setStatus('Upload failed: ' + e.message, 'err');
     } finally {
@@ -790,7 +921,7 @@
         var existing = await ghGet(PHOTOS_DIR + '/' + sfilename);
         var sha = existing ? existing.sha : null;
         await ghPut(PHOTOS_DIR + '/' + sfilename, b64, sha, 'Upload photo: ' + sfilename);
-        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ') });
+        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: '' });
         dirty = true;
         uploaded++;
       } catch (e) {
