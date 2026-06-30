@@ -2107,8 +2107,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   var sections = Array.from(document.querySelectorAll('.section'));
   var dots     = Array.from(document.querySelectorAll('.side-dot'));
   var TOTAL    = sections.length;
-  var DURATION = 1100;
-  var EASE     = 'cubic-bezier(0.4, 0, 0.2, 1)';
+  var DURATION = 850;
+  var EASE_IN  = 'cubic-bezier(0.4, 0, 1, 1)';
+  var EASE_OUT = 'cubic-bezier(0.0, 0, 0.2, 1)';
 
   var currentIndex    = 3;
   var isTransitioning = false;
@@ -2132,18 +2133,21 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
     inEl.style.visibility = 'visible';
     inEl.style.opacity    = '0';
-    inEl.style.transform  = goDown ? 'translateY(18px)' : 'translateY(-18px)';
+    inEl.style.filter     = 'blur(7px)';
+    inEl.style.transform  = 'scale(0.984)';
     inEl.style.clipPath   = 'none';
 
     inEl.getBoundingClientRect(); // force reflow
 
-    outEl.style.transition = 'transform ' + DURATION + 'ms ' + EASE + ', opacity ' + (DURATION * 0.7) + 'ms ' + EASE;
-    outEl.style.transform  = goDown ? 'translateY(-18px)' : 'translateY(18px)';
+    outEl.style.transition = 'filter ' + DURATION + 'ms ' + EASE_IN + ', transform ' + DURATION + 'ms ' + EASE_IN + ', opacity ' + DURATION + 'ms ' + EASE_IN;
+    outEl.style.filter     = 'blur(7px)';
+    outEl.style.transform  = 'scale(1.018)';
     outEl.style.opacity    = '0';
 
-    inEl.style.transition  = 'opacity ' + DURATION + 'ms ' + EASE + ', transform ' + DURATION + 'ms ' + EASE;
+    inEl.style.transition  = 'filter ' + DURATION + 'ms ' + EASE_OUT + ', transform ' + DURATION + 'ms ' + EASE_OUT + ', opacity ' + DURATION + 'ms ' + EASE_OUT;
     inEl.style.opacity     = '1';
-    inEl.style.transform   = 'translateY(0)';
+    inEl.style.filter      = 'blur(0px)';
+    inEl.style.transform   = 'scale(1)';
 
     dots[currentIndex].classList.remove('active');
     dots[targetIndex].classList.add('active');
@@ -2157,12 +2161,14 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       var out      = sections[prevIndex];
       out.style.transition  = '';
       out.style.opacity     = '1';
+      out.style.filter      = '';
       out.style.transform   = '';
       out.style.clipPath    = '';
       out.style.visibility  = 'hidden';
 
       var incoming = sections[currentIndex];
       incoming.style.transition = '';
+      incoming.style.filter     = '';
       incoming.style.clipPath   = '';
       incoming.style.transform  = '';
 
