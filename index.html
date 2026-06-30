@@ -2131,23 +2131,32 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     var inEl   = sections[targetIndex];
     var goDown = targetIndex > currentIndex;
 
-    inEl.style.visibility = 'visible';
-    inEl.style.opacity    = '0';
-    inEl.style.filter     = 'blur(7px)';
-    inEl.style.transform  = 'scale(0.984)';
-    inEl.style.clipPath   = 'none';
+    var outInner = outEl.firstElementChild;
+    var inInner  = inEl.firstElementChild;
+
+    // Make incoming section visible but invisible, inner pre-blurred
+    inEl.style.visibility  = 'visible';
+    inEl.style.opacity     = '1';
+    inEl.style.clipPath    = 'none';
+    inInner.style.opacity  = '0';
+    inInner.style.filter   = 'blur(7px)';
+    inInner.style.transform = 'scale(0.984)';
 
     inEl.getBoundingClientRect(); // force reflow
 
-    outEl.style.transition = 'filter ' + DURATION + 'ms ' + EASE_IN + ', transform ' + DURATION + 'ms ' + EASE_IN + ', opacity ' + DURATION + 'ms ' + EASE_IN;
-    outEl.style.filter     = 'blur(7px)';
-    outEl.style.transform  = 'scale(1.018)';
-    outEl.style.opacity    = '0';
+    // Out: section fades, inner blurs+expands
+    var T = DURATION + 'ms ';
+    outEl.style.transition    = 'none';
+    outInner.style.transition = 'filter ' + T + EASE_IN + ', transform ' + T + EASE_IN + ', opacity ' + T + EASE_IN;
+    outInner.style.filter     = 'blur(7px)';
+    outInner.style.transform  = 'scale(1.018)';
+    outInner.style.opacity    = '0';
 
-    inEl.style.transition  = 'filter ' + DURATION + 'ms ' + EASE_OUT + ', transform ' + DURATION + 'ms ' + EASE_OUT + ', opacity ' + DURATION + 'ms ' + EASE_OUT;
-    inEl.style.opacity     = '1';
-    inEl.style.filter      = 'blur(0px)';
-    inEl.style.transform   = 'scale(1)';
+    // In: inner sharpens+contracts
+    inInner.style.transition  = 'filter ' + T + EASE_OUT + ', transform ' + T + EASE_OUT + ', opacity ' + T + EASE_OUT;
+    inInner.style.opacity     = '1';
+    inInner.style.filter      = 'blur(0px)';
+    inInner.style.transform   = 'scale(1)';
 
     dots[currentIndex].classList.remove('active');
     dots[targetIndex].classList.add('active');
@@ -2159,18 +2168,23 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
     setTimeout(function () {
       var out      = sections[prevIndex];
+      var outI     = out.firstElementChild;
       out.style.transition  = '';
-      out.style.opacity     = '1';
-      out.style.filter      = '';
-      out.style.transform   = '';
       out.style.clipPath    = '';
       out.style.visibility  = 'hidden';
+      outI.style.transition = '';
+      outI.style.filter     = '';
+      outI.style.transform  = '';
+      outI.style.opacity    = '';
 
-      var incoming = sections[currentIndex];
-      incoming.style.transition = '';
-      incoming.style.filter     = '';
-      incoming.style.clipPath   = '';
-      incoming.style.transform  = '';
+      var incoming  = sections[currentIndex];
+      var incomingI = incoming.firstElementChild;
+      incoming.style.transition  = '';
+      incoming.style.clipPath    = '';
+      incomingI.style.transition = '';
+      incomingI.style.filter     = '';
+      incomingI.style.transform  = '';
+      incomingI.style.opacity    = '';
 
       onSectionActivate(currentIndex);
       isTransitioning = false;
