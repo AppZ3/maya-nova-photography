@@ -276,6 +276,30 @@
     .admin-cell:hover .delete-btn { opacity: 1; }
     .admin-cell .delete-btn:hover { background: var(--danger); }
 
+    .admin-cell .hide-btn {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 28px;
+      height: 28px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+      z-index: 2;
+    }
+    .admin-cell:hover .hide-btn { opacity: 1; }
+    .admin-cell.is-hidden .hide-btn { opacity: 1; background: rgba(200,168,130,0.9); }
+    .admin-cell .hide-btn:hover { background: rgba(200,168,130,0.85); }
+    .admin-cell.is-hidden { opacity: 0.5; }
+    .admin-cell.is-hidden img { filter: grayscale(40%); }
+
     .admin-cell .img-label {
       position: absolute;
       bottom: 0;
@@ -428,7 +452,7 @@
       </label>
       <button class="btn-publish" id="publish-btn">Publish Changes</button>
     </div>
-    <p class="hint">Drag to reorder &middot; Click photo to assign category &middot; Hover to delete &middot; Changes go live ~30s after publishing</p>
+    <p class="hint">Drag to reorder &middot; Click photo to assign category &middot; Hover: eye to hide from gallery / &times; to delete &middot; Changes go live ~30s after publishing</p>
   </header>
 
   <div id="status"></div>
@@ -730,14 +754,31 @@
       badge.className = 'cat-badge' + (img.category ? '' : ' unset');
       badge.textContent = img.category ? (CAT_LABELS[img.category] || img.category) : 'Uncategorised';
 
+      var hideBtn = document.createElement('button');
+      hideBtn.className = 'hide-btn';
+      hideBtn.title = img.hidden ? 'Show in gallery' : 'Hide from gallery';
+      hideBtn.innerHTML = img.hidden
+        ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+        : '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+      hideBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        images[i].hidden = !images[i].hidden;
+        dirty = true;
+        setStatus(images[i].hidden ? 'Image hidden from gallery. Click Publish to go live.' : 'Image now visible in gallery. Click Publish to go live.');
+        render();
+      });
+
+      if (img.hidden) cell.classList.add('is-hidden');
+
       cell.appendChild(imgEl);
       cell.appendChild(label);
       cell.appendChild(badge);
+      cell.appendChild(hideBtn);
       cell.appendChild(delBtn);
 
       /* Click to assign category */
       cell.addEventListener('click', function (e) {
-        if (e.target.closest('.delete-btn')) return;
+        if (e.target.closest('.delete-btn') || e.target.closest('.hide-btn')) return;
         if (wasDragged) { wasDragged = false; return; }
         showCatPicker(i, cell);
       });

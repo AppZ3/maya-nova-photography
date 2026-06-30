@@ -2551,7 +2551,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     function renderFiltered() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) return;
-      var list = currentCat === 'all' ? allImages : allImages.filter(function (img) { return img.category === currentCat; });
+      var list = (currentCat === 'all' ? allImages : allImages.filter(function (img) { return img.category === currentCat; })).filter(function (img) { return !img.hidden; });
       if (!list.length) {
         grid.innerHTML = '<p class="gallery-empty">No images in this category yet.</p>';
         return;
