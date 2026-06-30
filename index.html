@@ -1025,7 +1025,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   --card-bg: #ffffff;
 }
 
-#section-4 .section-eyebrow { color: #7a6450; justify-content: center; }
+#section-4 .section-eyebrow { color: #7a6450; }
 
 #section-4 .service-card {
   box-shadow: 0 2px 18px rgba(74,56,32,0.07);
@@ -1240,25 +1240,20 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 }
 
 /* ============================================================
-   SERVICES: STACKED CENTERED LAYOUT
+   SERVICES: SIDE-BY-SIDE LAYOUT
    ============================================================ */
 .services-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 48px 40px 60px;
-  gap: 48px;
-  max-height: calc(100vh - 80px);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  max-width: 1200px;
+  padding: 24px 52px;
+  gap: 60px;
+  align-items: flex-start;
 }
 
-.services-left { width: 100%; }
+.services-left { flex: 0 0 42%; min-width: 0; }
 
-.services-right { width: 100%; }
+.services-right { flex: 1; min-width: 0; }
 
 .services-book {
   display: flex;
@@ -1266,16 +1261,16 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   gap: 0;
 }
 
-.services-book .contact-eyebrow { color: #7a6450; text-align: center; }
+.services-book .contact-eyebrow { color: #7a6450; text-align: left; }
 .services-book .contact-h2 {
   color: #1e1408;
-  font-size: clamp(32px, 3vw, 46px);
-  text-align: center;
-  margin-bottom: 16px;
+  font-size: clamp(28px, 2.4vw, 38px);
+  text-align: left;
+  margin-bottom: 10px;
 }
-.services-book .contact-sub { color: #4a3820; text-align: center; margin-left: auto; margin-right: auto; }
-.services-book .contact-direct { color: #7a6450; text-align: center; }
-.services-book .contact-location { text-align: center; }
+.services-book .contact-sub { color: #4a3820; text-align: left; margin-left: 0; margin-right: 0; }
+.services-book .contact-direct { color: #7a6450; text-align: left; }
+.services-book .contact-location { text-align: left; }
 
 #section-4 .contact-input {
   background: rgba(30,20,8,0.05);
@@ -1414,7 +1409,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 /* ============================================================
    BOOKING FORM
    ============================================================ */
-.book-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.book-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.book-form .book-label { margin-bottom: 4px; }
+.book-form .book-input { padding: 8px 12px; }
 .book-row-2 { grid-column: 1 / -1; }
 .book-field:has(textarea) { grid-column: 1 / -1; }
 .book-field:has([name="purpose"]) { grid-column: 1 / -1; }
@@ -1908,7 +1905,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
           <div class="book-field">
             <label class="book-label" for="bf-vision">What is your vision?</label>
-            <textarea class="book-input book-textarea" id="bf-vision" name="vision" placeholder="The feeling, the story, the moment you want to capture..." rows="3"></textarea>
+            <textarea class="book-input book-textarea" id="bf-vision" name="vision" placeholder="The feeling, the story, the moment you want to capture..." rows="2"></textarea>
           </div>
 
           <div class="book-field">
