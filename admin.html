@@ -858,6 +858,36 @@
     });
   }
 
+  /* ---- Auto-scroll while dragging ---- */
+  (function () {
+    var rafId = null;
+    var scrollSpeed = 0;
+    var ZONE = 120;
+    var MAX_SPEED = 14;
+
+    function step() {
+      if (!scrollSpeed) { rafId = null; return; }
+      window.scrollBy(0, scrollSpeed);
+      rafId = requestAnimationFrame(step);
+    }
+
+    document.addEventListener('dragover', function (e) {
+      if (draggingIdx === null) return;
+      var y = e.clientY;
+      var h = window.innerHeight;
+      var speed = 0;
+      if (y < ZONE) speed = -Math.round(2 + (ZONE - y) / ZONE * MAX_SPEED);
+      else if (y > h - ZONE) speed = Math.round(2 + (y - (h - ZONE)) / ZONE * MAX_SPEED);
+      scrollSpeed = speed;
+      if (speed && !rafId) rafId = requestAnimationFrame(step);
+    });
+
+    document.addEventListener('dragend', function () {
+      scrollSpeed = 0;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    });
+  })();
+
   /* ---- Delete ---- */
   function confirmDelete(i, img) {
     var filename = img.src.replace(/^photos\//, '');
