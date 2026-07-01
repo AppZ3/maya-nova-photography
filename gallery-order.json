@@ -38,6 +38,14 @@
       ]
     },
     {
+      "src": "photos/edited-4.jpg",
+      "alt": "edited 4",
+      "category": [
+        "events",
+        "social"
+      ]
+    },
+    {
       "src": "photos/p3.jpg",
       "alt": "Outdoor portrait",
       "category": [
@@ -60,14 +68,6 @@
       ]
     },
     {
-      "src": "photos/p1.jpg",
-      "alt": "Portrait",
-      "category": [
-        "portrait"
-      ],
-      "hidden": true
-    },
-    {
       "src": "photos/p4.jpg",
       "alt": "Portrait session",
       "category": [
@@ -75,6 +75,14 @@
         "social",
         "events"
       ]
+    },
+    {
+      "src": "photos/p1.jpg",
+      "alt": "Portrait",
+      "category": [
+        "portrait"
+      ],
+      "hidden": true
     },
     {
       "src": "photos/avatar.jpg",
@@ -341,6 +349,13 @@
       "category": []
     },
     {
+      "src": "photos/helenatom-72.jpg",
+      "alt": "helenatom 72",
+      "category": [
+        "events"
+      ]
+    },
+    {
       "src": "photos/397a6777.jpg",
       "alt": "397a6777",
       "category": [
@@ -479,14 +494,6 @@
       "category": []
     },
     {
-      "src": "photos/edited-4.jpg",
-      "alt": "edited 4",
-      "category": [
-        "events",
-        "social"
-      ]
-    },
-    {
       "src": "photos/edited-5.jpg",
       "alt": "edited 5",
       "hidden": true,
@@ -623,13 +630,6 @@
       "alt": "helenatom 51",
       "hidden": true,
       "category": []
-    },
-    {
-      "src": "photos/helenatom-72.jpg",
-      "alt": "helenatom 72",
-      "category": [
-        "events"
-      ]
     }
   ]
 }
