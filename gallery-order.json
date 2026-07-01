@@ -1,6 +1,13 @@
 {
   "images": [
     {
+      "src": "photos/p7.jpg",
+      "alt": "Documentary portrait",
+      "category": [
+        "portrait"
+      ]
+    },
+    {
       "src": "photos/p6.jpg",
       "alt": "Natural light portrait",
       "category": [
@@ -8,8 +15,16 @@
       ]
     },
     {
-      "src": "photos/p7.jpg",
-      "alt": "Documentary portrait",
+      "src": "photos/edited-4.jpg",
+      "alt": "edited 4",
+      "category": [
+        "events",
+        "social"
+      ]
+    },
+    {
+      "src": "photos/397a3485.jpg",
+      "alt": "397a3485",
       "category": [
         "portrait"
       ]
@@ -29,21 +44,6 @@
         "portrait"
       ],
       "hidden": true
-    },
-    {
-      "src": "photos/397a3485.jpg",
-      "alt": "397a3485",
-      "category": [
-        "portrait"
-      ]
-    },
-    {
-      "src": "photos/edited-4.jpg",
-      "alt": "edited 4",
-      "category": [
-        "events",
-        "social"
-      ]
     },
     {
       "src": "photos/p3.jpg",
