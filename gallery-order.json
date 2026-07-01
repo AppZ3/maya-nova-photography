@@ -1,46 +1,8 @@
 {
   "images": [
     {
-      "src": "photos/p8.jpg",
-      "alt": "Creative portrait",
-      "category": [
-        "portrait"
-      ],
-      "hidden": true
-    },
-    {
-      "src": "photos/p2.jpg",
-      "alt": "Artistic portrait",
-      "category": [
-        "portrait",
-        "events"
-      ]
-    },
-    {
-      "src": "photos/p3.jpg",
-      "alt": "Outdoor portrait",
-      "category": [
-        "portrait"
-      ]
-    },
-    {
       "src": "photos/p6.jpg",
       "alt": "Natural light portrait",
-      "category": [
-        "portrait"
-      ]
-    },
-    {
-      "src": "photos/p1.jpg",
-      "alt": "Portrait",
-      "category": [
-        "portrait"
-      ],
-      "hidden": true
-    },
-    {
-      "src": "photos/p5.jpg",
-      "alt": "Wellness portrait",
       "category": [
         "portrait"
       ]
@@ -51,6 +13,59 @@
       "category": [
         "portrait"
       ]
+    },
+    {
+      "src": "photos/397a5012.jpg",
+      "alt": "397a5012",
+      "category": [
+        "events",
+        "social"
+      ]
+    },
+    {
+      "src": "photos/p8.jpg",
+      "alt": "Creative portrait",
+      "category": [
+        "portrait"
+      ],
+      "hidden": true
+    },
+    {
+      "src": "photos/397a3485.jpg",
+      "alt": "397a3485",
+      "category": [
+        "portrait"
+      ]
+    },
+    {
+      "src": "photos/p3.jpg",
+      "alt": "Outdoor portrait",
+      "category": [
+        "portrait"
+      ]
+    },
+    {
+      "src": "photos/p5.jpg",
+      "alt": "Wellness portrait",
+      "category": [
+        "portrait"
+      ]
+    },
+    {
+      "src": "photos/p2.jpg",
+      "alt": "Artistic portrait",
+      "category": [
+        "portrait",
+        "events"
+      ]
+    },
+    {
+      "src": "photos/p1.jpg",
+      "alt": "Portrait",
+      "category": [
+        "portrait"
+      ],
+      "hidden": true
     },
     {
       "src": "photos/p4.jpg",
@@ -144,13 +159,6 @@
       ]
     },
     {
-      "src": "photos/397a3485.jpg",
-      "alt": "397a3485",
-      "category": [
-        "portrait"
-      ]
-    },
-    {
       "src": "photos/397a3847.jpg",
       "alt": "397a3847",
       "category": [
@@ -213,14 +221,6 @@
       ]
     },
     {
-      "src": "photos/397a5012.jpg",
-      "alt": "397a5012",
-      "category": [
-        "events",
-        "social"
-      ]
-    },
-    {
       "src": "photos/397a5030.jpg",
       "alt": "397a5030",
       "category": [
@@ -260,6 +260,14 @@
       "category": [
         "events",
         "social"
+      ]
+    },
+    {
+      "src": "photos/397a8218.jpg",
+      "alt": "397a8218",
+      "category": [
+        "portrait",
+        "events"
       ]
     },
     {
@@ -424,14 +432,6 @@
       "alt": "397a8050",
       "hidden": true,
       "category": []
-    },
-    {
-      "src": "photos/397a8218.jpg",
-      "alt": "397a8218",
-      "category": [
-        "portrait",
-        "events"
-      ]
     },
     {
       "src": "photos/397a8222.jpg",
