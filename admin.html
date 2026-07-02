@@ -298,6 +298,42 @@
     .admin-cell.is-hidden .hide-btn { opacity: 1; background: rgba(200,168,130,0.9); }
     .admin-cell .hide-btn:hover { background: rgba(200,168,130,0.85); }
     .admin-cell.is-hidden { opacity: 0.5; }
+
+    .admin-cell .focal-btn {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 28px;
+      height: 28px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+      z-index: 2;
+    }
+    .admin-cell:hover .focal-btn { opacity: 1; }
+    .admin-cell .focal-btn.is-set { opacity: 1; background: rgba(200,168,130,0.9); }
+    .admin-cell .focal-btn:hover { background: rgba(200,168,130,0.85); }
+
+    /* Small dot on the thumbnail showing where the focal point is set */
+    .focal-indicator {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.4);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 2;
+    }
     .admin-cell.is-hidden img { filter: grayscale(40%); }
 
     .admin-cell .img-label {
@@ -404,6 +440,89 @@
     .cat-option:hover { background: #f0ede8; }
     .cat-option.selected { background: rgba(200,168,130,0.18); color: #8a5820; font-weight: 600; }
 
+    /* ---- Focal point picker ---- */
+    #focal-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    #focal-modal.open { display: flex; }
+    .focal-modal-box {
+      background: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: 640px;
+      width: 100%;
+    }
+    .focal-modal-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .focal-modal-hint {
+      font-size: 12px;
+      color: var(--mid);
+      margin-bottom: 14px;
+    }
+    .focal-modal-img-wrap {
+      position: relative;
+      width: 100%;
+      max-height: 60vh;
+      overflow: hidden;
+      border-radius: var(--radius);
+      cursor: crosshair;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .focal-modal-img-wrap img {
+      display: block;
+      max-width: 100%;
+      max-height: 60vh;
+      pointer-events: none;
+      user-select: none;
+    }
+    .focal-crosshair {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      margin-left: -13px;
+      margin-top: -13px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.5), 0 0 0 3px rgba(255,255,255,0.6);
+      pointer-events: none;
+    }
+    .focal-crosshair::before, .focal-crosshair::after {
+      content: '';
+      position: absolute;
+      background: var(--gold);
+    }
+    .focal-crosshair::before { left: 50%; top: -6px; bottom: -6px; width: 1px; margin-left: -0.5px; }
+    .focal-crosshair::after { top: 50%; left: -6px; right: -6px; height: 1px; margin-top: -0.5px; }
+    .focal-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .btn-ghost {
+      padding: 8px 16px;
+      background: none;
+      color: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-ghost:hover { background: #f5f3ee; }
+
     @media (max-width: 640px) {
       header { padding: 12px 16px; }
       #grid { gap: 8px; padding: 16px 16px 48px; grid-template-columns: repeat(2, 1fr); }
@@ -485,6 +604,22 @@
   <button class="cat-option" data-cat="commercial">Commercial</button>
 </div>
 
+<div id="focal-modal">
+  <div class="focal-modal-box">
+    <div class="focal-modal-title">Set focal point</div>
+    <div class="focal-modal-hint">Click the subject -- this stays centered no matter what shape tile the photo lands in on the gallery grid.</div>
+    <div class="focal-modal-img-wrap" id="focal-img-wrap">
+      <img id="focal-modal-img" src="" alt="">
+      <div class="focal-crosshair" id="focal-crosshair"></div>
+    </div>
+    <div class="focal-modal-actions">
+      <button class="btn-ghost" id="focal-reset-btn">Reset to Center</button>
+      <button class="btn-ghost" id="focal-cancel-btn">Cancel</button>
+      <button class="btn-sm" id="focal-save-btn">Save</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
 (function () {
@@ -502,13 +637,15 @@
   var PW_HASH = '115d3edebd34374fc5e962bd4b0a02bc3f05cf9d4ae8b1e67cb8d913e52d05aa';
 
   /* ---- State ---- */
-  var images = [];        // [{src, alt, category}]
+  var images = [];        // [{src, alt, category, focal}]
   var orderSha = null;    // current SHA of gallery-order.json on GitHub
   var pat = '';           // GitHub PAT
   var dirty = false;      // unsaved changes
   var draggingIdx = null;
   var wasDragged = false;
   var activePickerIdx = null;
+  var activeFocalIdx = null;
+  var pendingFocal = null; // "x% y%" chosen but not yet saved, while modal is open
 
   var CAT_LABELS = {
     portrait: 'Portrait',
@@ -534,6 +671,13 @@
   var zipInput    = document.getElementById('zip-input');
   var publishBtn  = document.getElementById('publish-btn');
   var gridEl     = document.getElementById('grid');
+  var focalModal    = document.getElementById('focal-modal');
+  var focalImgWrap  = document.getElementById('focal-img-wrap');
+  var focalModalImg = document.getElementById('focal-modal-img');
+  var focalCrosshair = document.getElementById('focal-crosshair');
+  var focalResetBtn = document.getElementById('focal-reset-btn');
+  var focalCancelBtn = document.getElementById('focal-cancel-btn');
+  var focalSaveBtn  = document.getElementById('focal-save-btn');
 
   /* ---- Utilities ---- */
   function setStatus(msg, type) {
@@ -553,15 +697,44 @@
     return name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9.\-_]/g, '');
   }
 
-  function fileToBase64(file) {
+  /* ---- Image optimization on upload ----
+     Camera uploads were coming in at 10-30MB each (full sensor resolution),
+     served straight into gallery tiles a few hundred px wide -- see the
+     manual one-time cleanup done 2026-07-02. This does the same thing
+     automatically for every future upload: resize to a 1800px max edge,
+     re-encode as a quality-72 progressive-equivalent JPEG, which also
+     strips EXIF/GPS metadata. Runs entirely client-side via Canvas, no
+     server needed. Falls back to the original file untouched if the
+     browser can't decode it (e.g. an exotic format) or resizing throws. */
+  var RESIZE_MAX_DIM = 1800;
+  var RESIZE_QUALITY = 0.72;
+
+  function resizeImageBlob(blob) {
+    if (!window.createImageBitmap) return Promise.reject(new Error('createImageBitmap unsupported'));
+    return createImageBitmap(blob, { imageOrientation: 'from-image' }).then(function (bitmap) {
+      var scale = Math.min(1, RESIZE_MAX_DIM / Math.max(bitmap.width, bitmap.height));
+      var tw = Math.max(1, Math.round(bitmap.width * scale));
+      var th = Math.max(1, Math.round(bitmap.height * scale));
+      var canvas = document.createElement('canvas');
+      canvas.width = tw;
+      canvas.height = th;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(bitmap, 0, 0, tw, th);
+      if (bitmap.close) bitmap.close();
+      return new Promise(function (resolve, reject) {
+        canvas.toBlob(function (out) {
+          if (out) resolve(out); else reject(new Error('Canvas encode failed'));
+        }, 'image/jpeg', RESIZE_QUALITY);
+      });
+    });
+  }
+
+  function blobToBase64(blob) {
     return new Promise(function (resolve, reject) {
       var reader = new FileReader();
-      reader.onload = function (e) {
-        var dataUrl = e.target.result;
-        resolve(dataUrl.split(',')[1]);
-      };
+      reader.onload = function (e) { resolve(e.target.result.split(',')[1]); };
       reader.onerror = reject;
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(blob);
     });
   }
 
@@ -741,6 +914,69 @@
     }
   });
 
+  /* ---- Focal point picker ----
+     Stored per-photo as a CSS object-position string ("x% y%") in
+     gallery-order.json, read directly by the public site's focalFor().
+     Click anywhere on the preview image to move the crosshair; nothing
+     is written to `images` until Save is clicked. */
+  function setCrosshairPosition(xPct, yPct) {
+    focalCrosshair.style.left = xPct + '%';
+    focalCrosshair.style.top = yPct + '%';
+  }
+
+  function showFocalPicker(idx) {
+    activeFocalIdx = idx;
+    var img = images[idx];
+    pendingFocal = img.focal || null;
+    focalModalImg.src = img.src;
+    var startPct = parsePct(pendingFocal) || { x: 50, y: 50 };
+    setCrosshairPosition(startPct.x, startPct.y);
+    focalModal.classList.add('open');
+  }
+
+  function hideFocalPicker() {
+    focalModal.classList.remove('open');
+    activeFocalIdx = null;
+    pendingFocal = null;
+  }
+
+  function parsePct(str) {
+    if (!str) return null;
+    var m = str.match(/^([\d.]+)%\s+([\d.]+)%$/);
+    if (!m) return null;
+    return { x: parseFloat(m[1]), y: parseFloat(m[2]) };
+  }
+
+  focalImgWrap.addEventListener('click', function (e) {
+    if (activeFocalIdx === null) return;
+    var rect = focalModalImg.getBoundingClientRect();
+    var x = Math.min(100, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
+    var y = Math.min(100, Math.max(0, ((e.clientY - rect.top) / rect.height) * 100));
+    pendingFocal = x.toFixed(1) + '% ' + y.toFixed(1) + '%';
+    setCrosshairPosition(x, y);
+  });
+
+  focalResetBtn.addEventListener('click', function () {
+    pendingFocal = null;
+    setCrosshairPosition(50, 50);
+  });
+
+  focalCancelBtn.addEventListener('click', hideFocalPicker);
+
+  focalModal.addEventListener('click', function (e) {
+    if (e.target === focalModal) hideFocalPicker();
+  });
+
+  focalSaveBtn.addEventListener('click', function () {
+    if (activeFocalIdx === null) return;
+    if (pendingFocal) images[activeFocalIdx].focal = pendingFocal;
+    else delete images[activeFocalIdx].focal;
+    dirty = true;
+    setStatus('Focal point updated. Click Publish to go live.');
+    hideFocalPicker();
+    render();
+  });
+
   /* ---- Render grid ---- */
   function render() {
     if (!images.length) {
@@ -797,6 +1033,15 @@
         render();
       });
 
+      var focalBtn = document.createElement('button');
+      focalBtn.className = 'focal-btn' + (img.focal ? ' is-set' : '');
+      focalBtn.title = img.focal ? 'Focal point set -- click to adjust' : 'Set focal point';
+      focalBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="6"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>';
+      focalBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        showFocalPicker(i);
+      });
+
       if (img.hidden) cell.classList.add('is-hidden');
 
       cell.appendChild(imgEl);
@@ -804,10 +1049,20 @@
       cell.appendChild(badge);
       cell.appendChild(hideBtn);
       cell.appendChild(delBtn);
+      cell.appendChild(focalBtn);
+
+      var focalPct = parsePct(img.focal);
+      if (focalPct) {
+        var dot = document.createElement('div');
+        dot.className = 'focal-indicator';
+        dot.style.left = focalPct.x + '%';
+        dot.style.top = focalPct.y + '%';
+        cell.appendChild(dot);
+      }
 
       /* Click to assign category */
       cell.addEventListener('click', function (e) {
-        if (e.target.closest('.delete-btn') || e.target.closest('.hide-btn')) return;
+        if (e.target.closest('.delete-btn') || e.target.closest('.hide-btn') || e.target.closest('.focal-btn')) return;
         if (wasDragged) { wasDragged = false; return; }
         showCatPicker(i, cell);
       });
@@ -952,19 +1207,36 @@
   });
 
   async function uploadFile(file) {
-    var filename = sanitizeFilename(file.name);
-    var src = PHOTOS_DIR + '/' + filename;
+    var rawName = sanitizeFilename(file.name);
 
     /* Add uploading placeholder */
     var placeholder = document.createElement('div');
     placeholder.className = 'admin-cell uploading';
-    placeholder.textContent = 'Uploading ' + filename + '...';
+    placeholder.textContent = 'Optimizing ' + rawName + '...';
     gridEl.appendChild(placeholder);
 
-    setStatus('Uploading ' + filename + '...');
+    setStatus('Optimizing ' + rawName + '...');
 
     try {
-      var b64 = await fileToBase64(file);
+      var toUpload = file;
+      var resized = false;
+      try {
+        toUpload = await resizeImageBlob(file);
+        resized = true;
+      } catch (e) {
+        toUpload = file; // unsupported format or decode failure -- upload original untouched
+      }
+
+      /* Resized output is always JPEG; keep the original extension only
+         when resizing was skipped (so e.g. a PNG that failed to decode
+         still uploads as-is instead of mislabeled). */
+      var filename = resized ? rawName.replace(/\.[^.]+$/, '') + '.jpg' : rawName;
+      var src = PHOTOS_DIR + '/' + filename;
+
+      placeholder.textContent = 'Uploading ' + filename + '...';
+      setStatus('Uploading ' + filename + '...');
+
+      var b64 = await blobToBase64(toUpload);
 
       /* Check if file already exists (need SHA to overwrite) */
       var existing = await ghGet(PHOTOS_DIR + '/' + filename);
@@ -974,7 +1246,7 @@
 
       images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] });
       dirty = true;
-      setStatus(filename + ' uploaded. Click photo to assign a category, then Publish.');
+      setStatus(filename + ' uploaded' + (resized ? ' and optimized' : '') + '. Click photo to assign a category or set its focal point, then Publish.');
     } catch (e) {
       setStatus('Upload failed: ' + e.message, 'err');
     } finally {
@@ -1015,19 +1287,34 @@
 
     for (var i = 0; i < entries.length; i++) {
       var filename = entries[i].path.split('/').pop();
-      var sfilename = sanitizeFilename(filename);
-      if (!sfilename) continue;
+      var rawZipName = sanitizeFilename(filename);
+      if (!rawZipName) continue;
 
       var placeholder = document.createElement('div');
       placeholder.className = 'admin-cell uploading';
-      placeholder.textContent = 'Uploading ' + filename + '...';
+      placeholder.textContent = 'Optimizing ' + filename + '...';
       gridEl.appendChild(placeholder);
 
-      setStatus('Uploading ' + (i + 1) + ' / ' + entries.length + ': ' + filename);
+      setStatus('Optimizing ' + (i + 1) + ' / ' + entries.length + ': ' + filename);
 
       try {
-        var b64 = await entries[i].entry.async('base64');
+        var zipBlob = await entries[i].entry.async('blob');
+        var zipResized = false;
+        var zipToUpload = zipBlob;
+        try {
+          zipToUpload = await resizeImageBlob(zipBlob);
+          zipResized = true;
+        } catch (e) {
+          zipToUpload = zipBlob;
+        }
+
+        var sfilename = zipResized ? rawZipName.replace(/\.[^.]+$/, '') + '.jpg' : rawZipName;
         var src = PHOTOS_DIR + '/' + sfilename;
+
+        placeholder.textContent = 'Uploading ' + sfilename + '...';
+        setStatus('Uploading ' + (i + 1) + ' / ' + entries.length + ': ' + sfilename);
+
+        var b64 = await blobToBase64(zipToUpload);
         var existing = await ghGet(PHOTOS_DIR + '/' + sfilename);
         var sha = existing ? existing.sha : null;
         await ghPut(PHOTOS_DIR + '/' + sfilename, b64, sha, 'Upload photo: ' + sfilename);
