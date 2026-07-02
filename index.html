@@ -1646,6 +1646,22 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   .services-grid { grid-template-columns: 1fr; }
   .services-wrap { padding: 90px 24px 40px; }
 
+  /* .services-layout (services-left cards + services-right booking form)
+     had no mobile rule at all -- the 42%/flex-1 split plus services-right's
+     200px right padding (sized for desktop breathing room) squeezed both
+     columns into an overlapping mess on phone widths. */
+  .services-layout {
+    flex-direction: column;
+    padding: 20px 20px 40px;
+    gap: 24px;
+    overflow-y: auto;
+    height: 100%;
+  }
+  .services-left { flex: none; }
+  .services-right { flex: none; padding: 0; }
+  .book-form { grid-template-columns: 1fr; }
+  .book-row-2 { grid-template-columns: 1fr; }
+
   .contact-form-row { flex-direction: column; }
   .side-nav { display: none; }
 }
@@ -1657,6 +1673,24 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   .bento-cell.size-lg { grid-column: span 2; grid-row: span 2; }
   .bento-cell.size-tall { grid-column: span 1; grid-row: span 2; }
   .bento-cell.size-wide { grid-column: span 2; grid-row: span 1; }
+
+  /* Category tabs: 5 labels (incl. "Social Media Content") never fit a
+     phone width -- scroll horizontally instead of wrapping/cutting off. */
+  .gallery-cats {
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .gallery-cats::-webkit-scrollbar { display: none; }
+  .gallery-cat {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 14px 14px 12px;
+  }
+
+  #galleryScroll { padding: 0 16px 40px; }
 }
 </style>
 </head>
@@ -2733,11 +2767,15 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     function measureColumns() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) { cellCache = []; return; }
+      // Mobile CSS switches the grid from 4 columns to 2 -- read the real
+      // column count instead of assuming 4, so the column bucketing below
+      // stays correct at any breakpoint.
+      var numCols = getComputedStyle(grid).gridTemplateColumns.split(' ').length || 4;
       var gridRect = grid.getBoundingClientRect();
-      var colWidth = gridRect.width / 4;
+      var colWidth = gridRect.width / numCols;
       cellCache = Array.prototype.map.call(grid.querySelectorAll('.bento-cell'), function (cell) {
         var r = cell.getBoundingClientRect();
-        var col = Math.min(3, Math.max(0, Math.floor((r.left - gridRect.left) / colWidth)));
+        var col = Math.min(numCols - 1, Math.max(0, Math.floor((r.left - gridRect.left) / colWidth)));
         return { el: cell, col: col };
       });
     }
