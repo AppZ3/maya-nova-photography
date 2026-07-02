@@ -2647,7 +2647,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       if (sectionEntered) return;
       sectionEntered = true;
       initRevealObserver();
-      if (window.__updateGalleryParallax) window.__updateGalleryParallax();
+      if (window.__remeasureGalleryColumns) window.__remeasureGalleryColumns();
     };
 
     function renderFiltered() {
@@ -2669,7 +2669,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         '</div>';
       }).join('');
       initRevealObserver();
-      if (window.__updateGalleryParallax) window.__updateGalleryParallax();
+      if (window.__remeasureGalleryColumns) window.__remeasureGalleryColumns();
     }
 
     window.setGalleryCategory = function (cat) {
@@ -2724,19 +2724,33 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     var WAVELENGTH = 900; // px of internal scroll per full drift cycle
     var parallaxTicking = false;
 
-    function updateParallax() {
+    // Column assignment only changes when the grid is re-rendered or resized,
+    // not on every scroll tick -- measuring it (getBoundingClientRect forces
+    // layout) once per cell and caching avoids layout-thrashing 90+ elements
+    // on every animation frame while scrolling.
+    var cellCache = null; // [{el, col}, ...]
+
+    function measureColumns() {
       var grid = document.getElementById('galleryGrid');
-      if (!grid) return;
+      if (!grid) { cellCache = []; return; }
       var gridRect = grid.getBoundingClientRect();
       var colWidth = gridRect.width / 4;
+      cellCache = Array.prototype.map.call(grid.querySelectorAll('.bento-cell'), function (cell) {
+        var r = cell.getBoundingClientRect();
+        var col = Math.min(3, Math.max(0, Math.floor((r.left - gridRect.left) / colWidth)));
+        return { el: cell, col: col };
+      });
+    }
+
+    function updateParallax() {
+      if (!cellCache) measureColumns();
       var colOffset = COL_AMP.map(function (amp, col) {
         return Math.sin((scroll.scrollTop / WAVELENGTH) * Math.PI * 2 + COL_PHASE[col]) * amp;
       });
-      grid.querySelectorAll('.bento-cell').forEach(function (cell) {
-        var r = cell.getBoundingClientRect();
-        var col = Math.min(3, Math.max(0, Math.floor((r.left - gridRect.left) / colWidth)));
-        cell.style.transform = 'translate3d(0,' + colOffset[col].toFixed(2) + 'px,0)';
-      });
+      for (var i = 0; i < cellCache.length; i++) {
+        var c = cellCache[i];
+        c.el.style.transform = 'translate3d(0,' + colOffset[c.col].toFixed(2) + 'px,0)';
+      }
       parallaxTicking = false;
     }
 
@@ -2746,9 +2760,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       requestAnimationFrame(updateParallax);
     }
 
+    window.__remeasureGalleryColumns = function () { cellCache = null; requestParallax(); };
     scroll.addEventListener('scroll', requestParallax, { passive: true });
-    window.addEventListener('resize', requestParallax);
-    window.__updateGalleryParallax = requestParallax;
+    window.addEventListener('resize', window.__remeasureGalleryColumns);
 
     var lightbox = document.getElementById('galleryLightbox');
     var lbImg    = document.getElementById('galleryLightboxImg');
