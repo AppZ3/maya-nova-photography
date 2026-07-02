@@ -723,7 +723,15 @@
       catPicker.querySelectorAll('.cat-option').forEach(function (b) {
         b.classList.toggle('selected', cats.indexOf(b.dataset.cat) !== -1);
       });
-      render();
+      var activeCell = gridEl.querySelector('[data-index="' + activePickerIdx + '"]');
+      if (activeCell) {
+        var badge = activeCell.querySelector('.cat-badge');
+        if (badge) {
+          badge.className = 'cat-badge' + (cats.length ? '' : ' unset');
+          var catLabels = cats.map(function (c) { return CAT_LABELS[c] || c; });
+          badge.textContent = cats.length ? catLabels.slice(0, 2).join(' · ') + (catLabels.length > 2 ? ' +' + (catLabels.length - 2) : '') : 'Uncategorised';
+        }
+      }
     });
   });
 
@@ -849,6 +857,46 @@
       gridEl.appendChild(cell);
     });
   }
+
+  /* ---- Auto-scroll while dragging ---- */
+  (function () {
+    var rafId = null;
+    var scrollSpeed = 0;
+    var ZONE = 200;
+
+    function step() {
+      if (!scrollSpeed) { rafId = null; return; }
+      window.scrollBy(0, scrollSpeed);
+      rafId = requestAnimationFrame(step);
+    }
+
+    function updateFromY(y) {
+      if (draggingIdx === null) { scrollSpeed = 0; return; }
+      var h = window.innerHeight;
+      var spd = 0;
+      if (y > 0 && y < ZONE) spd = -((120 * (1 - y / ZONE)) + 15) | 0;
+      else if (y > h - ZONE && y < h) spd = ((120 * (1 - (h - y) / ZONE)) + 15) | 0;
+      scrollSpeed = spd;
+      if (spd && !rafId) rafId = requestAnimationFrame(step);
+    }
+
+    /* 'drag' fires on the source element — works even over non-droppable areas
+       and fires periodically even when the mouse is stationary */
+    document.addEventListener('drag', function (e) {
+      if (e.clientY === 0 && e.clientX === 0) return;
+      updateFromY(e.clientY);
+    });
+
+    /* 'dragover' as backup — fires more frequently while moving */
+    document.addEventListener('dragover', function (e) {
+      updateFromY(e.clientY);
+    });
+
+    document.addEventListener('dragend', function () {
+      scrollSpeed = 0;
+      if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    });
+  })();
 
   /* ---- Delete ---- */
   function confirmDelete(i, img) {
