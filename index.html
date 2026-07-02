@@ -129,6 +129,29 @@ html, body {
 
 .nav-links a:hover { color: var(--ink); }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Desktop already has Gallery in .nav-links; this duplicate is mobile-only
+   (see @media 960px) since .nav-links hides there and Gallery had no other
+   way to reach the header. */
+.nav-gallery-mobile {
+  display: none;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 11px;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: color 0.25s;
+  cursor: pointer;
+}
+.nav-gallery-mobile:hover { color: var(--ink); }
+
 .nav-book {
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
@@ -1606,6 +1629,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 @media (max-width: 960px) {
   .nav { padding: 0 24px; }
   .nav-links { display: none; }
+  .nav-gallery-mobile { display: inline-block; }
 
   .hero-inner-wrap {
     flex-direction: column-reverse;
@@ -1731,7 +1755,10 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     <li><a href="#" data-section="1">Gallery</a></li>
     <li><a href="#" data-section="4">Services</a></li>
   </ul>
-  <a href="#" class="nav-book" data-section="4">Book a session</a>
+  <div class="nav-actions">
+    <a href="#" class="nav-gallery-mobile" data-section="1">Gallery</a>
+    <a href="#" class="nav-book" data-section="4">Book a session</a>
+  </div>
 </nav>
 
 <!-- ============================================================
@@ -2632,8 +2659,12 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       '397a5553.jpg': '55% 35%'
     };
 
-    function focalFor(src) {
-      var fname = src.split('/').pop();
+    function focalFor(img) {
+      // Per-photo focal point set via the admin panel's picker takes priority
+      // (gallery-order.json's "focal" field). FOCAL below is a legacy map for
+      // photos hand-positioned before the admin picker existed.
+      if (img.focal) return img.focal;
+      var fname = img.src.split('/').pop();
       return FOCAL[fname] || 'center';
     }
 
@@ -2699,7 +2730,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       grid.innerHTML = list.map(function (img, i) {
         var size = SIZE_PATTERN[i % SIZE_PATTERN.length];
         return '<div class="bento-cell ' + size + '">' +
-          '<img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy" decoding="async" style="object-position:' + focalFor(img.src) + '">' +
+          '<img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy" decoding="async" style="object-position:' + focalFor(img) + '">' +
         '</div>';
       }).join('');
       initRevealObserver();
@@ -2736,6 +2767,12 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
     // Stop wheel from reaching section-navigation; let native scroll handle it
     scroll.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+    // Same for touch swipes -- the section-nav swipe handler lives on window
+    // with no awareness of internally-scrollable areas, so without this a
+    // vertical swipe while scrolling the gallery (mobile) gets counted as a
+    // swipe-to-change-section gesture and jumps back to About/hero.
+    scroll.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
+    scroll.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
 
     /* ------------------------------------------------------------
        Continuous per-column scroll parallax, podium.global-mechanism:
@@ -2831,7 +2868,13 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      ============================================================ */
   (function () {
     var s = document.getElementById('servicesScroll');
-    if (s) s.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+    if (!s) return;
+    s.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+    // Same touch-swipe fix as the gallery (see 11a) -- this section only
+    // scrolls internally on mobile since the services/booking stacking fix,
+    // so it has the identical latent bug without this.
+    s.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
+    s.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
   })();
 
   /* ============================================================
