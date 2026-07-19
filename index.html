@@ -1316,8 +1316,31 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 #section-3 .about-right { flex: 1; }
 
 #section-3 .about-h2 {
-  font-size: clamp(52px, 5vw, 72px);
-  margin-bottom: 32px;
+  font-size: clamp(34px, 3.4vw, 50px);
+  margin-bottom: 22px;
+}
+
+#section-3 .about-p {
+  max-width: 600px;
+  font-size: 15.5px;
+}
+
+/* Long-form bio flows in two magazine columns on desktop */
+.about-cols {
+  columns: 2;
+  column-gap: 32px;
+  max-width: 780px;
+  margin-bottom: 22px;
+}
+
+.about-body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #4a3820;
+  margin-bottom: 14px;
+  break-inside: avoid;
 }
 
 .about-lead {
@@ -1675,9 +1698,10 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     max-height: 320px;
   }
 
-  .about-layout { flex-direction: column; }
+  .about-layout { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .about-right { height: 250px; flex: none; order: -1; }
   .about-left { padding: 40px 28px 40px; }
+  .about-cols { columns: 1; }
 
   .services-grid { grid-template-columns: 1fr; }
   .services-wrap { padding: 90px 24px 40px; }
@@ -1950,20 +1974,24 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      SECTION 3: ABOUT
      ============================================================ -->
 <section class="section" id="section-3" aria-label="About Maya">
-  <div class="about-layout">
+  <div class="about-layout" id="aboutScroll">
     <div class="about-left">
       <p class="about-title">About Maya</p>
       <h2 class="about-h2">
         Photographer.<br>
-        Storyteller.<br>
-        Observer.
+        Videographer.<br>
+        Storyteller.
       </h2>
       <p class="about-p">
-        Maya Nova is a photographer with an eye for the space between moments -- the quiet breath before laughter, the fleeting geometry of light on skin. Her work lives in the emotional register that most images miss.
+        I'm a photographer + videographer based in the Northern Rivers capturing honest, heartfelt stories inspired by nature, connection and the beauty of being present.
       </p>
-      <p class="about-lead">
-        Available for portrait sessions, editorial commissions, and events across Australia and internationally.
-      </p>
+      <div class="about-cols">
+        <p class="about-body">My work is about more than beautiful photos ~ it's about preserving the feeling of a moment. The laughter, loving glances, carefree movement, the happy tears and all the little in-between moments that often become our most treasured memories.</p>
+        <p class="about-body">I believe photography can be a beautiful act of self-love. A chance to slow down, come home to your body, embrace the season you're in, and celebrate yourself and the people you love.</p>
+        <p class="about-body">My sessions are relaxed, natural and free from stiff poses or forced smiles. I'll gently guide you when needed but mostly I'll create space for you to simply be yourselves while I capture the magic as it naturally unfolds.</p>
+        <p class="about-body">Alongside photography, I also create films that bring your story to life through movement, sound and emotion ~ allowing you to relive your most meaningful moments for years to come.</p>
+        <p class="about-body">My hope is that when you look back at your gallery or film, you don't just remember what happened ~ you remember exactly how it felt.</p>
+      </div>
       <a href="#" class="about-cta" data-section="4">Book a session &rarr;</a>
     </div>
     <div class="about-right">
@@ -2915,6 +2943,22 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     // so it has the identical latent bug without this.
     s.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
     s.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
+  })();
+
+  /* ============================================================
+     11b2. ABOUT SCROLL PASSTHROUGH (mobile: bio scrolls internally)
+     ============================================================ */
+  (function () {
+    var a = document.getElementById('aboutScroll');
+    if (!a) return;
+    a.addEventListener('wheel', function (e) {
+      var up = e.deltaY < 0;
+      var atTop = a.scrollTop <= 0;
+      var atBottom = a.scrollTop + a.clientHeight >= a.scrollHeight - 1;
+      if ((up && !atTop) || (!up && !atBottom)) e.stopPropagation();
+    }, { passive: true });
+    a.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
+    a.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
   })();
 
   /* ============================================================
