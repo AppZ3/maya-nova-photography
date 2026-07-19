@@ -3225,19 +3225,31 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         var submitBtn = form.querySelector('.book-submit');
         if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
 
+        // Each field becomes its own labelled row in the notification email,
+        // and empty fields are omitted so Maya only reads what was filled in.
+        var payload = {
+          access_key: W3F_KEY,
+          subject: 'New inquiry · ' + name + (purposes ? ' · ' + purposes : ''),
+          from_name: 'Maya Nova Website',
+          'Name': name,
+          'Email': email,
+          email: email
+        };
+        if (phone)    payload['Phone'] = phone;
+        if (date)     payload['Preferred date'] = date;
+        if (purposes) payload['Purpose of shoot'] = purposes;
+        if (media)    payload['Photos or videos'] = media;
+        if (orient)   payload['Orientation'] = orient;
+        if (location) payload['Location or venue'] = location;
+        if (budget)   payload['Budget'] = budget;
+        if (exchange) payload['Open to gift exchange'] = exchange + (offering ? ' (' + offering + ')' : '');
+        if (vision)   payload['Their vision'] = vision;
+        payload.botcheck = (form.querySelector('input[name="botcheck"]') || {}).checked || '';
+
         fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            access_key: W3F_KEY,
-            subject: 'Session inquiry from ' + name,
-            from_name: 'Maya Nova Photography',
-            name: name,
-            email: email,
-            phone: phone,
-            message: lines.join('\n'),
-            botcheck: (form.querySelector('input[name="botcheck"]') || {}).checked || ''
-          })
+          body: JSON.stringify(payload)
         }).then(function (r) { return r.json(); }).then(function (data) {
           if (data && data.success) { showSuccess(); }
           else { mailtoFallback(); }
