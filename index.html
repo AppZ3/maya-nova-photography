@@ -1703,7 +1703,11 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   .about-left { padding: 40px 28px 40px; }
   .about-cols { columns: 1; }
 
-  .services-grid { grid-template-columns: 1fr; }
+  /* Rows: auto, not 1fr -- equal-height rows stretch three short cards
+     to fill the tall scroll container, leaving huge dead space on phones. */
+  .services-grid { grid-template-columns: 1fr; grid-template-rows: auto; gap: 12px; flex: none; }
+  .service-card { padding: 22px 24px; }
+  .service-title { font-size: 26px; margin-bottom: 12px; }
   .services-wrap { padding: 90px 24px 40px; }
 
   /* .services-layout (services-left cards + services-right booking form)
@@ -1712,7 +1716,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      columns into an overlapping mess on phone widths. */
   .services-layout {
     flex-direction: column;
-    padding: 20px 20px 40px;
+    /* Top padding clears the fixed nav band, which otherwise covers the
+       WHAT I DO header at the top of this internally-scrolling section. */
+    padding: 140px 20px 40px;
     gap: 24px;
     overflow-y: auto;
     height: 100%;
@@ -2878,6 +2884,14 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     }
 
     function updateParallax() {
+      // No drift on phones: with only 2 columns the resting sine offset
+      // (+26px on column 2) reads as broken alignment, not parallax.
+      if (window.innerWidth <= 960) {
+        var cells = document.querySelectorAll('#galleryGrid .bento-cell');
+        for (var j = 0; j < cells.length; j++) cells[j].style.transform = '';
+        parallaxTicking = false;
+        return;
+      }
       if (!cellCache) measureColumns();
       var colOffset = COL_AMP.map(function (amp, col) {
         return Math.sin((scroll.scrollTop / WAVELENGTH) * Math.PI * 2 + COL_PHASE[col]) * amp;
@@ -3154,7 +3168,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
     // Web3Forms access key — inquiries are emailed via api.web3forms.com.
     // While this is the placeholder, the form falls back to a mailto: link.
-    var W3F_KEY = 'REPLACE_WITH_WEB3FORMS_KEY';
+    var W3F_KEY = '89dbfce8-52c3-4043-a176-c3e856fbaad4';
 
     if (form && success) {
       form.addEventListener('submit', function (e) {
