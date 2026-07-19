@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Gallery · Maya Nova Photography</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,600;1,300;1,500;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js" onerror="window.__zipLibFailed=true"></script>
+<style>
+/* ============================================================
+   RESET + BASE
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:       #fffef8;
+  --ink:      #1e1408;
+  --muted:    rgba(74,56,32,0.75);
+  --dim:      rgba(122,100,80,0.85);
+  --accent:   #8a5820;
+  --border:   rgba(138,88,32,0.14);
+  --card-bg:  #ffffff;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse 60% 40% at 62% 0%, rgba(200,168,130,0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 10% 100%, rgba(138,88,32,0.05) 0%, transparent 60%),
+    var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fffef8;
+}
+
+a { color: inherit; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Film grain, matching the main site */
+.grain {
+  position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  animation: grainShift .15s steps(1) infinite;
+}
+@keyframes grainShift {
+  0%   { background-position: 0 0; }
+  25%  { background-position: -50px -30px; }
+  50%  { background-position: 30px 50px; }
+  75%  { background-position: -80px 20px; }
+  100% { background-position: 50px -60px; }
+}
+
+/* ============================================================
+   TOP BAR
+   ============================================================ */
+.topbar {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 52px 0;
+}
+
+.wordmark {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--ink);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  transition: opacity 0.25s;
+}
+.wordmark:hover { opacity: 0.75; }
+
+/* ============================================================
+   CENTERED STATE PANELS (loading / pin / not found / expired)
+   ============================================================ */
+.panel-stage {
+  min-height: calc(100vh - 64px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px 96px;
+}
+
+.panel {
+  max-width: 430px;
+  width: 100%;
+  text-align: center;
+  animation: panelIn 0.7s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.eyebrow::before,
+.eyebrow::after {
+  content: '';
+  width: 26px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.55;
+}
+
+.panel h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  margin: 20px 0 14px;
+}
+
+.panel p {
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+.panel p + p { margin-top: 10px; }
+
+.panel .accent-link {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(138,88,32,0.35);
+  padding-bottom: 1px;
+  transition: border-color 0.25s;
+}
+.panel .accent-link:hover { border-color: var(--accent); }
+
+.pill-link {
+  display: inline-block;
+  margin-top: 30px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-decoration: none;
+  border: 1px solid rgba(74,56,32,0.3);
+  border-radius: 20px;
+  padding: 10px 26px;
+  transition: border-color 0.25s, background 0.25s, color 0.25s;
+}
+.pill-link:hover {
+  border-color: var(--accent);
+  background: rgba(138,88,32,0.07);
+  color: var(--accent);
+}
+
+/* Loader */
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+.loader-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  animation: loaderBreathe 2.4s ease-in-out infinite;
+}
+.loader-line {
+  width: 120px;
+  height: 1px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.loader-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+  animation: loaderSweep 1.6s cubic-bezier(0.45,0,0.55,1) infinite;
+}
+@keyframes loaderSweep {
+  0%   { transform: translateX(-40px); }
+  100% { transform: translateX(120px); }
+}
+@keyframes loaderBreathe {
+  0%, 100% { opacity: 0.45; }
+  50%      { opacity: 0.9; }
+}
+
+/* PIN form */
+.pin-form {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.pin-input {
+  width: 210px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.5em;
+  text-indent: 0.5em;
+  text-align: center;
+  padding: 13px 10px;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.pin-input:focus {
+  border-color: rgba(138,88,32,0.55);
+  box-shadow: 0 0 0 3px rgba(138,88,32,0.08);
+}
+.pin-input::placeholder {
+  color: var(--dim);
+  letter-spacing: 0.4em;
+  font-size: 16px;
+}
+.pin-submit {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid rgba(74,56,32,0.3);
+  border-radius: 20px;
+  padding: 10px 30px;
+  transition: border-color 0.25s, background 0.25s, color 0.25s, opacity 0.25s;
+}
+.pin-submit:hover {
+  border-color: var(--accent);
+  background: rgba(138,88,32,0.07);
+  color: var(--accent);
+}
+.pin-submit:disabled { opacity: 0.45; cursor: default; }
+.pin-error {
+  min-height: 18px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #B04A3A;
+}
+.pin-form.shake .pin-input {
+  animation: pinShake 0.45s cubic-bezier(0.36,0.07,0.19,0.97);
+  border-color: rgba(176,74,58,0.5);
+}
+@keyframes pinShake {
+  10%, 90%      { transform: translateX(-1px); }
+  20%, 80%      { transform: translateX(2px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60%      { transform: translateX(5px); }
+}
+
+/* ============================================================
+   GALLERY VIEW
+   ============================================================ */
+.gallery-view {
+  position: relative;
+  z-index: 10;
+  animation: panelIn 0.8s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.gallery-head {
+  text-align: center;
+  padding: 64px 24px 20px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.client-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(42px, 8vw, 78px);
+  line-height: 1.08;
+  letter-spacing: 0.01em;
+  margin: 22px 0 18px;
+}
+
+.gallery-meta {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  line-height: 1.9;
+}
+.gallery-meta .sep { color: var(--dim); padding: 0 8px; }
+.days-left.urgent { color: var(--accent); }
+
+.download-all-row {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-download-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid rgba(74,56,32,0.3);
+  border-radius: 20px;
+  padding: 11px 30px;
+  transition: border-color 0.25s, background 0.25s, color 0.25s, opacity 0.25s;
+}
+.btn-download-all svg {
+  width: 13px; height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.btn-download-all:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(138,88,32,0.07);
+  color: var(--accent);
+}
+.btn-download-all:disabled { opacity: 0.5; cursor: default; }
+
+.download-status {
+  min-height: 18px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.download-status.error { color: #B04A3A; }
+
+/* Photo grid: CSS columns masonry */
+.photo-grid {
+  columns: 2;
+  column-gap: 10px;
+  padding: 34px 16px 30px;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+@media (min-width: 760px)  { .photo-grid { columns: 3; column-gap: 12px; padding: 44px 32px 40px; } }
+@media (min-width: 1200px) { .photo-grid { columns: 4; } }
+
+.photo-tile {
+  position: relative;
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+  background: var(--card-bg);
+  cursor: zoom-in;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s ease;
+}
+@media (min-width: 760px) { .photo-tile { margin-bottom: 12px; } }
+
+.photo-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(74,56,32,0.18);
+}
+
+.photo-tile img {
+  width: 100%;
+  display: block;
+  opacity: 0;
+  transform: scale(1.015);
+  transition: opacity 0.7s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.photo-tile img.loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.tile-dl {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(8,6,10,0.55);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease, background 0.2s, border-color 0.2s;
+}
+.photo-tile:hover .tile-dl,
+.tile-dl:focus-visible { opacity: 1; }
+.tile-dl:hover {
+  background: rgba(200,168,130,0.22);
+  border-color: rgba(200,168,130,0.55);
+}
+.tile-dl svg {
+  width: 14px; height: 14px;
+  stroke: rgba(240,237,234,0.9);
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@media (hover: none) {
+  .tile-dl { opacity: 1; }
+}
+
+/* Empty gallery */
+.empty-note {
+  text-align: center;
+  padding: 70px 24px 50px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.empty-note .empty-serif {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 26px;
+  color: var(--ink);
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Footer */
+.gallery-footer {
+  border-top: 1px solid var(--border);
+  margin-top: 30px;
+  padding: 36px 24px 48px;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  line-height: 2;
+  color: var(--dim);
+}
+.gallery-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+.gallery-footer a:hover { color: var(--accent); }
+
+/* ============================================================
+   LIGHTBOX
+   ============================================================ */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0,0,0,0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+  pointer-events: none;
+  touch-action: pan-y;
+}
+.lightbox.open {
+  background: rgba(0,0,0,0.96);
+  pointer-events: all;
+}
+
+.lightbox-img {
+  max-width: 92vw;
+  max-height: 86vh;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34,1.1,0.64,1);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.lightbox.open .lightbox-img.ready {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lb-btn {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease, background 0.2s, border-color 0.2s;
+  pointer-events: none;
+  z-index: 9010;
+}
+.lightbox.open .lb-btn {
+  opacity: 1;
+  pointer-events: all;
+}
+.lb-btn:hover {
+  background: rgba(255,255,255,0.18);
+}
+.lb-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: rgba(255,255,255,0.75);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lb-close { top: 22px; right: 24px; }
+.lb-prev  { left: 18px;  top: 50%; transform: translateY(-50%); }
+.lb-next  { right: 18px; top: 50%; transform: translateY(-50%); }
+
+.lb-download {
+  position: fixed;
+  bottom: 26px;
+  right: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #F0EDEA;
+  text-decoration: none;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 10px 22px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, border-color 0.2s, background 0.2s, color 0.2s;
+  z-index: 9010;
+}
+.lightbox.open .lb-download {
+  opacity: 1;
+  pointer-events: all;
+}
+.lb-download:hover {
+  border-color: #C8A882;
+  background: rgba(200,168,130,0.14);
+  color: #C8A882;
+}
+.lb-download svg {
+  width: 13px; height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.lb-counter {
+  position: fixed;
+  bottom: 34px;
+  left: 28px;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(240,237,234,0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 9010;
+  font-variant-numeric: tabular-nums;
+}
+.lightbox.open .lb-counter { opacity: 1; }
+
+@media (max-width: 640px) {
+  .topbar { padding: 22px 22px 0; }
+  .gallery-head { padding-top: 46px; }
+  .lb-prev { left: 8px; }
+  .lb-next { right: 8px; }
+  .lb-download { bottom: 20px; right: 16px; padding: 9px 18px; }
+  .lb-counter { bottom: 30px; left: 18px; }
+}
+
+.hidden { display: none !important; }
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain { animation: none; }
+  .photo-tile:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="wordmark" href="/">Maya Nova</a>
+</header>
+
+<!-- LOADING -->
+<main id="state-loading" class="panel-stage">
+  <div class="loader" role="status" aria-label="Loading gallery">
+    <div class="loader-mark">Maya Nova</div>
+    <div class="loader-line"></div>
+  </div>
+</main>
+
+<!-- ERROR / NOT FOUND -->
+<main id="state-error" class="panel-stage hidden">
+  <div class="panel">
+    <span class="eyebrow">Client Gallery</span>
+    <h1 id="error-title">Gallery not found</h1>
+    <p id="error-message">We couldn't find a gallery at this link. Please check the link in your email, or reach out and we'll send you a fresh one.</p>
+    <a class="pill-link" href="/">Visit the main site</a>
+  </div>
+</main>
+
+<!-- PIN -->
+<main id="state-pin" class="panel-stage hidden">
+  <div class="panel">
+    <span class="eyebrow">Client Gallery</span>
+    <h1>A private collection</h1>
+    <p id="pin-label">This gallery is protected. Enter your PIN.</p>
+    <form id="pin-form" class="pin-form" novalidate>
+      <label class="hidden" for="pin-input">Gallery PIN</label>
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="8" placeholder="••••" aria-describedby="pin-error">
+      <div id="pin-error" class="pin-error" aria-live="polite"></div>
+      <button id="pin-submit" class="pin-submit" type="submit">Unlock gallery</button>
+    </form>
+  </div>
+</main>
+
+<!-- EXPIRED -->
+<main id="state-expired" class="panel-stage hidden">
+  <div class="panel">
+    <span class="eyebrow">Client Gallery</span>
+    <h1>This gallery has expired</h1>
+    <p>To keep every collection private, galleries are only available for a limited time, and this one has now closed.</p>
+    <p>Still need your photographs? Write to <a class="accent-link" href="mailto:hello@mayanova.photography">hello@mayanova.photography</a> and Maya will look after you.</p>
+    <a class="pill-link" href="/">Visit the main site</a>
+  </div>
+</main>
+
+<!-- GALLERY -->
+<main id="state-gallery" class="gallery-view hidden">
+  <div class="gallery-head">
+    <span class="eyebrow">Client Gallery</span>
+    <h1 id="client-name" class="client-name"></h1>
+    <div class="gallery-meta">
+      <span id="photo-count"></span>
+      <span class="sep">·</span>
+      <span id="availability"></span>
+    </div>
+    <div class="download-all-row">
+      <button id="btn-download-all" class="btn-download-all" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
+        <span id="btn-download-all-label">Download all</span>
+      </button>
+      <div id="download-status" class="download-status" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <div id="photo-grid" class="photo-grid"></div>
+
+  <div id="empty-note" class="empty-note hidden">
+    <span class="empty-serif">Your photographs are on their way</span>
+    Maya is still adding photos to this gallery. Check back a little later.
+  </div>
+
+  <footer class="gallery-footer">
+    <div>Photographs by Maya Nova · <a href="/">mayanova.photography</a></div>
+    <div id="footer-reminder">This gallery is private. Please download your photos and keep them safe.</div>
+  </footer>
+</main>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer">
+  <img id="lightbox-img" class="lightbox-img" alt="">
+  <button id="lb-close" class="lb-btn lb-close" type="button" aria-label="Close">
+    <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+  <button id="lb-prev" class="lb-btn lb-prev" type="button" aria-label="Previous photo">
+    <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+  </button>
+  <button id="lb-next" class="lb-btn lb-next" type="button" aria-label="Next photo">
+    <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+  </button>
+  <a id="lb-download" class="lb-download" href="#" download>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>
+    Download
+  </a>
+  <div id="lb-counter" class="lb-counter"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  var states = {
+    loading: $('state-loading'),
+    error: $('state-error'),
+    pin: $('state-pin'),
+    expired: $('state-expired'),
+    gallery: $('state-gallery')
+  };
+
+  function showState(name) {
+    Object.keys(states).forEach(function (k) {
+      states[k].classList.toggle('hidden', k !== name);
+    });
+  }
+
+  var params = new URLSearchParams(location.search);
+  var galleryId = (params.get('g') || '').trim().toLowerCase();
+  var ID_RE = /^[a-f0-9]{16}$/;
+  var PIN_KEY = 'mn-gallery-pin-' + galleryId;
+
+  var photos = [];
+  var clientName = '';
+  var expiresAtISO = '';
+
+  function dlHref(url) {
+    return url + (url.indexOf('?') === -1 ? '?' : '&') + 'download=1';
+  }
+
+  function slugify(name) {
+    var s = (name || 'gallery').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    return s || 'gallery';
+  }
+
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleDateString('en-AU', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+    } catch (e) {
+      return iso;
+    }
+  }
+
+  function showError(title, message) {
+    $('error-title').textContent = title;
+    $('error-message').textContent = message;
+    showState('error');
+  }
+
+  /* ------------------------------------------------------------
+     Fetch flow
+     ------------------------------------------------------------ */
+  function load(pin, fromUser) {
+    if (!fromUser) showState('loading');
+    var url = '/api/gallery?id=' + encodeURIComponent(galleryId);
+    if (pin) url += '&pin=' + encodeURIComponent(pin);
+
+    fetch(url, { cache: 'no-store' }).then(function (res) {
+      if (res.status === 404) {
+        showError('Gallery not found', "We couldn't find a gallery at this link. Please check the link in your email, or reach out and we'll send you a fresh one.");
+        return null;
+      }
+      if (res.status === 410) {
+        showState('expired');
+        return null;
+      }
+      if (res.status === 401) {
+        handlePinRequired(pin, fromUser);
+        return null;
+      }
+      if (!res.ok) {
+        showError('Something went sideways', 'The gallery could not be loaded right now. Please refresh the page to try again, or come back in a few minutes.');
+        return null;
+      }
+      return res.json();
+    }).then(function (data) {
+      if (!data) return;
+      if (pin) {
+        try { sessionStorage.setItem(PIN_KEY, pin); } catch (e) { /* private mode */ }
+      }
+      renderGallery(data);
+    }).catch(function () {
+      showError('Connection trouble', 'We could not reach the gallery. Please check your connection and refresh the page.');
+    });
+  }
+
+  /* ------------------------------------------------------------
+     PIN state
+     ------------------------------------------------------------ */
+  var pinForm = $('pin-form');
+  var pinInput = $('pin-input');
+  var pinErrorEl = $('pin-error');
+  var pinSubmit = $('pin-submit');
+
+  function handlePinRequired(attemptedPin, fromUser) {
+    if (attemptedPin && !fromUser) {
+      // A remembered pin no longer works; forget it quietly.
+      try { sessionStorage.removeItem(PIN_KEY); } catch (e) {}
+    }
+    showState('pin');
+    pinSubmit.disabled = false;
+    if (fromUser && attemptedPin) {
+      pinErrorEl.textContent = "That PIN didn't match. Please try again.";
+      pinForm.classList.remove('shake');
+      // restart the animation
+      void pinForm.offsetWidth;
+      pinForm.classList.add('shake');
+      pinInput.select();
+    } else {
+      pinErrorEl.textContent = '';
+      setTimeout(function () { pinInput.focus(); }, 60);
+    }
+  }
+
+  pinInput.addEventListener('input', function () {
+    this.value = this.value.replace(/[^0-9]/g, '');
+  });
+
+  pinForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var pin = pinInput.value.trim();
+    if (!pin) {
+      pinErrorEl.textContent = 'Please enter your PIN.';
+      return;
+    }
+    pinErrorEl.textContent = '';
+    pinSubmit.disabled = true;
+    load(pin, true);
+  });
+
+  /* ------------------------------------------------------------
+     Gallery render
+     ------------------------------------------------------------ */
+  function renderGallery(data) {
+    photos = data.photos || [];
+    clientName = data.clientName || 'Your Gallery';
+    expiresAtISO = data.expiresAt || '';
+
+    document.title = clientName + ' · Maya Nova Photography';
+    $('client-name').textContent = clientName;
+    $('photo-count').textContent = photos.length + (photos.length === 1 ? ' photograph' : ' photographs');
+
+    var niceDate = formatDate(expiresAtISO);
+    var daysLeft = Math.max(0, Math.ceil((new Date(expiresAtISO).getTime() - Date.now()) / 86400000));
+    var availEl = $('availability');
+    availEl.textContent = 'Available until ' + niceDate + ' · ';
+    var daysSpan = document.createElement('span');
+    daysSpan.className = 'days-left' + (daysLeft < 14 ? ' urgent' : '');
+    daysSpan.textContent = daysLeft + (daysLeft === 1 ? ' day left' : ' days left');
+    availEl.appendChild(daysSpan);
+
+    $('footer-reminder').textContent = 'This gallery is private. Photos are available until ' + niceDate + ', please download and keep them safe.';
+
+    var grid = $('photo-grid');
+    grid.textContent = '';
+
+    if (photos.length === 0) {
+      $('empty-note').classList.remove('hidden');
+      $('btn-download-all').disabled = true;
+    } else {
+      var frag = document.createDocumentFragment();
+      photos.forEach(function (p, i) {
+        frag.appendChild(buildTile(p, i));
+      });
+      grid.appendChild(frag);
+    }
+
+    showState('gallery');
+  }
+
+  function buildTile(photo, index) {
+    var tile = document.createElement('figure');
+    tile.className = 'photo-tile';
+    tile.setAttribute('role', 'button');
+    tile.setAttribute('tabindex', '0');
+    tile.setAttribute('aria-label', 'View photo ' + (index + 1) + ' of ' + photos.length);
+
+    var img = document.createElement('img');
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.alt = 'Photograph ' + (index + 1) + ' for ' + clientName;
+    img.addEventListener('load', function () { img.classList.add('loaded'); });
+    img.addEventListener('error', function () { img.classList.add('loaded'); });
+    img.src = photo.thumbUrl || photo.url;
+    if (img.complete && img.naturalWidth > 0) img.classList.add('loaded');
+    tile.appendChild(img);
+
+    var dl = document.createElement('a');
+    dl.className = 'tile-dl';
+    dl.href = dlHref(photo.url);
+    dl.setAttribute('download', photo.name || '');
+    dl.setAttribute('aria-label', 'Download this photo');
+    dl.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16"/></svg>';
+    dl.addEventListener('click', function (e) { e.stopPropagation(); });
+    tile.appendChild(dl);
+
+    tile.addEventListener('click', function () { openLightbox(index); });
+    tile.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openLightbox(index);
+      }
+    });
+
+    return tile;
+  }
+
+  /* ------------------------------------------------------------
+     Lightbox
+     ------------------------------------------------------------ */
+  var lightbox = $('lightbox');
+  var lbImg = $('lightbox-img');
+  var lbCounter = $('lb-counter');
+  var lbDownload = $('lb-download');
+  var lbIndex = 0;
+  var lbOpen = false;
+
+  function openLightbox(index) {
+    lbIndex = index;
+    lbOpen = true;
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showLightboxPhoto();
+  }
+
+  function closeLightbox() {
+    lbOpen = false;
+    lightbox.classList.remove('open');
+    lbImg.classList.remove('ready');
+    document.body.style.overflow = '';
+  }
+
+  function showLightboxPhoto() {
+    var p = photos[lbIndex];
+    if (!p) return;
+    lbImg.classList.remove('ready');
+    lbImg.alt = 'Photograph ' + (lbIndex + 1) + ' for ' + clientName;
+    var target = p.url;
+    lbImg.onload = function () {
+      if (lbImg.src === target || lbImg.getAttribute('src') === target) {
+        lbImg.classList.add('ready');
+      }
+    };
+    lbImg.src = target;
+    if (lbImg.complete && lbImg.naturalWidth > 0) lbImg.classList.add('ready');
+    lbCounter.textContent = (lbIndex + 1) + ' / ' + photos.length;
+    lbDownload.href = dlHref(p.url);
+    lbDownload.setAttribute('download', p.name || '');
+  }
+
+  function lbStep(delta) {
+    if (photos.length === 0) return;
+    lbIndex = (lbIndex + delta + photos.length) % photos.length;
+    showLightboxPhoto();
+  }
+
+  $('lb-close').addEventListener('click', closeLightbox);
+  $('lb-prev').addEventListener('click', function (e) { e.stopPropagation(); lbStep(-1); });
+  $('lb-next').addEventListener('click', function (e) { e.stopPropagation(); lbStep(1); });
+  lbDownload.addEventListener('click', function (e) { e.stopPropagation(); });
+  lbImg.addEventListener('click', function (e) { e.stopPropagation(); });
+
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (!lbOpen) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') lbStep(-1);
+    else if (e.key === 'ArrowRight') lbStep(1);
+  });
+
+  var touchStartX = null, touchStartY = null;
+  lightbox.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) { touchStartX = null; return; }
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', function (e) {
+    if (touchStartX === null) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    var dy = e.changedTouches[0].clientY - touchStartY;
+    touchStartX = null;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+      lbStep(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  /* ------------------------------------------------------------
+     Download all
+     ------------------------------------------------------------ */
+  var dlAllBtn = $('btn-download-all');
+  var dlAllLabel = $('btn-download-all-label');
+  var dlStatus = $('download-status');
+  var dlBusy = false;
+  var SIZE_LIMIT = 1.5 * 1024 * 1024 * 1024; // ~1.5GB
+
+  function setStatus(msg, isError) {
+    dlStatus.textContent = msg;
+    dlStatus.classList.toggle('error', !!isError);
+  }
+
+  dlAllBtn.addEventListener('click', function () {
+    if (dlBusy || photos.length === 0) return;
+    dlBusy = true;
+    dlAllBtn.disabled = true;
+
+    var totalBytes = photos.reduce(function (sum, p) { return sum + (p.size || 0); }, 0);
+    var zipAvailable = !window.__zipLibFailed && typeof window.fflate !== 'undefined' &&
+                       typeof window.fflate.Zip === 'function';
+
+    var job;
+    if (!zipAvailable || totalBytes > SIZE_LIMIT) {
+      job = downloadIndividually();
+    } else {
+      job = downloadAsZip();
+    }
+
+    job.then(function () {
+      dlBusy = false;
+      dlAllBtn.disabled = false;
+      dlAllLabel.textContent = 'Download all';
+    }).catch(function () {
+      dlBusy = false;
+      dlAllBtn.disabled = false;
+      dlAllLabel.textContent = 'Download all';
+      setStatus('Something interrupted the download. Please try again.', true);
+    });
+  });
+
+  function downloadAsZip() {
+    return new Promise(function (resolve, reject) {
+      var chunks = [];
+      var zipError = null;
+      var zip = new fflate.Zip(function (err, chunk, final) {
+        if (err) {
+          if (!zipError) { zipError = err; reject(err); }
+          return;
+        }
+        chunks.push(chunk);
+        if (final) finishZip();
+      });
+
+      var usedNames = {};
+      function uniqueName(name, index) {
+        var base = (name || 'photo-' + (index + 1) + '.jpg');
+        var out = base, n = 2;
+        while (usedNames[out]) {
+          var dot = base.lastIndexOf('.');
+          out = dot > 0
+            ? base.slice(0, dot) + '-' + n + base.slice(dot)
+            : base + '-' + n;
+          n++;
+        }
+        usedNames[out] = true;
+        return out;
+      }
+
+      function finishZip() {
+        var blob = new Blob(chunks, { type: 'application/zip' });
+        chunks = [];
+        var objectUrl = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = 'maya-nova-' + slugify(clientName) + '.zip';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 60000);
+        setStatus('Done. Your zip is in your downloads folder.');
+        setTimeout(function () { setStatus(''); }, 8000);
+        resolve();
+      }
+
+      var i = 0;
+      function next() {
+        if (zipError) { reject(zipError); return; }
+        if (i >= photos.length) {
+          setStatus('Wrapping up your zip...');
+          zip.end();
+          return;
+        }
+        var p = photos[i];
+        setStatus('Preparing your photos... ' + (i + 1) + ' / ' + photos.length);
+        dlAllLabel.textContent = 'Preparing...';
+        fetch(p.url).then(function (res) {
+          if (!res.ok) throw new Error('fetch failed: ' + res.status);
+          return res.arrayBuffer();
+        }).then(function (buf) {
+          var entry = new fflate.ZipPassThrough(uniqueName(p.name, i));
+          zip.add(entry);
+          entry.push(new Uint8Array(buf), true);
+          i++;
+          // Yield to the UI between files.
+          setTimeout(next, 0);
+        }).catch(reject);
+      }
+      next();
+    });
+  }
+
+  function downloadIndividually() {
+    setStatus('Downloading photos one by one. Your browser may ask to allow multiple downloads.');
+    dlAllLabel.textContent = 'Downloading...';
+    return new Promise(function (resolve) {
+      var i = 0;
+      function next() {
+        if (i >= photos.length) {
+          setStatus('All ' + photos.length + ' downloads started. Check your downloads folder.');
+          setTimeout(function () { setStatus(''); }, 8000);
+          resolve();
+          return;
+        }
+        var p = photos[i];
+        var a = document.createElement('a');
+        a.href = dlHref(p.url);
+        a.setAttribute('download', p.name || '');
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        i++;
+        setStatus('Starting downloads... ' + i + ' / ' + photos.length);
+        setTimeout(next, 250);
+      }
+      next();
+    });
+  }
+
+  /* ------------------------------------------------------------
+     Boot
+     ------------------------------------------------------------ */
+  if (!galleryId || !ID_RE.test(galleryId)) {
+    showError('Gallery not found', 'This link is missing its gallery code. Please open the exact link from your email, or reach out and we will send you a fresh one.');
+  } else {
+    var storedPin = null;
+    try { storedPin = sessionStorage.getItem(PIN_KEY); } catch (e) {}
+    load(storedPin || '', false);
+  }
+})();
+</script>
+</body>
+</html>
