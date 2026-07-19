@@ -993,8 +993,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
   gap: 18px;
   flex: 1;
 }
@@ -1889,7 +1889,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     <button class="gallery-cat" data-cat="portrait">Portrait Sessions</button>
     <button class="gallery-cat" data-cat="social">Social Media Content</button>
     <button class="gallery-cat" data-cat="events">Events</button>
-    <button class="gallery-cat" data-cat="commercial">Commercial</button>
   </div>
   <div id="galleryScroll">
     <div class="bento-gallery" id="galleryGrid">
@@ -1963,7 +1962,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         Maya Nova is a photographer with an eye for the space between moments -- the quiet breath before laughter, the fleeting geometry of light on skin. Her work lives in the emotional register that most images miss.
       </p>
       <p class="about-lead">
-        Available for portrait sessions, editorial commissions, events, and commercial projects across Australia and internationally.
+        Available for portrait sessions, editorial commissions, and events across Australia and internationally.
       </p>
       <a href="#" class="about-cta" data-section="4">Book a session &rarr;</a>
     </div>
@@ -2005,11 +2004,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           <h3 class="service-title">Events</h3>
           <div class="service-rule" aria-hidden="true"></div>
           <p class="service-desc">Weddings, celebrations, milestone moments. Documentary approach, no stiff poses.</p>
-        </div>
-        <div class="service-card" data-cat="commercial">
-          <h3 class="service-title">Commercial</h3>
-          <div class="service-rule" aria-hidden="true"></div>
-          <p class="service-desc">Product, lifestyle, brand. Images that work as hard as your business does.</p>
         </div>
       </div>
     </div>
@@ -2741,8 +2735,25 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         grid.innerHTML = '<p class="gallery-empty">No images in this category yet.</p>';
         return;
       }
+      // Tile shape follows the photo's own aspect ratio so object-fit:cover
+      // barely crops: portraits -> tall cells (~0.68), landscapes/squares ->
+      // sm/lg cells (~1.38), panoramas -> wide (~2.8). Every 6th landscape
+      // is promoted to lg (same aspect, just bigger) for editorial rhythm.
+      // Photos without stored w/h (older uploads) fall back to the pattern.
+      var landscapeRun = 0;
       grid.innerHTML = list.map(function (img, i) {
-        var size = SIZE_PATTERN[i % SIZE_PATTERN.length];
+        var size;
+        if (img.w && img.h) {
+          var a = img.w / img.h;
+          if (a <= 0.9)       size = 'size-tall';
+          else if (a >= 2.2)  size = 'size-wide';
+          else {
+            landscapeRun++;
+            size = (landscapeRun % 6 === 1) ? 'size-lg' : 'size-sm';
+          }
+        } else {
+          size = SIZE_PATTERN[i % SIZE_PATTERN.length];
+        }
         return '<div class="bento-cell ' + size + '">' +
           '<img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy" decoding="async" style="object-position:' + focalFor(img) + '">' +
         '</div>';
@@ -2779,8 +2790,15 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     var scroll = document.getElementById('galleryScroll');
     if (!scroll) return;
 
-    // Stop wheel from reaching section-navigation; let native scroll handle it
-    scroll.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+    // Stop wheel from reaching section-navigation while the container can
+    // still scroll in that direction; at the top/bottom boundary let it
+    // bubble so the wheel flips to the previous/next section.
+    scroll.addEventListener('wheel', function (e) {
+      var up = e.deltaY < 0;
+      var atTop = scroll.scrollTop <= 0;
+      var atBottom = scroll.scrollTop + scroll.clientHeight >= scroll.scrollHeight - 1;
+      if ((up && !atTop) || (!up && !atBottom)) e.stopPropagation();
+    }, { passive: true });
     // Same for touch swipes -- the section-nav swipe handler lives on window
     // with no awareness of internally-scrollable areas, so without this a
     // vertical swipe while scrolling the gallery (mobile) gets counted as a
@@ -2883,7 +2901,15 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   (function () {
     var s = document.getElementById('servicesScroll');
     if (!s) return;
-    s.addEventListener('wheel', function (e) { e.stopPropagation(); }, { passive: true });
+    // Boundary-aware, same as the gallery: consume the wheel only while the
+    // section can still scroll internally in that direction, so wheeling up
+    // from the top of Services returns to the previous section.
+    s.addEventListener('wheel', function (e) {
+      var up = e.deltaY < 0;
+      var atTop = s.scrollTop <= 0;
+      var atBottom = s.scrollTop + s.clientHeight >= s.scrollHeight - 1;
+      if ((up && !atTop) || (!up && !atBottom)) e.stopPropagation();
+    }, { passive: true });
     // Same touch-swipe fix as the gallery (see 11a) -- this section only
     // scrolls internally on mobile since the services/booking stacking fix,
     // so it has the identical latent bug without this.

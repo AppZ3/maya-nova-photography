@@ -856,7 +856,7 @@
        crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-password'))
          .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
   */
-  var PW_HASH = '115d3edebd34374fc5e962bd4b0a02bc3f05cf9d4ae8b1e67cb8d913e52d05aa';
+  var PW_HASH = '3779d452ffc2fd7ec50bad09085431f970439de2f57c3ee55ceb608e5fc8516a';
 
   /* ---- State ---- */
   var images = [];        // [{src, alt, category, focal}]
@@ -945,7 +945,10 @@
       if (bitmap.close) bitmap.close();
       return new Promise(function (resolve, reject) {
         canvas.toBlob(function (out) {
-          if (out) resolve(out); else reject(new Error('Canvas encode failed'));
+          // Dimensions ride along so upload flows can store w/h in
+          // gallery-order.json (the public gallery shapes tiles from them).
+          if (out) { out.__w = tw; out.__h = th; resolve(out); }
+          else reject(new Error('Canvas encode failed'));
         }, 'image/jpeg', RESIZE_QUALITY);
       });
     });
@@ -1466,7 +1469,9 @@
 
       await ghPut(PHOTOS_DIR + '/' + filename, b64, sha, 'Upload photo: ' + filename);
 
-      images.push({ src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] });
+      var newEntry = { src: src, alt: filename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] };
+      if (toUpload.__w) { newEntry.w = toUpload.__w; newEntry.h = toUpload.__h; }
+      images.push(newEntry);
       dirty = true;
       setStatus(filename + ' uploaded' + (resized ? ' and optimized' : '') + '. Click photo to assign a category or set its focal point, then Publish.');
     } catch (e) {
@@ -1540,7 +1545,9 @@
         var existing = await ghGet(PHOTOS_DIR + '/' + sfilename);
         var sha = existing ? existing.sha : null;
         await ghPut(PHOTOS_DIR + '/' + sfilename, b64, sha, 'Upload photo: ' + sfilename);
-        images.push({ src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] });
+        var zipEntry = { src: src, alt: sfilename.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '), category: [] };
+        if (zipToUpload.__w) { zipEntry.w = zipToUpload.__w; zipEntry.h = zipToUpload.__h; }
+        images.push(zipEntry);
         dirty = true;
         uploaded++;
       } catch (e) {
