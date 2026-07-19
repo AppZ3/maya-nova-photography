@@ -523,6 +523,145 @@
     }
     .btn-ghost:hover { background: #f5f3ee; }
 
+    /* ---- TABS ---- */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 12px;
+      margin-bottom: -16px;
+    }
+    .tab-btn {
+      padding: 8px 16px 11px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mid);
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab-btn:hover { color: var(--dark); }
+    .tab-btn.active { color: var(--dark); border-bottom-color: var(--gold); font-weight: 600; }
+
+    #app.tab-galleries #status,
+    #app.tab-galleries #pat-setup,
+    #app.tab-galleries #grid,
+    #app.tab-galleries .portfolio-only { display: none !important; }
+    #galleries-section { display: none; }
+    #app.tab-galleries #galleries-section { display: block; }
+
+    /* ---- CLIENT GALLERIES ---- */
+    #galleries-section {
+      padding: 24px 32px 48px;
+      max-width: 860px;
+    }
+    .gal-panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .gal-panel h2 { font-size: 15px; font-weight: 600; margin-bottom: 14px; }
+    .gal-form { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end; }
+    .gal-field { display: flex; flex-direction: column; gap: 5px; }
+    .gal-field label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .gal-field input, .gal-field select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      outline: none;
+      background: #fff;
+      color: var(--dark);
+    }
+    .gal-field input:focus, .gal-field select:focus { border-color: var(--gold); }
+    .gal-status { font-size: 13px; color: var(--mid); min-height: 20px; margin-bottom: 12px; }
+    .gal-status.ok { color: #2e7d32; }
+    .gal-status.err { color: var(--danger); }
+    .gal-list-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .gal-list-head h2 { font-size: 15px; font-weight: 600; flex: 1; }
+    .gal-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .gal-card.selected { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+    .gal-info { flex: 1; min-width: 220px; }
+    .gal-name {
+      font-size: 15px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+      flex-wrap: wrap;
+    }
+    .pin-badge {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+      background: rgba(200,168,130,0.18);
+      color: #8a5820;
+    }
+    .gal-meta { font-size: 12px; color: var(--mid); }
+    .gal-expiry { font-size: 12px; color: var(--mid); margin-top: 2px; }
+    .gal-expiry.warn { color: #b26a00; font-weight: 600; }
+    .gal-expiry.expired { color: var(--danger); font-weight: 600; }
+    .gal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-danger-ghost {
+      padding: 8px 14px;
+      background: none;
+      color: var(--danger);
+      border: 1px solid rgba(192,57,43,0.35);
+      border-radius: var(--radius);
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .btn-danger-ghost:hover { background: rgba(192,57,43,0.07); }
+    .gal-upload-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .gal-upload-head h2 { margin-bottom: 0; }
+    .gal-dropzone {
+      border: 2px dashed var(--border);
+      border-radius: 8px;
+      padding: 32px 20px;
+      text-align: center;
+      color: var(--mid);
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .gal-dropzone:hover, .gal-dropzone.dragover { border-color: var(--gold); background: rgba(200,168,130,0.06); }
+    .gal-dropzone.disabled { pointer-events: none; opacity: 0.5; }
+    .gal-progress-bar { height: 6px; background: #f0ede8; border-radius: 3px; overflow: hidden; margin: 14px 0 8px; }
+    .gal-progress-fill { height: 100%; width: 0%; background: var(--gold); transition: width 0.2s; }
+    .gal-progress-text { font-size: 12px; color: var(--mid); display: flex; gap: 8px; }
+    .gal-progress-text span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .gal-upload-report { font-size: 12px; color: var(--danger); margin-top: 10px; line-height: 1.6; white-space: pre-wrap; }
+    .gal-empty { padding: 40px 20px; text-align: center; color: var(--mid); font-size: 14px; }
+
+    @media (max-width: 640px) {
+      #galleries-section { padding: 16px 16px 48px; }
+      .gal-card { padding: 14px 16px; }
+    }
+
     @media (max-width: 640px) {
       header { padding: 12px 16px; }
       #grid { gap: 8px; padding: 16px 16px 48px; grid-template-columns: repeat(2, 1fr); }
@@ -554,24 +693,28 @@
     <div class="header-row">
       <h1>Gallery Admin</h1>
       <a href="/" target="_blank">View site &rarr;</a>
-      <label class="btn-upload-label" for="file-input">
+      <label class="btn-upload-label portfolio-only" for="file-input">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Images
         <input type="file" id="file-input" accept="image/*" multiple style="display:none">
       </label>
-      <label class="btn-upload-label" for="folder-input">
+      <label class="btn-upload-label portfolio-only" for="folder-input">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
         Folder
         <input type="file" id="folder-input" multiple style="display:none" webkitdirectory>
       </label>
-      <label class="btn-upload-label" for="zip-input">
+      <label class="btn-upload-label portfolio-only" for="zip-input">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M9 9h6M9 15h6"/></svg>
         ZIP
         <input type="file" id="zip-input" accept=".zip,application/zip" style="display:none">
       </label>
-      <button class="btn-publish" id="publish-btn">Publish Changes</button>
+      <button class="btn-publish portfolio-only" id="publish-btn">Publish Changes</button>
     </div>
-    <p class="hint">Drag to reorder &middot; Click photo to assign category &middot; Hover: eye to hide from gallery / &times; to delete &middot; Changes go live ~30s after publishing</p>
+    <p class="hint portfolio-only">Drag to reorder &middot; Click photo to assign category &middot; Hover: eye to hide from gallery / &times; to delete &middot; Changes go live ~30s after publishing</p>
+    <nav class="tab-bar">
+      <button class="tab-btn active" id="tab-portfolio" data-tab="portfolio" type="button">Portfolio</button>
+      <button class="tab-btn" id="tab-galleries" data-tab="galleries" type="button">Client Galleries</button>
+    </nav>
   </header>
 
   <div id="status"></div>
@@ -594,6 +737,85 @@
   </div>
 
   <div id="grid"></div>
+
+  <!-- =========================================================
+       CLIENT GALLERIES
+       ========================================================= -->
+  <div id="galleries-section">
+
+    <!-- Admin key setup (shown on first use or after a 401) -->
+    <div id="gkey-setup" style="display:none">
+      <div class="pat-box">
+        <h2>Gallery Admin Key</h2>
+        <p>
+          Client galleries are managed through the site's own API, which needs an admin key.
+          The gallery admin key is set in Vercel env <code>ADMIN_KEY</code>.
+          Your key is stored only in this browser.
+        </p>
+        <div class="pat-row">
+          <input type="password" id="gkey-input" placeholder="Admin key" autocomplete="off">
+          <button class="btn-sm" id="gkey-save-btn">Save Key</button>
+        </div>
+        <p class="error-msg" id="gkey-err"></p>
+      </div>
+    </div>
+
+    <div id="gal-main" style="display:none">
+
+      <!-- Create gallery -->
+      <div class="gal-panel">
+        <h2>New Client Gallery</h2>
+        <div class="gal-form">
+          <div class="gal-field" style="flex:1; min-width:180px;">
+            <label for="gal-name-input">Client name</label>
+            <input type="text" id="gal-name-input" maxlength="80" placeholder="e.g. Sarah and Tom">
+          </div>
+          <div class="gal-field">
+            <label for="gal-months-input">Link lasts</label>
+            <select id="gal-months-input">
+              <option value="2">2 months</option>
+              <option value="3" selected>3 months</option>
+            </select>
+          </div>
+          <div class="gal-field">
+            <label for="gal-pin-input">PIN (4-8 digits)</label>
+            <input type="text" id="gal-pin-input" inputmode="numeric" maxlength="8" placeholder="optional" style="width:110px;">
+          </div>
+          <button class="btn-sm" id="gal-create-btn" type="button">Create</button>
+        </div>
+        <p class="error-msg" id="gal-create-err"></p>
+      </div>
+
+      <!-- Upload photos into selected gallery -->
+      <div class="gal-panel" id="gal-upload-panel" style="display:none">
+        <div class="gal-upload-head">
+          <h2 id="gal-upload-title">Upload photos</h2>
+          <button class="btn-ghost" id="gal-upload-close" type="button">Close</button>
+        </div>
+        <div class="gal-dropzone" id="gal-dropzone">
+          Drag photos here, or click to choose files. JPEG, PNG or WebP.
+          <input type="file" id="gal-file-input" accept="image/*" multiple style="display:none">
+        </div>
+        <div id="gal-progress" style="display:none">
+          <div class="gal-progress-bar"><div class="gal-progress-fill" id="gal-progress-fill"></div></div>
+          <div class="gal-progress-text">
+            <span id="gal-progress-label">Uploading 0 / 0</span>
+            <span id="gal-progress-file"></span>
+          </div>
+          <button class="btn-ghost" id="gal-cancel-btn" type="button" style="margin-top:10px">Cancel</button>
+        </div>
+        <div class="gal-upload-report" id="gal-upload-report"></div>
+      </div>
+
+      <!-- Gallery list -->
+      <div class="gal-list-head">
+        <h2>Galleries</h2>
+        <button class="btn-ghost" id="gal-refresh-btn" type="button">Refresh</button>
+      </div>
+      <div class="gal-status" id="gal-status"></div>
+      <div id="gal-list"></div>
+    </div>
+  </div>
 </div>
 
 <div id="cat-picker">
@@ -1374,6 +1596,544 @@
     }
   });
 })();
+</script>
+
+<!-- =========================================================
+     CLIENT GALLERIES (talks to our own /api, not GitHub)
+     ========================================================= -->
+<script type="module">
+/* The @vercel/blob client helper is loaded on demand so the rest of the
+   admin keeps working even if the CDN is unreachable. Pinned to the
+   version the api/ functions will install. */
+var BLOB_CLIENT_URL = 'https://esm.sh/@vercel/blob@2.6.1/client';
+var ADMIN_KEY_STORAGE = 'mnp_admin_key';
+var THUMB_MAX_DIM = 1200;
+var THUMB_QUALITY = 0.82;
+
+var uploadHelper = null;
+async function getUploadHelper() {
+  if (!uploadHelper) {
+    var mod = await import(BLOB_CLIENT_URL);
+    uploadHelper = mod.upload;
+  }
+  return uploadHelper;
+}
+
+/* ---- Elements ---- */
+var appEl        = document.getElementById('app');
+var tabBtns      = Array.from(document.querySelectorAll('.tab-btn'));
+var keySetup     = document.getElementById('gkey-setup');
+var keyInput     = document.getElementById('gkey-input');
+var keySaveBtn   = document.getElementById('gkey-save-btn');
+var keyErr       = document.getElementById('gkey-err');
+var galMain      = document.getElementById('gal-main');
+var nameInput    = document.getElementById('gal-name-input');
+var monthsInput  = document.getElementById('gal-months-input');
+var pinInput     = document.getElementById('gal-pin-input');
+var createBtn    = document.getElementById('gal-create-btn');
+var createErr    = document.getElementById('gal-create-err');
+var uploadPanel  = document.getElementById('gal-upload-panel');
+var uploadTitle  = document.getElementById('gal-upload-title');
+var uploadClose  = document.getElementById('gal-upload-close');
+var dropzone     = document.getElementById('gal-dropzone');
+var galFileInput = document.getElementById('gal-file-input');
+var progressWrap = document.getElementById('gal-progress');
+var progressFill = document.getElementById('gal-progress-fill');
+var progressLabel = document.getElementById('gal-progress-label');
+var progressFile = document.getElementById('gal-progress-file');
+var cancelBtn    = document.getElementById('gal-cancel-btn');
+var uploadReport = document.getElementById('gal-upload-report');
+var refreshBtn   = document.getElementById('gal-refresh-btn');
+var galStatus    = document.getElementById('gal-status');
+var galList      = document.getElementById('gal-list');
+
+/* ---- State ---- */
+var adminKey = '';
+var uploadTarget = null;   // { id, clientName }
+var uploading = false;
+var cancelRequested = false;
+
+/* ---- Tabs ---- */
+tabBtns.forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    tabBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
+    var showGalleries = btn.dataset.tab === 'galleries';
+    appEl.classList.toggle('tab-galleries', showGalleries);
+    if (showGalleries) enterGalleries();
+  });
+});
+
+function enterGalleries() {
+  adminKey = localStorage.getItem(ADMIN_KEY_STORAGE) || '';
+  if (!adminKey) { showKeySetup(''); return; }
+  showGalMain();
+  loadGalleries();
+}
+
+/* ---- Admin key ---- */
+function showKeySetup(note) {
+  keySetup.style.display = 'block';
+  galMain.style.display = 'none';
+  keyErr.textContent = note || '';
+  keyInput.focus();
+}
+
+function showGalMain() {
+  keySetup.style.display = 'none';
+  galMain.style.display = 'block';
+}
+
+function handleUnauthorized() {
+  showKeySetup('Invalid key. The gallery admin key is set in Vercel env ADMIN_KEY.');
+}
+
+function saveKey() {
+  var val = keyInput.value.trim();
+  if (!val) { keyErr.textContent = 'Key cannot be empty.'; return; }
+  localStorage.setItem(ADMIN_KEY_STORAGE, val);
+  adminKey = val;
+  keyInput.value = '';
+  keyErr.textContent = '';
+  showGalMain();
+  loadGalleries();
+}
+
+keySaveBtn.addEventListener('click', saveKey);
+keyInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') saveKey(); });
+
+/* ---- Status ---- */
+function setGalStatus(msg, type) {
+  galStatus.textContent = msg || '';
+  galStatus.className = 'gal-status' + (type ? ' ' + type : '');
+}
+
+/* ---- API helper ---- */
+async function api(method, path, body) {
+  var opts = { method: method, headers: { 'x-admin-key': adminKey } };
+  if (body) {
+    opts.headers['Content-Type'] = 'application/json';
+    opts.body = JSON.stringify(body);
+  }
+  var r = await fetch(path, opts);
+  if (r.status === 401) {
+    handleUnauthorized();
+    throw new Error('Unauthorized');
+  }
+  var data = await r.json().catch(function () { return {}; });
+  if (!r.ok) throw new Error(data.error || ('Request failed with status ' + r.status));
+  return data;
+}
+
+/* ---- Formatting ---- */
+function fmtBytes(n) {
+  if (!n) return '0 MB';
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + ' GB';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + ' MB';
+  return Math.max(1, Math.round(n / 1e3)) + ' KB';
+}
+
+function fmtDate(iso) {
+  var d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+/* ---- Load + render list ---- */
+async function loadGalleries() {
+  setGalStatus('Loading galleries...');
+  try {
+    var data = await api('GET', '/api/galleries');
+    renderGalleries(data.galleries || []);
+    var n = (data.galleries || []).length;
+    setGalStatus(n + (n === 1 ? ' gallery' : ' galleries'));
+  } catch (e) {
+    if (e.message !== 'Unauthorized') setGalStatus('Could not load galleries: ' + e.message, 'err');
+  }
+}
+
+function renderGalleries(galleries) {
+  galList.innerHTML = '';
+  if (!galleries.length) {
+    var empty = document.createElement('div');
+    empty.className = 'gal-empty';
+    empty.textContent = 'No client galleries yet. Create one above to get started.';
+    galList.appendChild(empty);
+    return;
+  }
+
+  galleries.forEach(function (g) {
+    var card = document.createElement('div');
+    card.className = 'gal-card' + (uploadTarget && uploadTarget.id === g.id ? ' selected' : '');
+    card.dataset.galId = g.id;
+
+    var info = document.createElement('div');
+    info.className = 'gal-info';
+
+    var nameRow = document.createElement('div');
+    nameRow.className = 'gal-name';
+    var nameSpan = document.createElement('span');
+    nameSpan.textContent = g.clientName;
+    nameRow.appendChild(nameSpan);
+    if (g.pinProtected) {
+      var badge = document.createElement('span');
+      badge.className = 'pin-badge';
+      badge.textContent = 'PIN';
+      nameRow.appendChild(badge);
+    }
+
+    var meta = document.createElement('div');
+    meta.className = 'gal-meta';
+    meta.textContent = g.photoCount + (g.photoCount === 1 ? ' photo' : ' photos') +
+      ' · ' + fmtBytes(g.totalBytes) + ' · created ' + fmtDate(g.createdAt);
+
+    var expiry = document.createElement('div');
+    var daysLeft = Math.ceil((new Date(g.expiresAt).getTime() - Date.now()) / 86400000);
+    if (g.expired || daysLeft <= 0) {
+      expiry.className = 'gal-expiry expired';
+      expiry.textContent = 'expired ' + fmtDate(g.expiresAt);
+    } else {
+      expiry.className = 'gal-expiry' + (daysLeft < 14 ? ' warn' : '');
+      expiry.textContent = 'expires ' + fmtDate(g.expiresAt) + ' · ' + daysLeft + (daysLeft === 1 ? ' day left' : ' days left');
+    }
+
+    info.appendChild(nameRow);
+    info.appendChild(meta);
+    info.appendChild(expiry);
+
+    var actions = document.createElement('div');
+    actions.className = 'gal-actions';
+
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'btn-ghost';
+    copyBtn.type = 'button';
+    copyBtn.textContent = 'Copy link';
+    copyBtn.addEventListener('click', function () {
+      copyText(location.origin + g.url).then(function () {
+        copyBtn.textContent = 'Copied';
+        setTimeout(function () { copyBtn.textContent = 'Copy link'; }, 1500);
+      }).catch(function () {
+        setGalStatus('Could not copy. Link: ' + location.origin + g.url, 'err');
+      });
+    });
+
+    var openBtn = document.createElement('button');
+    openBtn.className = 'btn-ghost';
+    openBtn.type = 'button';
+    openBtn.textContent = 'Open';
+    openBtn.addEventListener('click', function () {
+      window.open(g.url, '_blank', 'noopener');
+    });
+
+    var upBtn = document.createElement('button');
+    upBtn.className = 'btn-sm';
+    upBtn.type = 'button';
+    upBtn.textContent = 'Upload photos';
+    upBtn.addEventListener('click', function () {
+      selectUploadTarget(g);
+    });
+
+    var delBtn = document.createElement('button');
+    delBtn.className = 'btn-danger-ghost';
+    delBtn.type = 'button';
+    delBtn.textContent = 'Delete';
+    delBtn.addEventListener('click', function () {
+      deleteGallery(g);
+    });
+
+    actions.appendChild(copyBtn);
+    actions.appendChild(openBtn);
+    actions.appendChild(upBtn);
+    actions.appendChild(delBtn);
+
+    card.appendChild(info);
+    card.appendChild(actions);
+    galList.appendChild(card);
+  });
+}
+
+function copyText(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  return new Promise(function (resolve, reject) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      if (document.execCommand('copy')) resolve(); else reject(new Error('copy failed'));
+    } catch (e) {
+      reject(e);
+    } finally {
+      ta.remove();
+    }
+  });
+}
+
+refreshBtn.addEventListener('click', loadGalleries);
+
+/* ---- Create ---- */
+createBtn.addEventListener('click', async function () {
+  createErr.textContent = '';
+  var clientName = nameInput.value.trim();
+  if (!clientName) { createErr.textContent = 'Client name is required.'; nameInput.focus(); return; }
+  var pin = pinInput.value.trim();
+  if (pin && !/^\d{4,8}$/.test(pin)) {
+    createErr.textContent = 'PIN must be 4 to 8 digits, or left empty.';
+    pinInput.focus();
+    return;
+  }
+
+  createBtn.disabled = true;
+  setGalStatus('Creating gallery...');
+  try {
+    var body = { clientName: clientName, months: Number(monthsInput.value) };
+    if (pin) body.pin = pin;
+    await api('POST', '/api/galleries', body);
+    nameInput.value = '';
+    pinInput.value = '';
+    monthsInput.value = '3';
+    setGalStatus('Gallery created for ' + clientName + '. Use Copy link to share it.', 'ok');
+    await loadGalleries();
+  } catch (e) {
+    if (e.message !== 'Unauthorized') setGalStatus('Could not create gallery: ' + e.message, 'err');
+  } finally {
+    createBtn.disabled = false;
+  }
+});
+
+nameInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') createBtn.click(); });
+pinInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') createBtn.click(); });
+
+/* ---- Delete ---- */
+async function deleteGallery(g) {
+  var msg = 'Delete the gallery for "' + g.clientName + '"?\n\n' +
+    'This permanently deletes all ' + g.photoCount + ' of the client\'s photos and their link will stop working. This cannot be undone.';
+  if (!confirm(msg)) return;
+  setGalStatus('Deleting gallery...');
+  try {
+    await api('DELETE', '/api/galleries?id=' + encodeURIComponent(g.id));
+    if (uploadTarget && uploadTarget.id === g.id) closeUploadPanel();
+    setGalStatus('Gallery for ' + g.clientName + ' deleted.', 'ok');
+    await loadGalleries();
+  } catch (e) {
+    if (e.message !== 'Unauthorized') setGalStatus('Could not delete gallery: ' + e.message, 'err');
+  }
+}
+
+/* ---- Upload target selection ---- */
+function selectUploadTarget(g) {
+  if (uploading) { setGalStatus('Wait for the current upload to finish first.', 'err'); return; }
+  uploadTarget = { id: g.id, clientName: g.clientName };
+  uploadTitle.textContent = 'Upload photos to ' + g.clientName;
+  uploadPanel.style.display = 'block';
+  uploadReport.textContent = '';
+  progressWrap.style.display = 'none';
+  Array.from(galList.querySelectorAll('.gal-card')).forEach(function (c) {
+    c.classList.toggle('selected', c.dataset.galId === g.id);
+  });
+  uploadPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeUploadPanel() {
+  if (uploading) { cancelRequested = true; }
+  uploadTarget = null;
+  uploadPanel.style.display = 'none';
+  Array.from(galList.querySelectorAll('.gal-card')).forEach(function (c) { c.classList.remove('selected'); });
+}
+
+uploadClose.addEventListener('click', closeUploadPanel);
+
+/* ---- Dropzone ---- */
+dropzone.addEventListener('click', function (e) {
+  if (e.target !== galFileInput) galFileInput.click();
+});
+
+dropzone.addEventListener('dragover', function (e) {
+  e.preventDefault();
+  dropzone.classList.add('dragover');
+});
+
+dropzone.addEventListener('dragleave', function () {
+  dropzone.classList.remove('dragover');
+});
+
+dropzone.addEventListener('drop', function (e) {
+  e.preventDefault();
+  dropzone.classList.remove('dragover');
+  if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+    startBatch(e.dataTransfer.files);
+  }
+});
+
+galFileInput.addEventListener('change', function () {
+  if (galFileInput.files.length) startBatch(galFileInput.files);
+  galFileInput.value = '';
+});
+
+/* ---- Thumbnail (1200px max edge, JPEG q0.82) ---- */
+function makeThumb(file) {
+  if (!window.createImageBitmap) return Promise.reject(new Error('createImageBitmap unsupported'));
+  return createImageBitmap(file, { imageOrientation: 'from-image' }).then(function (bitmap) {
+    var scale = Math.min(1, THUMB_MAX_DIM / Math.max(bitmap.width, bitmap.height));
+    var w = Math.max(1, Math.round(bitmap.width * scale));
+    var h = Math.max(1, Math.round(bitmap.height * scale));
+    var canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+    if (bitmap.close) bitmap.close();
+    return new Promise(function (resolve, reject) {
+      canvas.toBlob(function (out) {
+        if (out) resolve(out); else reject(new Error('canvas encode failed'));
+      }, 'image/jpeg', THUMB_QUALITY);
+    });
+  });
+}
+
+function safeFileName(name) {
+  var safe = String(name || '').toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9._-]/g, '');
+  if (!safe.replace(/[._-]/g, '')) safe = 'photo.jpg';
+  return safe;
+}
+
+var HEIC_RE = /\.hei[cf]$/i;
+var ALLOWED_EXT_RE = /\.(jpe?g|png|webp)$/i;
+var ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+
+function setProgress(done, total, filename) {
+  progressLabel.textContent = 'Uploading ' + Math.min(done + 1, total) + ' / ' + total;
+  progressFile.textContent = filename || '';
+  progressFill.style.width = (total ? Math.round((done / total) * 100) : 0) + '%';
+}
+
+/* ---- Sequential batch upload ---- */
+async function startBatch(fileList) {
+  if (!uploadTarget) return;
+  if (uploading) { setGalStatus('An upload is already in progress.', 'err'); return; }
+
+  var files = Array.from(fileList);
+  var skippedHeic = [];
+  var skippedOther = [];
+  var queue = [];
+  files.forEach(function (f) {
+    var fname = f.name || 'photo';
+    if (HEIC_RE.test(fname) || /hei[cf]/i.test(f.type || '')) { skippedHeic.push(fname); return; }
+    if (ALLOWED_TYPES.indexOf(f.type) === -1 && !ALLOWED_EXT_RE.test(fname)) { skippedOther.push(fname); return; }
+    queue.push(f);
+  });
+
+  uploadReport.textContent = '';
+  var reportLines = [];
+  if (skippedHeic.length) {
+    reportLines.push('Skipped ' + skippedHeic.length + ' HEIC file' + (skippedHeic.length === 1 ? '' : 's') +
+      ' (browsers cannot convert HEIC, export as JPEG first): ' + skippedHeic.join(', '));
+  }
+  if (skippedOther.length) {
+    reportLines.push('Skipped unsupported format' + (skippedOther.length === 1 ? '' : 's') +
+      ' (JPEG, PNG or WebP only): ' + skippedOther.join(', '));
+  }
+
+  if (!queue.length) {
+    uploadReport.textContent = reportLines.length ? reportLines.join('\n') : '';
+    setGalStatus('No uploadable photos in that selection.', 'err');
+    return;
+  }
+
+  var uploadFn;
+  try {
+    uploadFn = await getUploadHelper();
+  } catch (e) {
+    setGalStatus('Could not load the upload library. Check your internet connection and try again.', 'err');
+    return;
+  }
+
+  uploading = true;
+  cancelRequested = false;
+  dropzone.classList.add('disabled');
+  progressWrap.style.display = 'block';
+  cancelBtn.disabled = false;
+  cancelBtn.textContent = 'Cancel';
+  setProgress(0, queue.length, queue[0].name);
+  setGalStatus('Uploading to ' + uploadTarget.clientName + '...');
+
+  var errors = [];
+  var done = 0;
+  var uploadedCount = 0;
+  var authFailed = false;
+  var targetId = uploadTarget.id;
+  var targetName = uploadTarget.clientName;
+
+  for (var i = 0; i < queue.length; i++) {
+    if (cancelRequested) break;
+    var file = queue[i];
+    setProgress(done, queue.length, file.name);
+    try {
+      var stamp = Date.now();
+      var safe = safeFileName(file.name);
+      var photoPath = 'galleries/' + targetId + '/photos/' + stamp + '-' + safe;
+      var thumbPath = 'galleries/' + targetId + '/thumbs/' + stamp + '-' + safe;
+
+      var thumb = null;
+      try {
+        thumb = await makeThumb(file);
+      } catch (e) {
+        thumb = null;
+      }
+
+      var opts = {
+        access: 'public',
+        handleUploadUrl: '/api/upload',
+        clientPayload: JSON.stringify({ adminKey: adminKey })
+      };
+
+      await uploadFn(photoPath, file, opts);
+      if (thumb) {
+        await uploadFn(thumbPath, thumb, opts);
+      } else {
+        errors.push(file.name + ': thumbnail could not be generated, the full image will be shown instead');
+      }
+      uploadedCount++;
+    } catch (e) {
+      var msg = (e && e.message) || 'upload failed';
+      if (/unauthorized/i.test(msg)) {
+        errors.push('Upload stopped: the admin key was rejected.');
+        authFailed = true;
+        done++;
+        break;
+      }
+      errors.push(file.name + ': ' + msg);
+    }
+    done++;
+    setProgress(done, queue.length, '');
+  }
+
+  uploading = false;
+  dropzone.classList.remove('disabled');
+  progressWrap.style.display = 'none';
+
+  reportLines = reportLines.concat(errors);
+  uploadReport.textContent = reportLines.join('\n');
+
+  var summary = uploadedCount + ' of ' + queue.length + ' photo' + (queue.length === 1 ? '' : 's') +
+    ' uploaded to ' + targetName + '.';
+  if (cancelRequested && done < queue.length) summary += ' Upload cancelled.';
+  setGalStatus(summary, uploadedCount ? 'ok' : 'err');
+
+  if (authFailed) {
+    handleUnauthorized();
+    return;
+  }
+  await loadGalleries();
+}
+
+cancelBtn.addEventListener('click', function () {
+  cancelRequested = true;
+  cancelBtn.disabled = true;
+  cancelBtn.textContent = 'Stopping after current photo...';
+});
 </script>
 </body>
 </html>

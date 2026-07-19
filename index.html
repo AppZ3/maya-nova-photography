@@ -648,9 +648,21 @@ html, body {
    SECTION 1: PORTFOLIO
    ============================================================ */
 #section-1 {
-  background: #0C0A0F;
+  background: #fffef8;
   overflow: hidden;
+  --ink: #1e1408;
+  --muted: rgba(74,56,32,0.75);
+  --dim: rgba(122,100,80,0.85);
+  --border: rgba(138,88,32,0.14);
+  --card-bg: #ffffff;
 }
+#section-1 .section-eyebrow { color: #7a6450; }
+#section-1 .gallery-cats { border-bottom-color: rgba(138,88,32,0.16); }
+#section-1 .gallery-cat { color: rgba(74,56,32,0.5); }
+#section-1 .gallery-cat:hover { color: rgba(30,20,8,0.8); }
+#section-1 .gallery-cat.active { color: #1e1408; border-bottom-color: #8a5820; }
+#section-1 .gallery-empty { color: rgba(74,56,32,0.45); }
+#section-1 .bento-cell { background: rgba(138,88,32,0.06); }
 
 .section-eyebrow {
   display: flex;
@@ -2095,6 +2107,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
             </div>
           </div>
 
+          <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" style="display:none">
+
           <button class="book-submit" type="submit">Send inquiry</button>
 
         </form>
@@ -3068,10 +3082,13 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       });
     }
 
+    // Web3Forms access key — inquiries are emailed via api.web3forms.com.
+    // While this is the placeholder, the form falls back to a mailto: link.
+    var W3F_KEY = 'REPLACE_WITH_WEB3FORMS_KEY';
+
     if (form && success) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-        // Gather selected purposes for mailto fallback
         var purposes = Array.from(form.querySelectorAll('input[name="purpose"]:checked'))
           .map(function (cb) { return cb.value; }).join(', ');
         var name     = (form.querySelector('#bf-name')     || {}).value || '';
@@ -3094,8 +3111,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           if (emailEl && !emailEl.value) { emailEl.style.borderColor = 'rgba(180,60,60,0.5)'; emailEl.focus(); return; }
         }
 
-        // Compose mailto as fallback delivery
-        var body = [
+        var lines = [
           'Name: ' + name,
           'Phone: ' + phone,
           'Vision: ' + vision,
@@ -3106,14 +3122,46 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           'Location: ' + location,
           'Budget: ' + budget,
           'Exchange: ' + exchange + (offering ? ' -- ' + offering : '')
-        ].join('%0A');
+        ];
 
-        var mailto = 'mailto:hello@mayanova.photography?subject=Session%20inquiry%20from%20' + encodeURIComponent(name) + '&body=' + body;
-        window.location.href = mailto;
+        function showSuccess() {
+          form.style.display = 'none';
+          success.style.display = 'block';
+        }
 
-        // Show success state
-        form.style.display = 'none';
-        success.style.display = 'block';
+        function mailtoFallback() {
+          var mailto = 'mailto:hello@mayanova.photography?subject=Session%20inquiry%20from%20' +
+            encodeURIComponent(name) + '&body=' + lines.join('%0A');
+          window.location.href = mailto;
+          showSuccess();
+        }
+
+        if (W3F_KEY.indexOf('REPLACE_WITH') === 0) { mailtoFallback(); return; }
+
+        var submitBtn = form.querySelector('.book-submit');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Sending...'; }
+
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: W3F_KEY,
+            subject: 'Session inquiry from ' + name,
+            from_name: 'Maya Nova Photography',
+            name: name,
+            email: email,
+            phone: phone,
+            message: lines.join('\n'),
+            botcheck: (form.querySelector('input[name="botcheck"]') || {}).checked || ''
+          })
+        }).then(function (r) { return r.json(); }).then(function (data) {
+          if (data && data.success) { showSuccess(); }
+          else { mailtoFallback(); }
+        }).catch(function () {
+          mailtoFallback();
+        }).finally(function () {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send inquiry'; }
+        });
       });
     }
   })();
