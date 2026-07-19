@@ -552,6 +552,34 @@
     #galleries-section { display: none; }
     #app.tab-galleries #galleries-section { display: block; }
 
+    /* ---- SETTINGS TAB ---- */
+    #app.tab-settings #status,
+    #app.tab-settings #pat-setup,
+    #app.tab-settings #grid,
+    #app.tab-settings .portfolio-only { display: none !important; }
+    #settings-section { display: none; padding: 24px 32px 48px; max-width: 640px; }
+    #app.tab-settings #settings-section { display: block; }
+    .set-form { display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
+    .set-form .btn-sm { align-self: flex-start; }
+    .set-msg { font-size: 13px; color: var(--mid); min-height: 18px; margin-top: 10px; }
+    .set-msg.ok { color: #2e7d32; }
+    .set-msg.err { color: var(--danger); }
+    .set-status { font-size: 13px; margin-bottom: 12px; }
+    .set-help { font-size: 12px; color: var(--mid); line-height: 1.6; margin-top: 14px; }
+    .set-help code { background: #f0ede8; padding: 1px 5px; border-radius: 3px; font-size: 11px; }
+    .set-storage { font-size: 13px; line-height: 1.8; }
+    .set-note { font-size: 12px; color: var(--mid); padding: 4px 2px 24px; }
+    .status-link {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 13px;
+      color: #8a5820;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    @media (max-width: 640px) { #settings-section { padding: 16px 16px 48px; } }
+
     /* ---- CLIENT GALLERIES ---- */
     #galleries-section {
       padding: 24px 32px 48px;
@@ -714,6 +742,7 @@
     <nav class="tab-bar">
       <button class="tab-btn active" id="tab-portfolio" data-tab="portfolio" type="button">Portfolio</button>
       <button class="tab-btn" id="tab-galleries" data-tab="galleries" type="button">Client Galleries</button>
+      <button class="tab-btn" id="tab-settings" data-tab="settings" type="button">Settings</button>
     </nav>
   </header>
 
@@ -743,7 +772,7 @@
        ========================================================= -->
   <div id="galleries-section">
 
-    <!-- Admin key setup (shown on first use or after a 401) -->
+    <!-- Admin key setup (shown only if the API rejects the stored key, e.g. key rotated) -->
     <div id="gkey-setup" style="display:none">
       <div class="pat-box">
         <h2>Gallery Admin Key</h2>
@@ -816,6 +845,60 @@
       <div id="gal-list"></div>
     </div>
   </div>
+
+  <!-- =========================================================
+       SETTINGS
+       ========================================================= -->
+  <div id="settings-section">
+
+    <!-- Change password -->
+    <div class="gal-panel">
+      <h2>Change password</h2>
+      <div class="set-form">
+        <div class="gal-field">
+          <label for="setpw-current">Current password</label>
+          <input type="password" id="setpw-current" autocomplete="current-password">
+        </div>
+        <div class="gal-field">
+          <label for="setpw-new">New password (at least 8 characters)</label>
+          <input type="password" id="setpw-new" autocomplete="new-password">
+        </div>
+        <div class="gal-field">
+          <label for="setpw-confirm">Confirm new password</label>
+          <input type="password" id="setpw-confirm" autocomplete="new-password">
+        </div>
+        <button class="btn-sm" id="setpw-save" type="button">Save</button>
+      </div>
+      <p class="set-msg" id="setpw-msg"></p>
+    </div>
+
+    <!-- GitHub token -->
+    <div class="gal-panel">
+      <h2>GitHub token</h2>
+      <p class="set-status" id="settok-status"></p>
+      <div class="pat-row">
+        <input type="password" id="settok-input" placeholder="ghp_..." autocomplete="off">
+        <button class="btn-sm" id="settok-save" type="button">Save token</button>
+        <button class="btn-ghost" id="settok-test" type="button">Test token</button>
+      </div>
+      <p class="set-msg" id="settok-msg"></p>
+      <p class="set-help">
+        To create a token: go to github.com, open Settings, then Developer settings,
+        then Personal access tokens, then Tokens (classic). Click Generate new token (classic),
+        tick the <code>repo</code> scope, set expiration to 1 year or No expiration,
+        then copy the token here. It is stored only in this browser and is used by the Portfolio tab.
+      </p>
+    </div>
+
+    <!-- Storage overview -->
+    <div class="gal-panel">
+      <h2>Storage</h2>
+      <div id="set-storage" class="set-storage"></div>
+      <p class="set-help">Client photos delete automatically when a gallery expires.</p>
+    </div>
+
+    <p class="set-note">Single admin account. The password above is for this whole admin panel.</p>
+  </div>
 </div>
 
 <div id="cat-picker">
@@ -851,12 +934,6 @@
   var REPO_BRANCH = 'main';
   var ORDER_FILE  = 'gallery-order.json';
   var PHOTOS_DIR  = 'photos';
-  /* SHA-256 of "maya2024" -- change by editing this value to the hash of your new password.
-     To get the hash: open browser console and run:
-       crypto.subtle.digest('SHA-256', new TextEncoder().encode('your-password'))
-         .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
-  */
-  var PW_HASH = '3779d452ffc2fd7ec50bad09085431f970439de2f57c3ee55ceb608e5fc8516a';
 
   /* ---- State ---- */
   var images = [];        // [{src, alt, category, focal}]
@@ -905,11 +982,6 @@
   function setStatus(msg, type) {
     statusEl.textContent = msg;
     statusEl.className = type || '';
-  }
-
-  async function sha256(str) {
-    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
   }
 
   function b64Encode(str) { return btoa(unescape(encodeURIComponent(str))); }
@@ -1018,17 +1090,47 @@
     return r.json();
   }
 
-  /* ---- Auth ---- */
+  /* ---- Auth ----
+     The password is checked server-side by /api/auth. On success the
+     server also returns the galleries admin key, which is stored so the
+     Client Galleries tab works without a second credential. The password
+     itself is never stored anywhere. */
+  function showApp() {
+    gateEl.style.display = 'none';
+    appEl.style.display = 'block';
+    init();
+  }
+
   async function unlock() {
-    var hash = await sha256(pwInput.value);
-    if (hash === PW_HASH) {
-      gateEl.style.display = 'none';
-      appEl.style.display = 'block';
-      init();
-    } else {
-      pwErr.textContent = 'Incorrect password.';
-      pwInput.value = '';
-      pwInput.focus();
+    var password = pwInput.value;
+    if (!password) { pwErr.textContent = 'Incorrect password.'; pwInput.focus(); return; }
+    pwBtn.disabled = true;
+    pwErr.textContent = '';
+    try {
+      var r = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: password })
+      });
+      var data = await r.json().catch(function () { return {}; });
+      if (r.ok && data.ok) {
+        if (data.adminKey) localStorage.setItem('mnp_admin_key', data.adminKey);
+        sessionStorage.setItem('mnp_authed', '1');
+        pwInput.value = '';
+        showApp();
+      } else if (r.status === 401) {
+        pwErr.textContent = 'Incorrect password.';
+        pwInput.value = '';
+        pwInput.focus();
+      } else if (r.status === 400 && data.error) {
+        pwErr.textContent = data.error;
+      } else {
+        pwErr.textContent = 'Could not reach the server, try again.';
+      }
+    } catch (e) {
+      pwErr.textContent = 'Could not reach the server, try again.';
+    } finally {
+      pwBtn.disabled = false;
     }
   }
 
@@ -1048,6 +1150,7 @@
     pat = val;
     patSetup.style.display = 'none';
     patErr.textContent = '';
+    refreshTokenStatus();
     loadGallery();
   }
 
@@ -1057,11 +1160,36 @@
   /* ---- Load gallery from GitHub ---- */
   async function loadGallery() {
     setStatus('Loading gallery...');
-    var data = await ghGet(ORDER_FILE);
-    if (!data) {
-      setStatus('Could not load gallery-order.json from GitHub. Check your token has repo access.', 'err');
+    var r = null;
+    try {
+      r = await ghFetch(ORDER_FILE);
+    } catch (e) {
+      r = null;
+    }
+    if (!r || !r.ok) {
+      var st = r ? r.status : 0;
+      var msg;
+      if (st === 401) {
+        msg = 'Your GitHub token is invalid or has expired. Update it in Settings and try again.';
+      } else if (st === 403 || st === 404) {
+        msg = 'Your GitHub token cannot access the repository. Update it in Settings.';
+      } else {
+        msg = 'Could not load gallery-order.json from GitHub. Check your token has repo access.';
+      }
+      setStatus(msg, 'err');
+      var openBtn = document.createElement('button');
+      openBtn.type = 'button';
+      openBtn.className = 'status-link';
+      openBtn.textContent = 'Open Settings';
+      openBtn.addEventListener('click', function () {
+        var t = document.getElementById('tab-settings');
+        if (t) t.click();
+      });
+      statusEl.appendChild(document.createTextNode(' '));
+      statusEl.appendChild(openBtn);
       return;
     }
+    var data = await r.json();
     orderSha = data.sha;
     try {
       var parsed = JSON.parse(b64Decode(data.content));
@@ -1360,14 +1488,14 @@
       if (spd && !rafId) rafId = requestAnimationFrame(step);
     }
 
-    /* 'drag' fires on the source element — works even over non-droppable areas
+    /* 'drag' fires on the source element, works even over non-droppable areas
        and fires periodically even when the mouse is stationary */
     document.addEventListener('drag', function (e) {
       if (e.clientY === 0 && e.clientX === 0) return;
       updateFromY(e.clientY);
     });
 
-    /* 'dragover' as backup — fires more frequently while moving */
+    /* 'dragover' as backup, fires more frequently while moving */
     document.addEventListener('dragover', function (e) {
       updateFromY(e.clientY);
     });
@@ -1585,9 +1713,126 @@
     }
   });
 
+  /* ---- Settings: change password ---- */
+  var setpwCurrent = document.getElementById('setpw-current');
+  var setpwNew     = document.getElementById('setpw-new');
+  var setpwConfirm = document.getElementById('setpw-confirm');
+  var setpwSaveBtn = document.getElementById('setpw-save');
+  var setpwMsg     = document.getElementById('setpw-msg');
+
+  function setPwMsg(msg, type) {
+    setpwMsg.textContent = msg || '';
+    setpwMsg.className = 'set-msg' + (type ? ' ' + type : '');
+  }
+
+  async function changePassword() {
+    var current = setpwCurrent.value;
+    var next = setpwNew.value;
+    var confirmed = setpwConfirm.value;
+    if (!current) { setPwMsg('Enter your current password.', 'err'); setpwCurrent.focus(); return; }
+    if (next.length < 8) { setPwMsg('New password must be at least 8 characters.', 'err'); setpwNew.focus(); return; }
+    if (next !== confirmed) { setPwMsg('New passwords do not match.', 'err'); setpwConfirm.focus(); return; }
+    setpwSaveBtn.disabled = true;
+    setPwMsg('Saving...');
+    try {
+      var r = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: current, newPassword: next })
+      });
+      var data = await r.json().catch(function () { return {}; });
+      if (r.ok && data.ok) {
+        setPwMsg('Password updated.', 'ok');
+        setpwCurrent.value = '';
+        setpwNew.value = '';
+        setpwConfirm.value = '';
+      } else if (r.status === 401) {
+        setPwMsg('Current password is incorrect.', 'err');
+      } else {
+        setPwMsg(data.error || 'Could not update the password, try again.', 'err');
+      }
+    } catch (e) {
+      setPwMsg('Could not reach the server, try again.', 'err');
+    } finally {
+      setpwSaveBtn.disabled = false;
+    }
+  }
+
+  setpwSaveBtn.addEventListener('click', changePassword);
+  setpwConfirm.addEventListener('keydown', function (e) { if (e.key === 'Enter') changePassword(); });
+
+  /* ---- Settings: GitHub token ---- */
+  var settokStatus = document.getElementById('settok-status');
+  var settokInput  = document.getElementById('settok-input');
+  var settokSave   = document.getElementById('settok-save');
+  var settokTest   = document.getElementById('settok-test');
+  var settokMsg    = document.getElementById('settok-msg');
+
+  function setTokMsg(msg, type) {
+    settokMsg.textContent = msg || '';
+    settokMsg.className = 'set-msg' + (type ? ' ' + type : '');
+  }
+
+  function refreshTokenStatus() {
+    if (pat) {
+      settokStatus.textContent = 'Token stored: ' + pat.slice(0, 4) + '****...' + pat.slice(-4);
+    } else {
+      settokStatus.textContent = 'No token stored. The Portfolio tab needs one to load and publish photos.';
+    }
+  }
+
+  settokSave.addEventListener('click', function () {
+    var val = settokInput.value.trim();
+    if (!val) { setTokMsg('Token cannot be empty.', 'err'); return; }
+    localStorage.setItem('mnp_admin_pat', val);
+    pat = val;
+    settokInput.value = '';
+    patSetup.style.display = 'none';
+    refreshTokenStatus();
+    setTokMsg('Token saved.', 'ok');
+    loadGallery();
+  });
+
+  settokInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') settokSave.click(); });
+
+  settokTest.addEventListener('click', async function () {
+    if (!pat) { setTokMsg('No token stored. Save one first.', 'err'); return; }
+    settokTest.disabled = true;
+    setTokMsg('Testing token...');
+    try {
+      var r = await fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME, {
+        headers: {
+          'Authorization': 'Bearer ' + pat,
+          'Accept': 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
+      });
+      if (r.status === 200) {
+        var info = await r.json().catch(function () { return {}; });
+        if (info.permissions && info.permissions.push === false) {
+          setTokMsg('Token is read-only, publishing will fail. It needs repo write access.', 'err');
+        } else {
+          setTokMsg('Token works. Repo access confirmed.', 'ok');
+        }
+      } else if (r.status === 401) {
+        setTokMsg('Token is invalid or expired. Create a new one.', 'err');
+      } else if (r.status === 403 || r.status === 404) {
+        setTokMsg('Token does not have access to the ' + REPO_OWNER + '/' + REPO_NAME + ' repository.', 'err');
+      } else {
+        setTokMsg('GitHub returned an unexpected status: ' + r.status + '.', 'err');
+      }
+    } catch (e) {
+      setTokMsg('Could not reach GitHub. Check your internet connection and try again.', 'err');
+    } finally {
+      settokTest.disabled = false;
+    }
+  });
+
   /* ---- Init ---- */
   function init() {
-    if (!loadPAT()) {
+    var hasPat = loadPAT();
+    refreshTokenStatus();
+    if (!hasPat) {
       patSetup.style.display = 'block';
       setStatus('Enter your GitHub token to continue.');
       return;
@@ -1602,6 +1847,9 @@
       e.returnValue = '';
     }
   });
+
+  /* Skip the gate on refresh within the same browser session */
+  if (sessionStorage.getItem('mnp_authed') === '1') showApp();
 })();
 </script>
 
@@ -1664,15 +1912,19 @@ var cancelRequested = false;
 tabBtns.forEach(function (btn) {
   btn.addEventListener('click', function () {
     tabBtns.forEach(function (b) { b.classList.toggle('active', b === btn); });
-    var showGalleries = btn.dataset.tab === 'galleries';
-    appEl.classList.toggle('tab-galleries', showGalleries);
-    if (showGalleries) enterGalleries();
+    var tab = btn.dataset.tab;
+    appEl.classList.toggle('tab-galleries', tab === 'galleries');
+    appEl.classList.toggle('tab-settings', tab === 'settings');
+    if (tab === 'galleries') enterGalleries();
+    if (tab === 'settings') loadStorageOverview();
   });
 });
 
+/* The admin key is normally filled in automatically at login by /api/auth.
+   The key setup panel only appears if the API rejects the stored key
+   (e.g. the key was rotated), via handleUnauthorized(). */
 function enterGalleries() {
   adminKey = localStorage.getItem(ADMIN_KEY_STORAGE) || '';
-  if (!adminKey) { showKeySetup(''); return; }
   showGalMain();
   loadGalleries();
 }
@@ -2141,6 +2393,52 @@ cancelBtn.addEventListener('click', function () {
   cancelBtn.disabled = true;
   cancelBtn.textContent = 'Stopping after current photo...';
 });
+
+/* ---- Settings: storage overview (read-only) ---- */
+var storageEl = document.getElementById('set-storage');
+
+async function loadStorageOverview() {
+  storageEl.textContent = 'Loading storage info...';
+  var key = localStorage.getItem(ADMIN_KEY_STORAGE) || '';
+  try {
+    var r = await fetch('/api/galleries', { headers: { 'x-admin-key': key } });
+    if (r.status === 401) {
+      storageEl.textContent = 'The gallery admin key is missing or invalid. Open the Client Galleries tab to update it.';
+      return;
+    }
+    var data = await r.json().catch(function () { return {}; });
+    if (!r.ok) throw new Error(data.error || ('Request failed with status ' + r.status));
+    var galleries = data.galleries || [];
+    var now = Date.now();
+    var photos = 0;
+    var bytes = 0;
+    galleries.forEach(function (g) {
+      photos += g.photoCount || 0;
+      bytes += g.totalBytes || 0;
+    });
+    var active = galleries.filter(function (g) {
+      return !g.expired && new Date(g.expiresAt).getTime() > now;
+    });
+    var soonest = null;
+    active.forEach(function (g) {
+      if (!soonest || new Date(g.expiresAt) < new Date(soonest.expiresAt)) soonest = g;
+    });
+    var lines = [
+      'Active client galleries: ' + active.length,
+      'Total photos: ' + photos,
+      'Total size: ' + fmtBytes(bytes),
+      soonest ? 'Next expiry: ' + soonest.clientName + ' on ' + fmtDate(soonest.expiresAt) : 'No upcoming expiries.'
+    ];
+    storageEl.innerHTML = '';
+    lines.forEach(function (line) {
+      var div = document.createElement('div');
+      div.textContent = line;
+      storageEl.appendChild(div);
+    });
+  } catch (e) {
+    storageEl.textContent = 'Could not load storage info: ' + e.message;
+  }
+}
 </script>
 </body>
 </html>
