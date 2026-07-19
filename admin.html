@@ -696,6 +696,146 @@
       #status { padding: 0 16px; }
       #pat-setup { padding: 0 16px; }
     }
+
+    /* =====================================================
+       MOBILE + TOUCH SUPPORT (desktop rendering unchanged)
+       ===================================================== */
+
+    /* Kill the legacy 300ms tap delay on interactive elements */
+    button, .btn-upload-label, .tab-btn, .gal-dropzone, .header-row a { touch-action: manipulation; }
+
+    /* Desktop: mobile helpers stay invisible / transparent to layout */
+    .hint-toggle { display: none; }
+    .header-actions { display: contents; }
+    .dz-touch { display: none; }
+
+    /* Cheap scroll win: offscreen grid cells skip layout and paint.
+       Cell height comes from aspect-ratio, so no scroll jumping. */
+    .admin-cell { content-visibility: auto; contain-intrinsic-size: auto 300px; }
+
+    /* Touch reorder visuals (only present mid-gesture) */
+    .admin-cell.touch-dragging { opacity: 0.35; }
+    .touch-ghost {
+      position: fixed !important;
+      left: 0;
+      top: 0;
+      z-index: 999;
+      pointer-events: none;
+      opacity: 0.92;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+      border-radius: var(--radius);
+      overflow: hidden;
+      will-change: transform;
+      content-visibility: visible;
+    }
+
+    @media (hover: none) {
+      /* Hover-only cell controls become small always-visible chips */
+      .admin-cell .delete-btn,
+      .admin-cell .hide-btn,
+      .admin-cell .focal-btn { opacity: 0.72; width: 26px; height: 26px; background: rgba(0,0,0,0.45); }
+      /* Expand the effective tap target to 44px without growing the chip */
+      .admin-cell .delete-btn::after,
+      .admin-cell .hide-btn::after,
+      .admin-cell .focal-btn::after { content: ''; position: absolute; inset: -9px; }
+      /* Long-press is our reorder gesture: no callout / text selection */
+      .admin-cell { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+      /* Dropzone reads as a tap target */
+      .dz-mouse { display: none; }
+      .dz-touch { display: inline; }
+    }
+
+    @media (max-width: 640px) {
+      /* -- Header: row 1 = title + link + tips toggle, row 2 = scrollable actions -- */
+      .header-row { gap: 8px 10px; }
+      .header-row h1 { font-size: 16px; }
+      .header-row a { padding: 12px 6px; }
+      .hint-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--mid);
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        flex: 0 0 auto;
+        padding: 0;
+      }
+      .header-actions {
+        display: flex;
+        flex: 1 1 100%;
+        gap: 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .header-actions::-webkit-scrollbar { display: none; }
+      .header-actions .btn-upload-label,
+      .header-actions .btn-publish {
+        flex: 1 0 auto;
+        min-height: 44px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hint { display: none; }
+      .hint.show { display: block; margin-top: 10px; }
+
+      /* -- Tab bar: full width, even tabs, 44px tall -- */
+      .tab-bar { margin-top: 10px; margin-bottom: -12px; gap: 0; }
+      .tab-btn { flex: 1 1 0; min-height: 44px; padding: 8px 4px; }
+
+      /* -- Status text can wrap without huge line boxes -- */
+      #status { line-height: 1.5; padding-top: 8px; padding-bottom: 4px; }
+
+      /* -- 16px inputs stop iOS zoom-on-focus; 44px targets everywhere -- */
+      .gate-box input[type="password"],
+      .pat-row input,
+      .gal-field input,
+      .gal-field select { font-size: 16px; min-height: 44px; }
+      .btn-primary, .btn-publish, .btn-sm, .btn-ghost, .btn-danger-ghost, .btn-upload-label { min-height: 44px; }
+      .cat-option { padding: 12px 14px; }
+
+      /* -- Galleries create form stacks full width -- */
+      .gal-form { flex-direction: column; align-items: stretch; }
+      .gal-form .gal-field { width: 100%; }
+      #gal-pin-input { width: 100% !important; }
+
+      /* -- Gallery card actions: 2x2 grid of equal buttons -- */
+      .gal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+      .gal-actions button { width: 100%; }
+
+      /* -- Settings forms stack full width -- */
+      .set-form { max-width: none; }
+      .set-form .btn-sm { align-self: stretch; }
+      .pat-row { flex-wrap: wrap; }
+      .pat-row input { flex: 1 1 100%; }
+      .pat-row .btn-sm, .pat-row .btn-ghost { flex: 1 1 auto; }
+
+      /* -- Client upload progress stays visible during a batch -- */
+      #gal-progress {
+        position: fixed;
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        z-index: 60;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+      }
+
+      /* -- Focal modal fits small screens -- */
+      #focal-modal { padding: 12px; }
+      .focal-modal-box { padding: 14px; }
+      .focal-modal-actions { flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
@@ -721,6 +861,8 @@
     <div class="header-row">
       <h1>Gallery Admin</h1>
       <a href="/" target="_blank">View site &rarr;</a>
+      <button class="hint-toggle portfolio-only" id="hint-toggle" type="button" aria-label="Show tips">?</button>
+      <div class="header-actions">
       <label class="btn-upload-label portfolio-only" for="file-input">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         Images
@@ -737,6 +879,7 @@
         <input type="file" id="zip-input" accept=".zip,application/zip" style="display:none">
       </label>
       <button class="btn-publish portfolio-only" id="publish-btn">Publish Changes</button>
+      </div>
     </div>
     <p class="hint portfolio-only">Drag to reorder &middot; Click photo to assign category &middot; Hover: eye to hide from gallery / &times; to delete &middot; Changes go live ~30s after publishing</p>
     <nav class="tab-bar">
@@ -822,7 +965,7 @@
           <button class="btn-ghost" id="gal-upload-close" type="button">Close</button>
         </div>
         <div class="gal-dropzone" id="gal-dropzone">
-          Drag photos here, or click to choose files. JPEG, PNG or WebP.
+          <span class="dz-mouse">Drag photos here, or click to choose files.</span><span class="dz-touch">Tap to choose photos.</span> JPEG, PNG or WebP.
           <input type="file" id="gal-file-input" accept="image/*" multiple style="display:none">
         </div>
         <div id="gal-progress" style="display:none">
@@ -1348,6 +1491,7 @@
       imgEl.src = img.src;
       imgEl.alt = img.alt || '';
       imgEl.loading = 'lazy';
+      imgEl.decoding = 'async';
 
       var label = document.createElement('div');
       label.className = 'img-label';
@@ -1504,6 +1648,208 @@
       scrollSpeed = 0;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
     });
+  })();
+
+  /* ---- Touch reorder (long-press to lift, drag to reorder) ----
+     HTML5 drag-and-drop never fires on touch devices, so this adds a
+     parallel touch-event path that leaves the desktop DnD code alone.
+     A 350ms long-press with the finger nearly still lifts the cell
+     (scale + shadow ghost, haptic tick where supported). Moving the
+     finger then drags a fixed-position ghost while the real cell is
+     moved live through the grid with insertBefore, so siblings reflow
+     as you pass over them. Near the top or bottom of the viewport the
+     page auto-scrolls, mirroring the desktop drag auto-scroll. Release
+     commits the move with the same splice + render path the desktop
+     drop handler uses. A quick tap still opens the category picker and
+     normal scrolling is untouched: nothing happens until the timer
+     fires, and moving more than 10px first cancels the lift. */
+  (function () {
+    var LONG_PRESS_MS = 350;
+    var CANCEL_DIST = 10;
+    var touchId = null;
+    var pressTimer = null;
+    var srcCell = null;
+    var lifted = false;
+    var ghost = null;
+    var startX = 0, startY = 0, curX = 0, curY = 0;
+    var grabDX = 0, grabDY = 0;
+    var suppressUntil = 0;
+    var scrollRaf = null;
+    var scrollSpeed = 0;
+
+    function findTouch(e) {
+      for (var i = 0; i < e.changedTouches.length; i++) {
+        if (e.changedTouches[i].identifier === touchId) return e.changedTouches[i];
+      }
+      return null;
+    }
+
+    function clearPress() {
+      if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    }
+
+    function positionGhost() {
+      if (!ghost) return;
+      ghost.style.transform = 'translate(' + (curX - grabDX) + 'px,' + (curY - grabDY) + 'px) scale(1.04)';
+    }
+
+    function lift() {
+      pressTimer = null;
+      if (!srcCell || !srcCell.parentNode) { touchId = null; srcCell = null; return; }
+      lifted = true;
+      if (navigator.vibrate) { try { navigator.vibrate(25); } catch (e) {} }
+      var rect = srcCell.getBoundingClientRect();
+      grabDX = curX - rect.left;
+      grabDY = curY - rect.top;
+      ghost = srcCell.cloneNode(true);
+      ghost.className = 'admin-cell touch-ghost';
+      ghost.removeAttribute('draggable');
+      ghost.removeAttribute('data-index');
+      ghost.style.width = rect.width + 'px';
+      ghost.style.height = rect.height + 'px';
+      positionGhost();
+      document.body.appendChild(ghost);
+      srcCell.classList.add('touch-dragging');
+    }
+
+    /* Live preview: move the real cell through the grid as the finger
+       passes over siblings. The images array is only touched on release. */
+    function reorderPreview() {
+      if (!srcCell) return;
+      var el = document.elementFromPoint(curX, curY);
+      var target = el && el.closest ? el.closest('.admin-cell') : null;
+      if (!target || target === srcCell || target.classList.contains('uploading') || target.parentNode !== gridEl) return;
+      var after = !!(srcCell.compareDocumentPosition(target) & Node.DOCUMENT_POSITION_FOLLOWING);
+      gridEl.insertBefore(srcCell, after ? target.nextSibling : target);
+    }
+
+    /* Near-edge auto-scroll, touch mirror of the desktop drag version */
+    function scrollStep() {
+      if (!scrollSpeed || !lifted) { scrollRaf = null; return; }
+      window.scrollBy(0, scrollSpeed);
+      reorderPreview();
+      scrollRaf = requestAnimationFrame(scrollStep);
+    }
+
+    function updateAutoScroll() {
+      if (!lifted) { scrollSpeed = 0; return; }
+      var h = window.innerHeight;
+      var zone = 90;
+      var topEdge = zone;
+      var hdr = document.querySelector('header');
+      if (hdr) topEdge = Math.min(h * 0.45, hdr.getBoundingClientRect().bottom + 60);
+      var spd = 0;
+      if (curY < topEdge) spd = -Math.ceil(((topEdge - curY) / topEdge) * 18 + 4);
+      else if (curY > h - zone) spd = Math.ceil(((curY - (h - zone)) / zone) * 18 + 4);
+      scrollSpeed = spd;
+      if (spd && !scrollRaf) scrollRaf = requestAnimationFrame(scrollStep);
+    }
+
+    function finish(commit) {
+      clearPress();
+      if (scrollRaf) { cancelAnimationFrame(scrollRaf); scrollRaf = null; }
+      scrollSpeed = 0;
+      if (lifted && srcCell) {
+        suppressUntil = Date.now() + 500;
+        if (ghost && ghost.parentNode) ghost.parentNode.removeChild(ghost);
+        srcCell.classList.remove('touch-dragging');
+        var from = parseInt(srcCell.dataset.index, 10);
+        var cells = Array.prototype.filter.call(gridEl.children, function (c) {
+          return c.classList && c.classList.contains('admin-cell') && !c.classList.contains('uploading');
+        });
+        var to = cells.indexOf(srcCell);
+        if (commit && !isNaN(from) && to !== -1 && to !== from) {
+          var moved = images.splice(from, 1)[0];
+          images.splice(to, 0, moved);
+          dirty = true;
+          setStatus('Order changed. Click Publish to go live.');
+        }
+        /* Re-sync the DOM with the images array (also reverts the
+           preview when nothing changed or the gesture was cancelled) */
+        render();
+      }
+      ghost = null;
+      srcCell = null;
+      lifted = false;
+      touchId = null;
+    }
+
+    gridEl.addEventListener('touchstart', function (e) {
+      if (lifted) return; /* already dragging with the first finger */
+      if (e.touches.length > 1) { clearPress(); touchId = null; srcCell = null; return; }
+      var cell = e.target && e.target.closest ? e.target.closest('.admin-cell') : null;
+      if (!cell || cell.classList.contains('uploading')) return;
+      touchId = e.changedTouches[0].identifier;
+      srcCell = cell;
+      startX = curX = e.changedTouches[0].clientX;
+      startY = curY = e.changedTouches[0].clientY;
+      clearPress();
+      pressTimer = setTimeout(lift, LONG_PRESS_MS);
+    }, { passive: true });
+
+    gridEl.addEventListener('touchmove', function (e) {
+      if (touchId === null) return;
+      var t = findTouch(e);
+      if (!t) return;
+      curX = t.clientX;
+      curY = t.clientY;
+      if (!lifted) {
+        /* Finger travelled before the long-press fired: it is a scroll */
+        if (pressTimer && (Math.abs(curX - startX) > CANCEL_DIST || Math.abs(curY - startY) > CANCEL_DIST)) {
+          clearPress();
+          touchId = null;
+          srcCell = null;
+        }
+        return;
+      }
+      e.preventDefault(); /* dragging: the page must not scroll on its own */
+      positionGhost();
+      reorderPreview();
+      updateAutoScroll();
+    }, { passive: false });
+
+    gridEl.addEventListener('touchend', function (e) {
+      if (touchId === null || !findTouch(e)) return;
+      finish(true);
+    });
+
+    gridEl.addEventListener('touchcancel', function (e) {
+      if (touchId === null || !findTouch(e)) return;
+      finish(false);
+    });
+
+    /* Swallow the one synthetic click a lift can produce so it does not
+       open the category picker */
+    gridEl.addEventListener('click', function (e) {
+      if (Date.now() < suppressUntil) {
+        suppressUntil = 0;
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }, true);
+
+    /* Long-press is our gesture: block the context menu and any native
+       long-press drag the browser may start on draggable cells. Both
+       flags are only ever set from touch events, so mouse-driven desktop
+       drag-and-drop is unaffected. */
+    gridEl.addEventListener('contextmenu', function (e) {
+      if (lifted || pressTimer) e.preventDefault();
+    });
+
+    document.addEventListener('dragstart', function (e) {
+      if (lifted || pressTimer) e.preventDefault();
+    }, true);
+  })();
+
+  /* ---- Mobile hint toggle ("?" in the header) ---- */
+  (function () {
+    var hintToggle = document.getElementById('hint-toggle');
+    var hintEl = document.querySelector('.hint');
+    if (hintToggle && hintEl) {
+      hintToggle.addEventListener('click', function () {
+        hintEl.classList.toggle('show');
+      });
+    }
   })();
 
   /* ---- Delete ---- */
