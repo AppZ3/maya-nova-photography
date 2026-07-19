@@ -1,7 +1,11 @@
 import crypto from 'node:crypto';
-import { put, list } from '@vercel/blob';
+import { put, list, del } from '@vercel/blob';
 
-const AUTH_PATH = 'settings/auth.json';
+// Each save writes a NEW timestamped pathname (settings/auth-{ts}.json) and
+// deletes the previous ones. Overwriting a fixed pathname doesn't work here:
+// the Blob CDN caches by pathname (query strings ignored) for 60s minimum,
+// which made password changes lag behind.
+const AUTH_PREFIX = 'settings/auth';
 const PBKDF2_ITERS = 120000;
 
 // Seed hash: the password the site shipped with. Replaced in the settings
@@ -24,25 +28,33 @@ function makeRecord(password) {
   };
 }
 
+async function listAuthBlobs() {
+  const res = await list({ prefix: AUTH_PREFIX });
+  return res.blobs.filter((b) => /^settings\/auth(-\d+)?\.json$/.test(b.pathname));
+}
+
 async function loadRecord() {
-  const res = await list({ prefix: AUTH_PATH, limit: 1 });
-  const blob = res.blobs.find((b) => b.pathname === AUTH_PATH);
-  if (!blob) return null;
-  // Blob CDN caches aggressively and this file changes on password updates;
-  // bust with a query param and no-store.
-  const resp = await fetch(`${blob.url}?t=${Date.now()}`, { cache: 'no-store' });
+  const blobs = await listAuthBlobs();
+  if (!blobs.length) return null;
+  // Newest timestamped record wins; the legacy fixed-path auth.json sorts last.
+  blobs.sort((a, b) => (b.pathname > a.pathname ? 1 : -1));
+  const newest = blobs.find((b) => b.pathname !== 'settings/auth.json') || blobs[0];
+  const resp = await fetch(newest.url, { cache: 'no-store' });
   if (!resp.ok) return null;
   return resp.json();
 }
 
 async function saveRecord(record) {
-  await put(AUTH_PATH, JSON.stringify(record), {
+  const previous = await listAuthBlobs();
+  await put(`${AUTH_PREFIX}-${Date.now()}.json`, JSON.stringify(record), {
     access: 'public',
     addRandomSuffix: false,
-    allowOverwrite: true,
+    allowOverwrite: false,
     contentType: 'application/json',
-    cacheControlMaxAge: 60,
   });
+  if (previous.length) {
+    await del(previous.map((b) => b.url)).catch(() => {});
+  }
 }
 
 function verify(record, password) {
