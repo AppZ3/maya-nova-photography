@@ -523,6 +523,163 @@
     }
     .btn-ghost:hover { background: #f5f3ee; }
 
+    /* ---- Shoot grouping + black and white ---- */
+    #portfolio-toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 4px 32px 0;
+    }
+    #filter-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+    #filter-bar::-webkit-scrollbar { display: none; }
+    .filter-chip {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      background: #fff;
+      color: var(--mid);
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s, color 0.15s;
+    }
+    .filter-chip:hover { border-color: var(--gold); }
+    .filter-chip.active { background: var(--dark); border-color: var(--dark); color: #fff; font-weight: 600; }
+    .reorder-note { font-size: 12px; color: var(--mid); }
+    .toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .toolbar-actions .btn-ghost.active { border-color: var(--gold); background: rgba(200,168,130,0.14); color: #8a5820; font-weight: 600; }
+    #bulk-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    #bulk-count { font-size: 13px; color: var(--mid); white-space: nowrap; }
+    #bulk-shoot-input {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      outline: none;
+      min-width: 150px;
+      flex: 0 1 200px;
+    }
+    #bulk-shoot-input:focus { border-color: var(--gold); }
+
+    /* Cell badges: shoot label + B&W marker. Sit just above the category
+       badge, kept clear of the focal chip on the right, and are
+       pointer-events none so they never block the tap targets. */
+    .meta-badges {
+      position: absolute;
+      bottom: 30px;
+      left: 6px;
+      right: 40px;
+      display: flex;
+      gap: 4px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .shoot-badge {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 3px 8px;
+      background: rgba(200,168,130,0.88);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 600;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+    }
+    .bw-badge {
+      flex: 0 0 auto;
+      padding: 3px 6px;
+      background: rgba(0,0,0,0.72);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      border-radius: 3px;
+      letter-spacing: 0.08em;
+    }
+
+    /* Multi-select */
+    .admin-cell.msel { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+    .admin-cell.msel::after {
+      content: '\2713';
+      position: absolute;
+      top: 6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Display filter: cells are hidden, never removed or reordered */
+    .admin-cell.filtered-out { display: none !important; }
+
+    /* Cat picker extras: shoot + black and white */
+    #cat-picker { max-height: min(70vh, 480px); overflow-y: auto; }
+    .cat-picker-extra {
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+      padding: 8px 10px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cp-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    #shoot-input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      outline: none;
+    }
+    #shoot-input:focus { border-color: var(--gold); }
+    .cp-bw-toggle {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: none;
+      font-size: 13px;
+      color: var(--mid);
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .cp-bw-toggle:hover { background: #f0ede8; }
+    .cp-bw-toggle.on { background: rgba(200,168,130,0.18); border-color: var(--gold); color: #8a5820; font-weight: 600; }
+
+    @media (max-width: 640px) {
+      #portfolio-toolbar { padding: 4px 16px 0; }
+      #bulk-shoot-input { font-size: 16px; min-height: 44px; flex: 1 1 140px; }
+      #shoot-input { font-size: 16px; min-height: 44px; }
+      .cp-bw-toggle { min-height: 44px; }
+    }
+
     /* ---- TABS ---- */
     .tab-bar {
       display: flex;
@@ -908,6 +1065,25 @@
     </div>
   </div>
 
+  <!-- Shoot / B&W toolbar (Portfolio tab only; shown once the gallery loads) -->
+  <div id="portfolio-toolbar" class="portfolio-only" style="display:none">
+    <div id="filter-bar"></div>
+    <p class="reorder-note" id="reorder-note" style="display:none">Reordering is available in the All view.</p>
+    <div class="toolbar-actions">
+      <button class="btn-ghost" id="select-btn" type="button">Select</button>
+      <button class="btn-ghost" id="group-shoot-btn" type="button">Group by shoot</button>
+      <button class="btn-ghost" id="detect-bw-btn" type="button">Detect B&amp;W</button>
+      <button class="btn-ghost" id="detect-bw-cancel" type="button" style="display:none">Cancel</button>
+    </div>
+    <div id="bulk-bar" style="display:none">
+      <span id="bulk-count">0 selected</span>
+      <input type="text" id="bulk-shoot-input" list="shoot-datalist" placeholder="Shoot label" autocomplete="off">
+      <button class="btn-ghost" id="bulk-shoot-apply" type="button">Set shoot</button>
+      <button class="btn-ghost" id="bulk-bw-on" type="button">Mark B&amp;W</button>
+      <button class="btn-ghost" id="bulk-bw-off" type="button">Unmark B&amp;W</button>
+    </div>
+  </div>
+
   <div id="grid"></div>
 
   <!-- =========================================================
@@ -1050,7 +1226,13 @@
   <button class="cat-option" data-cat="social">Social Media Content</button>
   <button class="cat-option" data-cat="events">Events</button>
   <button class="cat-option" data-cat="commercial">Commercial</button>
+  <div class="cat-picker-extra">
+    <label class="cp-label" for="shoot-input">Shoot</label>
+    <input type="text" id="shoot-input" list="shoot-datalist" placeholder="e.g. amber-beach-may" autocomplete="off">
+    <button class="cp-bw-toggle" id="bw-toggle" type="button">Black and white</button>
+  </div>
 </div>
+<datalist id="shoot-datalist"></datalist>
 
 <div id="focal-modal">
   <div class="focal-modal-box">
@@ -1088,6 +1270,13 @@
   var activePickerIdx = null;
   var activeFocalIdx = null;
   var pendingFocal = null; // "x% y%" chosen but not yet saved, while modal is open
+  var activeFilter = { type: 'all' };      // {type:'all'|'shoot'|'bw'|'noshoot', label?}
+  var selectMode = false;                  // multi-select mode on/off
+  var selectedSrcs = Object.create(null);  // src -> true; keyed by src so it survives reorders
+  var bwScanning = false;
+  var bwScanCancel = false;
+  var BW_SAT_THRESHOLD = 12;               // mean saturation (0-255) below this = black and white
+  var BW_SAMPLE_DIM = 32;                  // downsample size for the B&W scan
 
   var CAT_LABELS = {
     portrait: 'Portrait',
@@ -1120,6 +1309,22 @@
   var focalResetBtn = document.getElementById('focal-reset-btn');
   var focalCancelBtn = document.getElementById('focal-cancel-btn');
   var focalSaveBtn  = document.getElementById('focal-save-btn');
+  var portfolioToolbar = document.getElementById('portfolio-toolbar');
+  var filterBar     = document.getElementById('filter-bar');
+  var reorderNote   = document.getElementById('reorder-note');
+  var selectBtn     = document.getElementById('select-btn');
+  var groupShootBtn = document.getElementById('group-shoot-btn');
+  var detectBwBtn   = document.getElementById('detect-bw-btn');
+  var detectBwCancel = document.getElementById('detect-bw-cancel');
+  var bulkBar       = document.getElementById('bulk-bar');
+  var bulkCount     = document.getElementById('bulk-count');
+  var bulkShootInput = document.getElementById('bulk-shoot-input');
+  var bulkShootApply = document.getElementById('bulk-shoot-apply');
+  var bulkBwOn      = document.getElementById('bulk-bw-on');
+  var bulkBwOff     = document.getElementById('bulk-bw-off');
+  var shootDatalist = document.getElementById('shoot-datalist');
+  var shootInput    = document.getElementById('shoot-input');
+  var bwToggle      = document.getElementById('bw-toggle');
 
   /* ---- Utilities ---- */
   function setStatus(msg, type) {
@@ -1352,8 +1557,10 @@
   /* ---- Category picker ---- */
   function showCatPicker(idx, cellEl) {
     activePickerIdx = idx;
+    shootInput.value = images[idx].shoot || '';
+    bwToggle.classList.toggle('on', !!images[idx].bw);
     var rect = cellEl.getBoundingClientRect();
-    var pickerH = 200;
+    var pickerH = 340;
     if (window.innerHeight - rect.bottom > pickerH) {
       catPicker.style.top = (rect.bottom + 6) + 'px';
       catPicker.style.bottom = 'auto';
@@ -1371,6 +1578,7 @@
   }
 
   function hideCatPicker() {
+    commitPickerShoot(); // catch a typed shoot label the change event missed
     catPicker.classList.remove('open');
     activePickerIdx = null;
   }
@@ -1473,8 +1681,336 @@
     render();
   });
 
+  /* ---- Shoots, black and white, filtering, multi-select ----
+     `shoot` is an optional per-photo label ("amber-beach-may") and `bw`
+     an optional boolean; both live on the same entries the Publish flow
+     already serializes whole, so nothing extra is needed to persist
+     them. Filtering only toggles a display class per cell, the images
+     array itself is never mutated by a filter. While any filter other
+     than All is active both reorder paths are disabled, because a drop
+     position among hidden cells would be meaningless. */
+  function normalizeShoot(value) {
+    return String(value || '').trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  }
+
+  function shootCounts() {
+    var order = [];
+    var counts = Object.create(null);
+    images.forEach(function (img) {
+      if (!img.shoot) return;
+      if (counts[img.shoot] === undefined) { counts[img.shoot] = 0; order.push(img.shoot); }
+      counts[img.shoot]++;
+    });
+    return { order: order, counts: counts };
+  }
+
+  function refreshShootDatalist() {
+    shootDatalist.innerHTML = '';
+    shootCounts().order.forEach(function (label) {
+      var opt = document.createElement('option');
+      opt.value = label;
+      shootDatalist.appendChild(opt);
+    });
+  }
+
+  function matchesFilter(img) {
+    switch (activeFilter.type) {
+      case 'shoot': return img.shoot === activeFilter.label;
+      case 'bw': return !!img.bw;
+      case 'noshoot': return !img.shoot;
+      default: return true;
+    }
+  }
+
+  function reorderLocked() {
+    return activeFilter.type !== 'all';
+  }
+
+  function updateReorderNote() {
+    reorderNote.style.display = reorderLocked() ? '' : 'none';
+  }
+
+  function filterEquals(a, b) {
+    return a.type === b.type && a.label === b.label;
+  }
+
+  function addFilterChip(text, filter) {
+    var chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'filter-chip' + (filterEquals(filter, activeFilter) ? ' active' : '');
+    chip.textContent = text;
+    chip.addEventListener('click', function () {
+      if (filterEquals(filter, activeFilter)) return;
+      activeFilter = filter;
+      render();
+    });
+    filterBar.appendChild(chip);
+  }
+
+  function renderFilterBar() {
+    portfolioToolbar.style.display = images.length ? '' : 'none';
+    var sc = shootCounts();
+    var bwCount = 0;
+    var noShootCount = 0;
+    images.forEach(function (img) {
+      if (img.bw) bwCount++;
+      if (!img.shoot) noShootCount++;
+    });
+    /* If the active filter no longer applies (label renamed away, last
+       B&W unmarked), fall back to All so the grid never strands itself */
+    if (activeFilter.type === 'shoot' && sc.counts[activeFilter.label] === undefined) activeFilter = { type: 'all' };
+    if (activeFilter.type === 'bw' && !bwCount) activeFilter = { type: 'all' };
+    if (activeFilter.type === 'noshoot' && !sc.order.length) activeFilter = { type: 'all' };
+    filterBar.innerHTML = '';
+    addFilterChip('All (' + images.length + ')', { type: 'all' });
+    sc.order.forEach(function (label) {
+      addFilterChip(label + ' (' + sc.counts[label] + ')', { type: 'shoot', label: label });
+    });
+    if (bwCount) addFilterChip('B&W (' + bwCount + ')', { type: 'bw' });
+    if (sc.order.length) addFilterChip('No shoot (' + noShootCount + ')', { type: 'noshoot' });
+    updateReorderNote();
+  }
+
+  function buildMetaBadges(img) {
+    if (!img.shoot && !img.bw) return null;
+    var wrap = document.createElement('div');
+    wrap.className = 'meta-badges';
+    if (img.shoot) {
+      var sb = document.createElement('span');
+      sb.className = 'shoot-badge';
+      sb.textContent = img.shoot.length > 12 ? img.shoot.slice(0, 12) + '…' : img.shoot;
+      wrap.appendChild(sb);
+    }
+    if (img.bw) {
+      var bb = document.createElement('span');
+      bb.className = 'bw-badge';
+      bb.textContent = 'B&W';
+      wrap.appendChild(bb);
+    }
+    return wrap;
+  }
+
+  /* Refresh chips/datalist plus the one edited cell's badges without a
+     full render, so an open cat picker keeps its cell alive. Under an
+     active filter a full render keeps every cell's visibility honest. */
+  function afterMetaChange(idx) {
+    refreshShootDatalist();
+    if (reorderLocked()) { render(); return; }
+    renderFilterBar();
+    var cell = gridEl.querySelector('.admin-cell[data-index="' + idx + '"]');
+    var img = images[idx];
+    if (!cell || !img) return;
+    var old = cell.querySelector('.meta-badges');
+    if (old) old.remove();
+    var fresh = buildMetaBadges(img);
+    if (fresh) cell.appendChild(fresh);
+  }
+
+  /* Cell editor: shoot label */
+  function commitPickerShoot() {
+    if (activePickerIdx === null) return;
+    var img = images[activePickerIdx];
+    if (!img) return;
+    var label = normalizeShoot(shootInput.value);
+    var cur = img.shoot || '';
+    if (label === cur) { shootInput.value = label; return; }
+    if (label) img.shoot = label; else delete img.shoot;
+    shootInput.value = label;
+    dirty = true;
+    setStatus(label ? 'Shoot set to "' + label + '". Click Publish to go live.' : 'Shoot label removed. Click Publish to go live.');
+    afterMetaChange(activePickerIdx);
+  }
+
+  shootInput.addEventListener('change', commitPickerShoot);
+  shootInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { commitPickerShoot(); shootInput.blur(); }
+  });
+
+  /* Cell editor: black and white toggle */
+  bwToggle.addEventListener('click', function () {
+    if (activePickerIdx === null) return;
+    var img = images[activePickerIdx];
+    if (!img) return;
+    img.bw = !img.bw;
+    bwToggle.classList.toggle('on', img.bw);
+    dirty = true;
+    setStatus(img.bw ? 'Marked as black and white. Click Publish to go live.' : 'Black and white mark removed. Click Publish to go live.');
+    afterMetaChange(activePickerIdx);
+  });
+
+  /* ---- Multi-select + bulk actions ---- */
+  function selectedEntries() {
+    return images.filter(function (img) { return selectedSrcs[img.src]; });
+  }
+
+  function updateBulkBar() {
+    bulkBar.style.display = selectMode ? '' : 'none';
+    if (!selectMode) return;
+    var n = selectedEntries().length;
+    bulkCount.textContent = n + ' selected';
+  }
+
+  selectBtn.addEventListener('click', function () {
+    selectMode = !selectMode;
+    if (!selectMode) selectedSrcs = Object.create(null);
+    selectBtn.textContent = selectMode ? 'Done' : 'Select';
+    selectBtn.classList.toggle('active', selectMode);
+    render();
+  });
+
+  bulkShootApply.addEventListener('click', function () {
+    var targets = selectedEntries();
+    if (!targets.length) { setStatus('Tap photos to select them first.', 'err'); return; }
+    var label = normalizeShoot(bulkShootInput.value);
+    targets.forEach(function (img) {
+      if (label) img.shoot = label; else delete img.shoot;
+    });
+    bulkShootInput.value = label;
+    dirty = true;
+    var noun = targets.length + ' photo' + (targets.length === 1 ? '' : 's');
+    setStatus(label
+      ? 'Shoot "' + label + '" set on ' + noun + '. Click Publish to go live.'
+      : 'Shoot label removed from ' + noun + '. Click Publish to go live.');
+    render();
+  });
+
+  bulkShootInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') bulkShootApply.click();
+  });
+
+  function bulkSetBw(value) {
+    var targets = selectedEntries();
+    if (!targets.length) { setStatus('Tap photos to select them first.', 'err'); return; }
+    targets.forEach(function (img) { img.bw = value; });
+    dirty = true;
+    var noun = targets.length + ' photo' + (targets.length === 1 ? '' : 's');
+    setStatus((value
+      ? 'Marked ' + noun + ' as black and white.'
+      : 'Removed the black and white mark from ' + noun + '.') + ' Click Publish to go live.');
+    render();
+  }
+
+  bulkBwOn.addEventListener('click', function () { bulkSetBw(true); });
+  bulkBwOff.addEventListener('click', function () { bulkSetBw(false); });
+
+  /* ---- Group by shoot ----
+     Stable reorder: shoots become contiguous blocks in order of each
+     shoot's first appearance, photos with no shoot keep their relative
+     order at the end, and inside each block colour photos come before
+     B&W ones (each sub-sequence keeps its existing relative order). */
+  groupShootBtn.addEventListener('click', function () {
+    if (!images.length) return;
+    var hasShoot = images.some(function (img) { return !!img.shoot; });
+    if (!hasShoot) { setStatus('No photos have a shoot label yet. Open a photo and give it one first.', 'err'); return; }
+    if (!confirm('Reorder the whole gallery so each shoot\'s photos sit together, with black and whites grouped inside each shoot? You can still drag to fine-tune afterwards.')) return;
+    var blockOrder = [];
+    var blocks = Object.create(null);
+    var noShoot = [];
+    images.forEach(function (img) {
+      if (img.shoot) {
+        if (!blocks[img.shoot]) { blocks[img.shoot] = { color: [], bw: [] }; blockOrder.push(img.shoot); }
+        (img.bw ? blocks[img.shoot].bw : blocks[img.shoot].color).push(img);
+      } else {
+        noShoot.push(img);
+      }
+    });
+    var next = [];
+    blockOrder.forEach(function (label) {
+      next = next.concat(blocks[label].color, blocks[label].bw);
+    });
+    images = next.concat(noShoot);
+    dirty = true;
+    render();
+    setStatus('Gallery grouped by shoot. Check the order, then click Publish to go live.');
+  });
+
+  /* ---- Detect B&W ----
+     Scans only entries whose bw is still undefined (an explicit true or
+     false is never overridden). Each photo is downsampled to 32x32 and
+     the mean per-pixel saturation (max(r,g,b) - min(r,g,b)) is compared
+     against BW_SAT_THRESHOLD on the 0-255 scale. */
+  function loadDecodedImage(src) {
+    if (window.createImageBitmap) {
+      return fetch(src).then(function (r) {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.blob();
+      }).then(function (blob) { return createImageBitmap(blob); });
+    }
+    return new Promise(function (resolve, reject) {
+      var im = new Image();
+      im.onload = function () { resolve(im); };
+      im.onerror = function () { reject(new Error('Image failed to load')); };
+      im.src = src;
+    });
+  }
+
+  async function meanSaturation(src) {
+    var bmp = await loadDecodedImage(src);
+    var canvas = document.createElement('canvas');
+    canvas.width = BW_SAMPLE_DIM;
+    canvas.height = BW_SAMPLE_DIM;
+    var ctx = canvas.getContext('2d', { willReadFrequently: true });
+    ctx.drawImage(bmp, 0, 0, BW_SAMPLE_DIM, BW_SAMPLE_DIM);
+    if (bmp.close) bmp.close();
+    var data = ctx.getImageData(0, 0, BW_SAMPLE_DIM, BW_SAMPLE_DIM).data;
+    var sum = 0;
+    var count = 0;
+    for (var p = 0; p < data.length; p += 4) {
+      sum += Math.max(data[p], data[p + 1], data[p + 2]) - Math.min(data[p], data[p + 1], data[p + 2]);
+      count++;
+    }
+    return count ? sum / count : 0;
+  }
+
+  async function runBwDetect() {
+    if (bwScanning) return;
+    var targets = images.filter(function (img) { return typeof img.bw === 'undefined'; });
+    if (!targets.length) { setStatus('Every photo already has a black and white setting. Nothing to scan.'); return; }
+    bwScanning = true;
+    bwScanCancel = false;
+    detectBwBtn.disabled = true;
+    detectBwCancel.style.display = '';
+    detectBwCancel.disabled = false;
+    detectBwCancel.textContent = 'Cancel';
+    var marked = 0;
+    var scanned = 0;
+    var failed = 0;
+    for (var i = 0; i < targets.length; i++) {
+      if (bwScanCancel) break;
+      setStatus('Scanning ' + (i + 1) + ' / ' + targets.length + '...');
+      try {
+        var mean = await meanSaturation(targets[i].src);
+        targets[i].bw = mean < BW_SAT_THRESHOLD;
+        if (targets[i].bw) marked++;
+        scanned++;
+      } catch (e) {
+        failed++;
+      }
+    }
+    bwScanning = false;
+    detectBwBtn.disabled = false;
+    detectBwCancel.style.display = 'none';
+    if (scanned) dirty = true;
+    var msg = 'Marked ' + marked + ' photo' + (marked === 1 ? '' : 's') + ' as black and white.';
+    if (bwScanCancel) msg = 'Scan stopped. ' + msg;
+    if (failed) msg += ' ' + failed + ' photo' + (failed === 1 ? '' : 's') + ' could not be scanned.';
+    if (scanned) msg += ' Click Publish to go live.';
+    setStatus(msg, scanned ? 'ok' : 'err');
+    render();
+  }
+
+  detectBwBtn.addEventListener('click', runBwDetect);
+  detectBwCancel.addEventListener('click', function () {
+    bwScanCancel = true;
+    detectBwCancel.disabled = true;
+    detectBwCancel.textContent = 'Stopping...';
+  });
+
   /* ---- Render grid ---- */
   function render() {
+    refreshShootDatalist();
+    renderFilterBar();
+    updateBulkBar();
     if (!images.length) {
       gridEl.innerHTML = '<div class="empty-state">No images yet. Upload some to get started.</div>';
       return;
@@ -1484,8 +2020,10 @@
     images.forEach(function (img, i) {
       var cell = document.createElement('div');
       cell.className = 'admin-cell';
-      cell.setAttribute('draggable', 'true');
+      cell.setAttribute('draggable', reorderLocked() ? 'false' : 'true');
       cell.dataset.index = i;
+      if (selectedSrcs[img.src]) cell.classList.add('msel');
+      if (!matchesFilter(img)) cell.classList.add('filtered-out');
 
       var imgEl = document.createElement('img');
       imgEl.src = img.src;
@@ -1548,6 +2086,9 @@
       cell.appendChild(delBtn);
       cell.appendChild(focalBtn);
 
+      var metaBadges = buildMetaBadges(img);
+      if (metaBadges) cell.appendChild(metaBadges);
+
       var focalPct = parsePct(img.focal);
       if (focalPct) {
         var dot = document.createElement('div');
@@ -1557,15 +2098,23 @@
         cell.appendChild(dot);
       }
 
-      /* Click to assign category */
+      /* Click: toggle selection in select mode, otherwise open the editor */
       cell.addEventListener('click', function (e) {
         if (e.target.closest('.delete-btn') || e.target.closest('.hide-btn') || e.target.closest('.focal-btn')) return;
         if (wasDragged) { wasDragged = false; return; }
+        if (selectMode) {
+          if (selectedSrcs[img.src]) delete selectedSrcs[img.src];
+          else selectedSrcs[img.src] = true;
+          cell.classList.toggle('msel', !!selectedSrcs[img.src]);
+          updateBulkBar();
+          return;
+        }
         showCatPicker(i, cell);
       });
 
       /* Drag events */
       cell.addEventListener('dragstart', function (e) {
+        if (reorderLocked()) { e.preventDefault(); return; }
         draggingIdx = i;
         wasDragged = false;
         cell.classList.add('dragging');
@@ -1595,6 +2144,7 @@
       cell.addEventListener('drop', function (e) {
         e.preventDefault();
         cell.classList.remove('drag-over');
+        if (reorderLocked()) return;
         var from = parseInt(e.dataTransfer.getData('text/plain'), 10);
         var to = i;
         if (from === to || isNaN(from)) return;
@@ -1779,6 +2329,7 @@
       if (e.touches.length > 1) { clearPress(); touchId = null; srcCell = null; return; }
       var cell = e.target && e.target.closest ? e.target.closest('.admin-cell') : null;
       if (!cell || cell.classList.contains('uploading')) return;
+      if (reorderLocked()) return; /* filtered view: reordering is disabled, taps still work */
       touchId = e.changedTouches[0].identifier;
       srcCell = cell;
       startX = curX = e.changedTouches[0].clientX;
