@@ -1285,12 +1285,21 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 .bento-cell.size-sm { grid-column: span 1; grid-row: span 1; }
 
 .bento-cell {
+  position: relative;
   overflow: hidden;
   cursor: zoom-in;
   border-radius: 2px;
   background: rgba(255,255,255,0.04);
   content-visibility: auto;
   contain-intrinsic-size: auto 300px;
+}
+
+/* Parallax layer: bleeds past the tile so the photo can drift inside its
+   own clipped frame. Tiles themselves never move, so they can't overlap. */
+.bento-inner {
+  position: absolute;
+  inset: -18px 0;
+  will-change: transform;
 }
 
 .bento-cell img {
@@ -2787,7 +2796,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           size = SIZE_PATTERN[i % SIZE_PATTERN.length];
         }
         return '<div class="bento-cell ' + size + '">' +
+          '<div class="bento-inner">' +
           '<img src="' + img.src + '" alt="' + (img.alt || '') + '" loading="lazy" decoding="async" style="object-position:' + focalFor(img) + '">' +
+          '</div>' +
         '</div>';
       }).join('');
       initRevealObserver();
@@ -2839,64 +2850,49 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     scroll.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
 
     /* ------------------------------------------------------------
-       Continuous per-column scroll parallax, podium.global-mechanism:
-       on podium.global every .project-card in a column shares ONE
-       offset value (confirmed by inspecting their live DOM) driven by
-       scroll depth -- not a per-tile calc. We match that: one offset
-       per column, applied to every cell in it, recalculated on every
-       scroll tick so it moves as you scroll in EITHER direction.
-       Podium's page ends shortly after the grid, so their offset can
-       grow unbounded with raw scrollY; this gallery scrolls ~9000px
-       internally, so the same unbounded formula would eventually blow
-       up. Using a bounded sine wave of scrollTop instead: same
-       "columns drift independently, alternating, decreasing amplitude"
-       feel, but safe at any scroll depth and still purely a function
-       of scroll position (works scrolling up or down, no direction
-       tracking needed).
+       Scroll parallax, contained inside each tile: the photo drifts
+       within its own clipped frame (.bento-inner bleeds 18px past the
+       tile) based on where the tile sits in the viewport. Tiles never
+       move, so images can never cut into a neighbouring tile -- the
+       old per-column tile translation collided with cells that span
+       two columns. Staggered tiles sit at different heights, so
+       neighbours still drift at slightly different offsets, keeping
+       the organic feel. Safe on phones, so it runs everywhere.
        ------------------------------------------------------------ */
-    var COL_AMP   = [34, 26, 20, 14];
-    var COL_PHASE = [0, Math.PI * 0.5, Math.PI, Math.PI * 1.5];
-    var WAVELENGTH = 900; // px of internal scroll per full drift cycle
+    var PLX_MAX = 16; // max px of photo drift; must stay under the 18px bleed
     var parallaxTicking = false;
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Column assignment only changes when the grid is re-rendered or resized,
-    // not on every scroll tick -- measuring it (getBoundingClientRect forces
-    // layout) once per cell and caching avoids layout-thrashing 90+ elements
-    // on every animation frame while scrolling.
-    var cellCache = null; // [{el, col}, ...]
+    // Tile positions only change on re-render or resize -- measure once
+    // and cache instead of layout-thrashing 90+ rects per scroll frame.
+    var cellCache = null; // [{inner, top, height}, ...]
 
-    function measureColumns() {
+    function measureCells() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) { cellCache = []; return; }
-      // Mobile CSS switches the grid from 4 columns to 2 -- read the real
-      // column count instead of assuming 4, so the column bucketing below
-      // stays correct at any breakpoint.
-      var numCols = getComputedStyle(grid).gridTemplateColumns.split(' ').length || 4;
-      var gridRect = grid.getBoundingClientRect();
-      var colWidth = gridRect.width / numCols;
+      var scrollRect = scroll.getBoundingClientRect();
+      var st = scroll.scrollTop;
       cellCache = Array.prototype.map.call(grid.querySelectorAll('.bento-cell'), function (cell) {
+        var inner = cell.querySelector('.bento-inner');
+        if (!inner) return null;
         var r = cell.getBoundingClientRect();
-        var col = Math.min(numCols - 1, Math.max(0, Math.floor((r.left - gridRect.left) / colWidth)));
-        return { el: cell, col: col };
-      });
+        return { inner: inner, top: r.top - scrollRect.top + st, height: r.height };
+      }).filter(Boolean);
     }
 
     function updateParallax() {
-      // No drift on phones: with only 2 columns the resting sine offset
-      // (+26px on column 2) reads as broken alignment, not parallax.
-      if (window.innerWidth <= 960) {
-        var cells = document.querySelectorAll('#galleryGrid .bento-cell');
-        for (var j = 0; j < cells.length; j++) cells[j].style.transform = '';
-        parallaxTicking = false;
-        return;
-      }
-      if (!cellCache) measureColumns();
-      var colOffset = COL_AMP.map(function (amp, col) {
-        return Math.sin((scroll.scrollTop / WAVELENGTH) * Math.PI * 2 + COL_PHASE[col]) * amp;
-      });
+      if (reduceMotion) { parallaxTicking = false; return; }
+      if (!cellCache) measureCells();
+      var st = scroll.scrollTop;
+      var vh = scroll.clientHeight;
       for (var i = 0; i < cellCache.length; i++) {
         var c = cellCache[i];
-        c.el.style.transform = 'translate3d(0,' + colOffset[c.col].toFixed(2) + 'px,0)';
+        var rel = c.top - st;
+        if (rel + c.height < -60 || rel > vh + 60) continue; // offscreen
+        var t = ((rel + c.height / 2) - vh / 2) / vh; // -0.5 top .. 0.5 bottom
+        if (t > 0.5) t = 0.5; else if (t < -0.5) t = -0.5;
+        c.inner.style.transform = 'translate3d(0,' + (t * PLX_MAX * 2).toFixed(2) + 'px,0)';
       }
       parallaxTicking = false;
     }
