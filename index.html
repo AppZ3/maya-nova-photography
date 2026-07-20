@@ -1747,7 +1747,16 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   .nav { padding: 0 18px; height: 58px; }
   .nav-logo { font-size: 17px; white-space: nowrap; }
   .nav-actions { gap: 12px; }
-  .nav-gallery-mobile { font-size: 10px; letter-spacing: 0.1em; }
+  /* Center the Gallery link in the bar itself, between wordmark and pill */
+  .nav-gallery-mobile {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 12px 10px;
+  }
   .nav-book {
     font-size: 10px;
     letter-spacing: 0.08em;
