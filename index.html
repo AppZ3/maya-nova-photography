@@ -70,11 +70,6 @@ html, body {
   100% { background-position: 50px -60px; }
 }
 
-.scanlines {
-  position: fixed; inset: 0; z-index: 51; pointer-events: none; opacity: 0.025;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.3) 2px, rgba(0,0,0,0.3) 4px);
-}
-
 /* Custom cursor disabled */
 .cursor-dot, .cursor-ring { display: none; }
 
@@ -245,17 +240,6 @@ html, body {
   background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 50%, rgba(0,0,0,0.65) 100%);
   pointer-events: none;
   z-index: 5;
-}
-
-/* Rule-of-thirds grid */
-.thirds-grid {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  z-index: 4;
-}
-.thirds-grid line {
-  stroke: rgba(255,255,255,0.04);
-  stroke-width: 1;
 }
 
 /* REC indicator -- inside video-screen-wrap, inherits tilt */
@@ -480,23 +464,6 @@ html, body {
   object-fit: cover;
   display: block;
   filter: sepia(0.22) saturate(0.78) contrast(1.04) brightness(1.0);
-}
-
-.video-screen-wrap::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 3px,
-      rgba(0,0,0,0.07) 3px,
-      rgba(0,0,0,0.07) 4px
-    );
-  pointer-events: none;
-  z-index: 1;
-  border-radius: 6px;
 }
 
 .video-screen-wrap::before {
@@ -1817,7 +1784,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      GRAIN + SCANLINES
      ============================================================ -->
 <div class="grain" aria-hidden="true"></div>
-<div class="scanlines" aria-hidden="true"></div>
 
 <!-- ============================================================
      CUSTOM CURSOR
@@ -1856,14 +1822,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      SECTION 0: HERO
      ============================================================ -->
 <section class="section" id="section-0" aria-label="Hero">
-
-  <!-- Rule-of-thirds grid -->
-  <svg class="thirds-grid" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <line x1="33%" y1="0" x2="33%" y2="100%"/>
-    <line x1="66%" y1="0" x2="66%" y2="100%"/>
-    <line x1="0" y1="33%" x2="100%" y2="33%"/>
-    <line x1="0" y1="66%" x2="100%" y2="66%"/>
-  </svg>
 
   <!-- Vignette -->
   <div class="hero-vignette" aria-hidden="true"></div>
@@ -2026,12 +1984,10 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         Storyteller.
       </h2>
       <div class="about-cols">
-        <p class="about-body">I'm a photographer + videographer based in the Northern Rivers capturing honest, heartfelt stories inspired by nature, connection and the beauty of being present.</p>
-        <p class="about-body">My work is about more than beautiful photos ~ it's about preserving the feeling of a moment. The laughter, loving glances, carefree movement, the happy tears and all the little in-between moments that often become our most treasured memories.</p>
-        <p class="about-body">I believe photography can be a beautiful act of self-love. A chance to slow down, come home to your body, embrace the season you're in, and celebrate yourself and the people you love.</p>
-        <p class="about-body">My sessions are relaxed, natural and free from stiff poses or forced smiles. I'll gently guide you when needed but mostly I'll create space for you to simply be yourselves while I capture the magic as it naturally unfolds.</p>
-        <p class="about-body">Alongside photography, I also create films that bring your story to life through movement, sound and emotion ~ allowing you to relive your most meaningful moments for years to come.</p>
-        <p class="about-body">My hope is that when you look back at your gallery or film, you don't just remember what happened ~ you remember exactly how it felt.</p>
+        <p class="about-body">I&rsquo;m a photographer + videographer based in the Northern Rivers, telling honest, heartfelt stories shaped by nature, connection and the quiet beauty of being present.</p>
+        <p class="about-body">I&rsquo;m drawn to the moments that can&rsquo;t be posed: the laughter that catches you off guard, the way you look at each other, the joyful movement, and all the little in-betweens that so often become our most treasured memories. My work is about holding on to how those moments felt.</p>
+        <p class="about-body">Being photographed can be an act of self-love. It&rsquo;s a chance to slow down, come home to your body, honour the season you&rsquo;re in, and celebrate yourself and the people you love. My sessions are relaxed and slow paced, gentle guidance and plenty of space to simply be you.</p>
+        <p class="about-body">Alongside photography, I create films and social media content that capture your story, your essence and your vision through movement, sound and light. For small businesses and brands, that means content that feels as genuine as you are and actually connects with the people you want to reach.</p>
       </div>
       <a href="#" class="about-cta" data-section="4">Book a session &rarr;</a>
     </div>
