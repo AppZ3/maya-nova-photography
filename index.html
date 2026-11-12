@@ -818,6 +818,29 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 }
 .video-wrap:hover video { transform: scale(1.04); }
 
+/* Gallery Videos tab */
+.gallery-lightbox .video-lightbox-player { display: none; }
+.gallery-lightbox.is-video .video-lightbox-player { display: block; }
+.gallery-lightbox.is-video .gallery-lightbox-img { display: none; }
+.video-cell { cursor: pointer; }
+.video-cell-preview {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  pointer-events: none;
+}
+.video-cell-play {
+  position: absolute; left: 14px; bottom: 14px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(20,14,6,0.45);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.video-cell-play svg { width: 16px; height: 16px; fill: #fffef8; margin-left: 2px; }
+.video-cell:hover .video-cell-play { opacity: 0; }
+
 /* Video lightbox player */
 .video-lightbox-player {
   max-width: 90vw;
@@ -1342,7 +1365,16 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
 .services-left { flex: 0 0 42%; min-width: 0; display: flex; flex-direction: column; }
 
-.services-right { flex: 1; min-width: 0; padding: 16px 200px 16px 24px; }
+.services-right { flex: 1 1 0; min-width: 0; max-width: 720px; padding: 72px 24px 32px 0; }
+.services-portrait {
+  flex: 0 0 38%;
+  position: sticky; top: 72px;
+  height: calc(100vh - 140px);
+  margin-top: 72px;
+  border-radius: 4px; overflow: hidden;
+}
+.services-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+#servicesScroll { overflow-y: auto; height: 100%; }
 
 .services-book {
   display: flex;
@@ -1700,7 +1732,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     height: 100%;
   }
   .services-left { flex: none; }
-  .services-right { flex: none; padding: 0; }
+  .services-right { flex: none; padding: 0; max-width: none; }
+  .services-portrait { flex: none; position: static; height: auto; aspect-ratio: 4 / 5; margin-top: 0; }
   .book-form { grid-template-columns: 1fr; }
   .book-row-2 { grid-template-columns: 1fr; }
 
@@ -1910,10 +1943,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      ============================================================ -->
 <section class="section" id="section-1" aria-label="Portfolio">
   <div class="gallery-cats" id="galleryCats">
-    <button class="gallery-cat active" data-cat="all">All</button>
-    <button class="gallery-cat" data-cat="portrait">Portrait Sessions</button>
-    <button class="gallery-cat" data-cat="social">Social Media Content</button>
-    <button class="gallery-cat" data-cat="events">Events</button>
+    <button class="gallery-cat active" data-cat="photos">Photos</button>
+    <button class="gallery-cat" data-cat="videos">Videos</button>
   </div>
   <div id="galleryScroll">
     <div class="bento-gallery" id="galleryGrid">
@@ -1933,6 +1964,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   </div>
   <div class="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Full size photo">
     <img class="gallery-lightbox-img" id="galleryLightboxImg" src="" alt="">
+    <video class="video-lightbox-player" id="galleryLightboxVideo" controls playsinline preload="none"></video>
     <button class="gallery-lightbox-close" id="galleryLightboxClose" aria-label="Close photo">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
@@ -2007,30 +2039,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 <section class="section" id="section-4" aria-label="Services">
   <div class="services-layout" id="servicesScroll">
 
-    <div class="services-left">
-      <div class="services-header">
-        <div class="section-eyebrow">
-          <span class="section-eyebrow-line" aria-hidden="true"></span>
-          WHAT I DO
-        </div>
-      </div>
-      <div class="services-grid">
-        <div class="service-card" data-cat="portrait">
-          <h3 class="service-title">Portrait Sessions</h3>
-          <div class="service-rule" aria-hidden="true"></div>
-          <p class="service-desc">One-on-one sessions designed to capture you authentically. Studio or location. 1-2 hours.</p>
-        </div>
-        <div class="service-card" data-cat="social">
-          <h3 class="service-title">Social Media Content</h3>
-          <div class="service-rule" aria-hidden="true"></div>
-          <p class="service-desc">Working with brands and publications to create images with intention and edge.</p>
-        </div>
-        <div class="service-card" data-cat="events">
-          <h3 class="service-title">Events</h3>
-          <div class="service-rule" aria-hidden="true"></div>
-          <p class="service-desc">Weddings, celebrations, milestone moments. Documentary approach, no stiff poses.</p>
-        </div>
-      </div>
+    <div class="services-portrait">
+      <img src="photos/maya-portrait.jpg" alt="Maya Nova at golden hour" loading="lazy" decoding="async">
     </div>
 
     <div class="services-right">
@@ -2082,6 +2092,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
               <label class="book-pill"><input type="checkbox" name="purpose" value="ceremony"><span>Ceremony</span></label>
               <label class="book-pill"><input type="checkbox" name="purpose" value="womens-circles"><span>Woman's circles</span></label>
               <label class="book-pill"><input type="checkbox" name="purpose" value="small-business"><span>Small business</span></label>
+              <label class="book-pill"><input type="checkbox" name="purpose" value="personal-branding"><span>Personal branding</span></label>
             </div>
           </div>
 
@@ -2109,15 +2120,15 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           </div>
 
           <div class="book-field">
-            <label class="book-label" for="bf-budget">Budget for this shoot</label>
-            <input class="book-input" type="text" id="bf-budget" name="budget" placeholder="e.g. $300-500">
+            <label class="book-label" for="bf-budget">Investment for this shoot</label>
+            <input class="book-input" type="text" id="bf-budget" name="budget" placeholder="e.g. $500 or $1,000">
           </div>
 
           <div class="book-field">
             <span class="book-label">Open to gift exchanges or offerings?</span>
             <p class="book-exchange-note">I am open to doing gift exchanges, offerings and sharing our passion</p>
             <div class="book-pills">
-              <label class="book-pill"><input type="radio" name="exchange" value="yes" id="bf-exchange-yes"><span>Yes -- I'd love to offer something</span></label>
+              <label class="book-pill"><input type="radio" name="exchange" value="yes" id="bf-exchange-yes"><span>Yes, I'd love to offer something</span></label>
               <label class="book-pill"><input type="radio" name="exchange" value="no" id="bf-exchange-no"><span>No, not this time</span></label>
             </div>
             <div class="book-exchange-detail" id="bookExchangeDetail">
@@ -2126,16 +2137,21 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
             </div>
           </div>
 
+          <div class="book-field">
+            <label class="book-label" for="bf-notes">Something you would like me to know about this shoot?</label>
+            <textarea class="book-input book-textarea" id="bf-notes" name="notes" placeholder="Anything at all..." rows="3"></textarea>
+          </div>
+
           <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" style="display:none">
 
-          <button class="book-submit" type="submit">Send inquiry</button>
+          <button class="book-submit" type="submit">Send enquiry</button>
 
         </form>
 
         <div class="book-success" id="bookSuccess" style="display:none">
           <p class="book-success-icon">&#10022;</p>
-          <h3 class="book-success-h">Thank you</h3>
-          <p class="book-success-p">Maya will be in touch soon. In the meantime, feel free to explore the gallery.</p>
+          <h3 class="book-success-h">Thank you!</h3>
+          <p class="book-success-p">I&rsquo;ve received your enquiry and will be in touch soon.</p>
         </div>
 
         <p class="contact-direct" style="margin-top:20px">Or email directly: <a href="mailto:mayanovaphotography@gmail.com" style="color:#8a5820;text-decoration:none;">mayanovaphotography@gmail.com</a></p>
@@ -2657,7 +2673,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     ];
 
     var allImages = [];
-    var currentCat = 'all';
+    var currentCat = 'photos';
+    var allVideos = [];
 
     // large / small / tall / wide / small / small -- repeats to give the
     // grid an editorial, non-uniform bento rhythm (mirrors podium.global)
@@ -2751,13 +2768,10 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     function renderFiltered() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) return;
-      var list = (currentCat === 'all' ? allImages : allImages.filter(function (img) {
-        var cats = img.category;
-        if (!cats) return false;
-        return Array.isArray(cats) ? cats.indexOf(currentCat) !== -1 : cats === currentCat;
-      })).filter(function (img) { return !img.hidden; });
+      if (currentCat === 'videos') { renderVideos(grid); return; }
+      var list = allImages.filter(function (img) { return !img.hidden; });
       if (!list.length) {
-        grid.innerHTML = '<p class="gallery-empty">No images in this category yet.</p>';
+        grid.innerHTML = '<p class="gallery-empty">No photos yet.</p>';
         return;
       }
       // Tile shape follows the photo's own aspect ratio so object-fit:cover
@@ -2789,6 +2803,28 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       if (window.__remeasureGalleryColumns) window.__remeasureGalleryColumns();
     }
 
+    // Videos tab: poster tiles shaped by each film's aspect; hover (desktop)
+    // previews muted, tap/click opens the lightbox player with sound.
+    function renderVideos(grid) {
+      var list = allVideos.filter(function (v) { return !v.hidden; });
+      if (!list.length) {
+        grid.innerHTML = '<p class="gallery-empty">No videos yet.</p>';
+        return;
+      }
+      grid.innerHTML = list.map(function (v) {
+        var a = (v.w && v.h) ? v.w / v.h : 0.5625;
+        var size = a <= 0.9 ? 'size-tall' : 'size-lg';
+        return '<div class="bento-cell video-cell ' + size + '" data-video="' + v.src + '">' +
+          '<div class="bento-inner">' +
+          '<img src="' + v.poster + '" alt="' + (v.alt || '') + '" loading="lazy" decoding="async">' +
+          '</div>' +
+          '<span class="video-cell-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>' +
+        '</div>';
+      }).join('');
+      initRevealObserver();
+      if (window.__remeasureGalleryColumns) window.__remeasureGalleryColumns();
+    }
+
     window.setGalleryCategory = function (cat) {
       currentCat = cat;
       document.querySelectorAll('.gallery-cat').forEach(function (btn) {
@@ -2811,6 +2847,11 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
       .then(function (data) { allImages = (data.images && data.images.length) ? data.images : FALLBACK; renderFiltered(); })
       .catch(function () { allImages = FALLBACK; renderFiltered(); });
+
+    fetch('video-order.json?v=' + Date.now())
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (data) { allVideos = data.videos || []; if (currentCat === 'videos') renderFiltered(); })
+      .catch(function () {});
   })();
 
   (function () {
@@ -2895,18 +2936,56 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     var lbImg    = document.getElementById('galleryLightboxImg');
     var lbClose  = document.getElementById('galleryLightboxClose');
 
+    var lbVid    = document.getElementById('galleryLightboxVideo');
+
     function openLightbox(src, alt) {
+      lightbox.classList.remove('is-video');
       lbImg.src = src; lbImg.alt = alt || '';
       lightbox.classList.add('open');
     }
-    function closeLightbox() { lightbox.classList.remove('open'); }
+    function openVideo(src) {
+      lightbox.classList.add('is-video');
+      lbVid.src = src;
+      lightbox.classList.add('open');
+      var p = lbVid.play(); if (p && p.catch) p.catch(function () {});
+    }
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      if (lbVid) { lbVid.pause(); lbVid.removeAttribute('src'); lbVid.load(); }
+    }
 
     scroll.addEventListener('click', function (e) {
       var cell = e.target.closest ? e.target.closest('.bento-cell') : null;
       if (!cell) return;
+      if (cell.dataset.video) { stopPreview(); openVideo(cell.dataset.video); return; }
       var img = cell.querySelector('img');
       if (img && img.src) openLightbox(img.src, img.alt || '');
     });
+
+    // Desktop hover preview for video tiles (muted, from the start).
+    var previewCell = null;
+    function stopPreview() {
+      if (!previewCell) return;
+      var v = previewCell.querySelector('video.video-cell-preview');
+      if (v) { v.pause(); v.remove(); }
+      previewCell = null;
+    }
+    if (window.matchMedia('(hover: hover)').matches) {
+      scroll.addEventListener('mouseover', function (e) {
+        var cell = e.target.closest ? e.target.closest('.video-cell') : null;
+        if (cell === previewCell) return;
+        stopPreview();
+        if (!cell) return;
+        previewCell = cell;
+        var v = document.createElement('video');
+        v.className = 'video-cell-preview';
+        v.muted = true; v.loop = true; v.playsInline = true;
+        v.src = cell.dataset.video;
+        cell.querySelector('.bento-inner').appendChild(v);
+        var p = v.play(); if (p && p.catch) p.catch(function () {});
+      });
+      scroll.addEventListener('mouseleave', stopPreview);
+    }
 
     if (lbClose) lbClose.addEventListener('click', closeLightbox);
     if (lightbox) lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
@@ -3164,6 +3243,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         var orient   = ((form.querySelector('input[name="orientation"]:checked') || {}).value) || '';
         var exchange = ((form.querySelector('input[name="exchange"]:checked') || {}).value) || '';
         var offering = (form.querySelector('#bf-offering') || {}).value || '';
+        var notes    = (form.querySelector('#bf-notes')    || {}).value || '';
 
         // Simple client-side validation
         if (!name || !email) {
@@ -3182,8 +3262,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           'Receiving: ' + media,
           'Orientation: ' + orient,
           'Location: ' + location,
-          'Budget: ' + budget,
-          'Exchange: ' + exchange + (offering ? ' -- ' + offering : '')
+          'Investment: ' + budget,
+          'Exchange: ' + exchange + (offering ? ', ' + offering : ''),
+          'Anything else: ' + notes
         ];
 
         function showSuccess() {
@@ -3192,7 +3273,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         }
 
         function mailtoFallback() {
-          var mailto = 'mailto:mayanovaphotography@gmail.com?subject=Session%20inquiry%20from%20' +
+          var mailto = 'mailto:mayanovaphotography@gmail.com?subject=Session%20enquiry%20from%20' +
             encodeURIComponent(name) + '&body=' + lines.join('%0A');
           window.location.href = mailto;
           showSuccess();
@@ -3207,7 +3288,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         // and empty fields are omitted so Maya only reads what was filled in.
         var payload = {
           access_key: W3F_KEY,
-          subject: 'New inquiry · ' + name + (purposes ? ' · ' + purposes : ''),
+          subject: 'New enquiry · ' + name + (purposes ? ' · ' + purposes : ''),
           from_name: 'Maya Nova Website',
           'Name': name,
           'Email': email,
@@ -3219,7 +3300,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         if (media)    payload['Photos or videos'] = media;
         if (orient)   payload['Orientation'] = orient;
         if (location) payload['Location or venue'] = location;
-        if (budget)   payload['Budget'] = budget;
+        if (budget)   payload['Investment'] = budget;
+        if (notes)    payload['Something to know'] = notes;
         if (exchange) payload['Open to gift exchange'] = exchange + (offering ? ' (' + offering + ')' : '');
         if (vision)   payload['Their vision'] = vision;
         payload.botcheck = (form.querySelector('input[name="botcheck"]') || {}).checked || '';
@@ -3234,7 +3316,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         }).catch(function () {
           mailtoFallback();
         }).finally(function () {
-          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send inquiry'; }
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Send enquiry'; }
         });
       });
     }
@@ -3281,7 +3363,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
           })
         }).then(function (r) { return r.json(); }).then(function (d) {
           if (d && d.success) {
-            row.innerHTML = '<p class="contact-direct" style="margin:0">Thank you. Maya will be in touch soon.</p>';
+            row.innerHTML = '<p class="contact-direct" style="margin:0">Thank you! I&rsquo;ve received your enquiry and will be in touch soon.</p>';
           } else { fail(); }
         }).catch(fail);
       }
