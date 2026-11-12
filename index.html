@@ -1358,22 +1358,34 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 .services-layout {
   display: flex;
   width: 100%;
-  padding: 28px 40px;
+  padding: 0 40px;
   gap: 48px;
   align-items: stretch;
 }
 
 .services-left { flex: 0 0 42%; min-width: 0; display: flex; flex-direction: column; }
 
-.services-right { flex: 1 1 0; min-width: 0; max-width: 720px; padding: 72px 24px 96px 0; }
+.services-right { flex: 1 1 0; min-width: 0; max-width: 720px; padding: 88px 24px 24px 0; }
 .services-portrait {
   flex: 0 0 38%;
-  position: sticky; top: 72px;
-  height: calc(100vh - 140px);
-  margin-top: 72px;
+  position: sticky; top: 88px;
+  height: calc(100vh - 112px);
+  margin-top: 88px;
   border-radius: 4px; overflow: hidden;
 }
 .services-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+/* Shorter desktop screens: narrower photo (form gets wider, pills wrap less)
+   and tighter vertical rhythm, so the fit-to-screen scale stays close to 1. */
+@media (min-width: 961px) and (max-height: 860px) {
+  .services-layout { gap: 36px; }
+  .services-portrait { flex-basis: 30%; }
+  .services-right { max-width: 800px; padding-top: 84px; padding-bottom: 16px; }
+  .services-book .contact-eyebrow { margin-bottom: 6px; }
+  .services-book .contact-h2 { font-size: 28px; margin-bottom: 8px; }
+  .book-form { gap: 8px; }
+  .book-textarea { min-height: 50px; }
+  .services-book .contact-direct { margin-top: 12px !important; }
+}
 #servicesScroll { overflow-y: auto; height: 100%; }
 
 .services-book {
@@ -1390,8 +1402,8 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   margin-bottom: 10px;
 }
 .services-book .contact-sub { color: #4a3820; text-align: left; margin-left: 0; margin-right: 0; }
-.services-book .contact-direct { color: #7a6450; text-align: left; }
-.services-book .contact-location { text-align: left; }
+.services-book .contact-direct { color: #7a6450; text-align: center; }
+.services-book .contact-location { text-align: center; }
 
 #section-4 .contact-input {
   background: rgba(30,20,8,0.05);
@@ -1733,7 +1745,9 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   }
   .services-left { flex: none; }
   .services-right { flex: none; padding: 0 0 48px; max-width: none; }
-  .services-portrait { flex: none; position: static; height: auto; aspect-ratio: 4 / 5; margin-top: 0; }
+  .services-portrait { flex: none; position: static; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 58vh; margin-top: 0; }
+  .services-portrait img { object-position: 50% 22%; }
+  .services-book .contact-direct a { overflow-wrap: anywhere; }
   .book-form { grid-template-columns: 1fr; }
   .book-row-2 { grid-template-columns: 1fr; }
 
@@ -2994,6 +3008,31 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   })();
 
   /* ============================================================
+     11a2. BOOKING FORM FIT (desktop: scale the form so the whole thing,
+     email line included, fits the viewport without scrolling)
+     ============================================================ */
+  (function () {
+    var book = document.querySelector('#section-4 .services-book');
+    var right = document.querySelector('#section-4 .services-right');
+    if (!book || !right) return;
+    var MIN = 0.62;
+    function fit() {
+      book.style.zoom = '';
+      if (window.innerWidth <= 960) return;
+      var cs = getComputedStyle(right);
+      var avail = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var h = book.offsetHeight;
+      if (h > avail) book.style.zoom = Math.max(MIN, avail / h).toFixed(3);
+    }
+    window.__fitBooking = fit;
+    window.addEventListener('resize', fit);
+    window.addEventListener('load', fit);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    book.addEventListener('change', function () { setTimeout(fit, 0); });
+    fit();
+  })();
+
+  /* ============================================================
      11b. SERVICES SCROLL PASSTHROUGH
      ============================================================ */
   (function () {
@@ -3269,6 +3308,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         function showSuccess() {
           form.style.display = 'none';
           success.style.display = 'block';
+          if (window.__fitBooking) window.__fitBooking();
         }
 
         function mailtoFallback() {
