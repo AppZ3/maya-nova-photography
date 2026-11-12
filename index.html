@@ -1374,7 +1374,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   border-radius: 4px; overflow: hidden;
 }
 .services-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-/* ---- Testimonials (mock A: rotating quote over the booking photo) ---- */
+/* ---- Testimonials: rotating quote over the booking photo ---- */
 .services-portrait { position: sticky; }
 .kw-overlay {
   position: absolute; left: 0; right: 0; bottom: 0; margin: 0;
@@ -1397,7 +1397,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 }
 .kw-slide blockquote::before { content: '\201C'; }
 .kw-slide blockquote::after { content: '\201D'; }
-.kw-slide figcaption, .kw-card figcaption {
+.kw-slide figcaption {
   margin-top: 12px;
   font-family: 'DM Sans', sans-serif; font-weight: 400;
   font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
@@ -1408,47 +1408,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   border: 1px solid rgba(255,254,248,0.7); background: transparent; cursor: pointer;
 }
 .kw-dots button.on { background: #fffef8; }
-
-/* ---- Testimonials (mock B: Kind words section) ---- */
-#section-6 { background: #fffef8; }
-.kw-layout {
-  width: 100%; max-width: 1180px; margin: 0 auto;
-  padding: 110px 40px 60px;
-  display: flex; flex-direction: column; align-items: center;
-  max-height: 100%; overflow-y: auto;
-}
-.kw-head { text-align: center; margin-bottom: 40px; }
-.kw-eyebrow {
-  font-family: 'DM Sans', sans-serif; font-weight: 300;
-  font-size: 12px; letter-spacing: .2em; color: #7a6450; margin-bottom: 14px;
-}
-.kw-h2 {
-  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
-  font-size: clamp(34px, 3.4vw, 52px); color: #1e1408; line-height: 1.1;
-}
-.kw-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 28px; width: 100%;
-}
-.kw-card {
-  margin: 0; padding: 58px 40px 34px;
-  background: rgba(138,88,32,0.05);
-  border-radius: 6px;
-  position: relative;
-}
-.kw-card::before {
-  content: '\201C';
-  position: absolute; top: 4px; left: 26px;
-  font-family: 'Cormorant Garamond', serif; font-size: 90px; line-height: 1;
-  color: rgba(138,88,32,0.25);
-}
-.kw-card blockquote {
-  margin: 0; position: relative;
-  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 400;
-  font-size: 21px; line-height: 1.5; color: #2c2010;
-}
-.kw-card figcaption { color: #8a5820; }
-.kw-cta { align-self: center; margin-top: 40px; }
 
 /* Shorter desktop screens: narrower photo (form gets wider, pills wrap less)
    and tighter vertical rhythm, so the fit-to-screen scale stays close to 1. */
@@ -1828,10 +1787,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   .kw-slide figcaption { color: #8a5820; }
   .kw-dots button { border-color: rgba(138,88,32,0.6); }
   .kw-dots button.on { background: #8a5820; }
-  .kw-layout { padding: 90px 20px 48px; }
-  .kw-card { padding: 34px 24px 26px; }
-  .kw-card blockquote { font-size: 19px; }
-  .kw-grid { grid-template-columns: 1fr; gap: 18px; }
   .services-portrait { flex: none; position: static; width: 100%; height: auto; aspect-ratio: 4 / 5; max-height: 58vh; margin-top: 0; }
   .services-portrait img { object-position: 50% 22%; }
   .services-book .contact-direct a { overflow-wrap: anywhere; }
@@ -1948,7 +1903,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   <div class="side-dot active" data-target="3" role="button" tabindex="0" aria-label="About"></div>
   <div class="side-dot" data-target="4" role="button" tabindex="0" aria-label="Book a session"></div>
   <div class="side-dot" data-target="5" role="button" tabindex="0" aria-label="Contact"></div>
-  <div class="side-dot" data-target="6" role="button" tabindex="0" aria-label="Kind words"></div>
 </nav>
 
 <!-- ============================================================
@@ -2301,20 +2255,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   </div>
 </section>
 
-<!-- ============================================================
-     SECTION 6: KIND WORDS (testimonials; scroll order About > Kind words > Book)
-     ============================================================ -->
-<section class="section" id="section-6" aria-label="Kind words">
-  <div class="kw-layout" id="kwScroll">
-    <div class="kw-head">
-      <p class="kw-eyebrow">KIND WORDS</p>
-      <h2 class="kw-h2">In their words.</h2>
-    </div>
-    <div class="kw-grid" id="kwGrid"></div>
-    <a href="#" class="about-cta kw-cta" data-section="4">Book a session &rarr;</a>
-  </div>
-</section>
-
 <!-- Hero lightbox at body level so z-index stacking works for seamless transition -->
 <div class="gallery-lightbox" id="heroGalleryLightbox" role="dialog" aria-modal="true" aria-label="Full size photo">
   <img class="gallery-lightbox-img" id="heroGalleryLightboxImg" src="" alt="">
@@ -2395,22 +2335,11 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   /* ============================================================
      1. SECTION SCROLL SYSTEM
      ============================================================ */
-  // Testimonials mock switch: ?mock=a (quote over booking photo) or
-  // ?mock=b (Kind words section between About and Book). Default: neither.
-  var MOCK = (location.search.match(/[?&]mock=([ab])/) || [])[1] || '';
-  if (MOCK !== 'b') {
-    var kwS = document.getElementById('section-6'); if (kwS) kwS.remove();
-    var kwD = document.querySelector('.side-dot[data-target="6"]'); if (kwD) kwD.remove();
-  }
-  if (MOCK !== 'a') { var kwO = document.getElementById('kwOverlay'); if (kwO) kwO.remove(); }
-  if (MOCK) {
+  // Testimonials: rotating quote over the booking photo (testimonials.json).
+  (function () {
     fetch('testimonials.json?v=' + Date.now()).then(function (r) { return r.json(); }).then(function (d) {
       var list = d.testimonials || [];
       function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
-      var grid = document.getElementById('kwGrid');
-      if (grid) grid.innerHTML = list.map(function (t) {
-        return '<figure class="kw-card"><blockquote>' + esc(t.quote) + '</blockquote><figcaption>' + esc(t.name) + '</figcaption></figure>';
-      }).join('');
       var ov = document.getElementById('kwOverlay');
       if (ov && list.length) {
         var stage = ov.querySelector('.kw-overlay-stage'), dotsEl = ov.querySelector('.kw-dots');
@@ -2431,7 +2360,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
         ov.addEventListener('mouseleave', function () { paused = false; });
       }
     }).catch(function () {});
-  }
+  })();
 
   var sections = Array.from(document.querySelectorAll('.section'));
   var dots     = Array.from(document.querySelectorAll('.side-dot'));
@@ -2444,7 +2373,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   var isTransitioning = false;
 
   // Scroll sequence: About (3) -> Services (4). Gallery is nav-only.
-  var scrollSequence = MOCK === 'b' ? [3, 6, 4] : [3, 4];
+  var scrollSequence = [3, 4];
   var scrollPos = 0; // index into scrollSequence
 
   sections[3].style.visibility = 'visible';
@@ -3202,19 +3131,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      ============================================================ */
   (function () {
     var a = document.getElementById('aboutScroll');
-    if (!a) return;
-    a.addEventListener('wheel', function (e) {
-      var up = e.deltaY < 0;
-      var atTop = a.scrollTop <= 0;
-      var atBottom = a.scrollTop + a.clientHeight >= a.scrollHeight - 1;
-      if ((up && !atTop) || (!up && !atBottom)) e.stopPropagation();
-    }, { passive: true });
-    a.addEventListener('touchstart', function (e) { e.stopPropagation(); }, { passive: true });
-    a.addEventListener('touchend', function (e) { e.stopPropagation(); }, { passive: true });
-  })();
-
-  (function () {
-    var a = document.getElementById('kwScroll');
     if (!a) return;
     a.addEventListener('wheel', function (e) {
       var up = e.deltaY < 0;
