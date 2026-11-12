@@ -1,21 +1,12 @@
 {
   "images": [
     {
-      "src": "photos/edited-4.jpg",
-      "alt": "edited 4",
-      "category": [
-        "events",
-        "social"
-      ],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6976.jpg",
+      "src": "photos/397a6896.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
-      "w": 1800,
-      "h": 1201
+      "w": 1201,
+      "h": 1800,
+      "shoot": "greenery"
     },
     {
       "src": "photos/397a3485.jpg",
@@ -24,31 +15,48 @@
         "portrait"
       ],
       "w": 1200,
-      "h": 1800
+      "h": 1800,
+      "shoot": "greenery"
     },
     {
-      "src": "photos/397a6896.jpg",
+      "src": "photos/397a6533.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1201,
-      "h": 1800
+      "h": 1800,
+      "shoot": "greenery"
     },
     {
-      "src": "photos/397a5012.jpg",
-      "alt": "397a5012",
-      "category": [
-        "events",
-        "social"
-      ],
+      "src": "photos/397a6241.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1201,
+      "h": 1800,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6792.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1201,
+      "h": 1800,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6976.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
       "w": 1800,
-      "h": 1200
+      "h": 1201,
+      "shoot": "greenery"
     },
     {
       "src": "photos/397a6817.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1201,
-      "h": 1800
+      "h": 1800,
+      "shoot": "greenery"
     },
     {
       "src": "photos/397a2713.jpg",
@@ -57,74 +65,80 @@
         "portrait"
       ],
       "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6792.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1201,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a3451.jpg",
-      "alt": "397a3451",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a6533.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1201,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a3847.jpg",
-      "alt": "397a3847",
-      "category": [
-        "portrait"
-      ],
-      "w": 1286,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6491.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1800,
-      "h": 1201
-    },
-    {
-      "src": "photos/397a4325.jpg",
-      "alt": "397a4325",
-      "category": [],
-      "w": 1800,
-      "h": 1200
+      "h": 1800,
+      "shoot": "greenery"
     },
     {
       "src": "photos/397a6438.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1201,
-      "h": 1800
+      "h": 1800,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6363.jpg",
+      "alt": "397a6363",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6888.jpg",
+      "alt": "397a6888",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6777.jpg",
+      "alt": "397a6777",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6851.jpg",
+      "alt": "397a6851",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6528.jpg",
+      "alt": "397a6528",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6491.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1201,
+      "shoot": "ocean"
     },
     {
       "src": "photos/397a4481.jpg",
       "alt": "397a4481",
       "category": [],
       "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a6241.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1201,
-      "h": 1800
+      "h": 1200,
+      "shoot": "ocean"
     },
     {
       "src": "photos/397a4509.jpg",
@@ -133,14 +147,176 @@
         "portrait"
       ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "ocean"
     },
     {
-      "src": "photos/wildwoman-edited-53.jpg",
+      "src": "photos/397a4625.jpg",
+      "alt": "397a4625",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/397a4325.jpg",
+      "alt": "397a4325",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/monk-edited-41.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/397a6483.jpg",
+      "alt": "397a6483",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/edited-5.jpg",
+      "alt": "edited 5",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/edited-10.jpg",
+      "alt": "edited 10",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/helena-tom-4.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/helena-tom-72.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/helena-tom-18.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1200,
-      "h": 1800
+      "h": 1800,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/helena-tom-10.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/edited-17.jpg",
+      "alt": "edited 17",
+      "category": [
+        "portrait"
+      ],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/397a3451.jpg",
+      "alt": "397a3451",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a3847.jpg",
+      "alt": "397a3847",
+      "category": [
+        "portrait"
+      ],
+      "w": 1286,
+      "h": 1800,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a5553.jpg",
+      "alt": "397a5553",
+      "category": [
+        "events",
+        "social"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a5030.jpg",
+      "alt": "397a5030",
+      "category": [
+        "events",
+        "social"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a5541.jpg",
+      "alt": "397a5541",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a5982.jpg",
+      "alt": "397a5982",
+      "category": [
+        "events",
+        "social"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
+    },
+    {
+      "src": "photos/397a5735.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "black-white",
+      "bw": true
     },
     {
       "src": "photos/397a4549.jpg",
@@ -149,28 +325,50 @@
         "portrait"
       ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "sunset"
     },
     {
-      "src": "photos/wildwoman-edited-22.jpg",
+      "src": "photos/edited-21.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/helena-tom-9.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1200,
-      "h": 1800
+      "h": 1800,
+      "shoot": "sunset"
     },
     {
-      "src": "photos/397a4625.jpg",
-      "alt": "397a4625",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/monk-edited-41.jpg",
+      "src": "photos/helena-tom-6.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/397a3319.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/397a6720.jpg",
+      "alt": "397a6720",
+      "category": [
+        "portrait"
+      ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "sunset"
     },
     {
       "src": "photos/397a4911.jpg",
@@ -181,189 +379,77 @@
         "events"
       ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "warm-indoor"
     },
     {
-      "src": "photos/tim-edited-51.jpg",
-      "alt": "Photograph by Maya Nova",
+      "src": "photos/397a7586.jpg",
+      "alt": "397a7586",
+      "category": [
+        "events"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/397a8302.jpg",
+      "alt": "397a8302",
       "category": [],
       "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a5030.jpg",
-      "alt": "397a5030",
-      "category": [
-        "events",
-        "social"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/tim-edited-35.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1550,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a5541.jpg",
-      "alt": "397a5541",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/edited-21.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a5553.jpg",
-      "alt": "397a5553",
-      "category": [
-        "events",
-        "social"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-72.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a5982.jpg",
-      "alt": "397a5982",
-      "category": [
-        "events",
-        "social"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-18.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6363.jpg",
-      "alt": "397a6363",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-10.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6483.jpg",
-      "alt": "397a6483",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-9.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6528.jpg",
-      "alt": "397a6528",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-6.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6720.jpg",
-      "alt": "397a6720",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/helena-tom-4.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a6777.jpg",
-      "alt": "397a6777",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a3319.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/397a6851.jpg",
-      "alt": "397a6851",
-      "category": [],
-      "w": 1800,
-      "h": 1200
+      "h": 1800,
+      "shoot": "warm-indoor"
     },
     {
       "src": "photos/397a7681.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "warm-indoor"
     },
     {
-      "src": "photos/397a6888.jpg",
-      "alt": "397a6888",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a5735.jpg",
+      "src": "photos/wildwoman-edited-53.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/tim-edited-51.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/tim-edited-35.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1550,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/wildwoman-edited-22.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/397a5012.jpg",
+      "alt": "397a5012",
+      "category": [
+        "events",
+        "social"
+      ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "warm-indoor"
     },
     {
       "src": "photos/397a7560.jpg",
@@ -373,46 +459,19 @@
         "social"
       ],
       "w": 1800,
-      "h": 1200
+      "h": 1200,
+      "shoot": "warm-indoor"
     },
     {
-      "src": "photos/397a7586.jpg",
-      "alt": "397a7586",
+      "src": "photos/edited-4.jpg",
+      "alt": "edited 4",
       "category": [
-        "events"
-      ],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/397a8302.jpg",
-      "alt": "397a8302",
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/edited-5.jpg",
-      "alt": "edited 5",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/edited-10.jpg",
-      "alt": "edited 10",
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
-      "src": "photos/edited-17.jpg",
-      "alt": "edited 17",
-      "category": [
-        "portrait"
+        "events",
+        "social"
       ],
       "w": 1200,
-      "h": 1800
+      "h": 1800,
+      "shoot": "warm-indoor"
     },
     {
       "src": "photos/p7.jpg",

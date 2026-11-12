@@ -1384,14 +1384,28 @@
   }
 
   /* ---- GitHub API ---- */
+  // Server proxy first: when logged in (admin key present) every GitHub call
+  // goes through /api/gh, which holds the token server-side. A browser-saved
+  // PAT is only used as a fallback when there is no admin key.
+  function ghAdminKey() { try { return localStorage.getItem('mnp_admin_key') || ''; } catch (e) { return ''; } }
   function ghFetch(path, opts) {
-    return fetch('https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + path, Object.assign({
-      headers: {
-        'Authorization': 'Bearer ' + pat,
-        'Accept': 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28'
-      }
-    }, opts));
+    opts = Object.assign({}, opts || {});
+    var headers = Object.assign({}, opts.headers || {});
+    delete headers['Authorization'];
+    var key = ghAdminKey();
+    var url;
+    if (key) {
+      var q = path.split('?');
+      url = '/api/gh?path=' + encodeURIComponent(q[0]) + (q[1] ? '&' + q[1] : '');
+      headers['x-admin-key'] = key;
+    } else {
+      url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + path;
+      headers['Authorization'] = 'Bearer ' + pat;
+      headers['Accept'] = 'application/vnd.github+json';
+      headers['X-GitHub-Api-Version'] = '2022-11-28';
+    }
+    opts.headers = headers;
+    return fetch(url, opts);
   }
 
   async function ghGet(path) {
@@ -1488,7 +1502,7 @@
   /* ---- PAT ---- */
   function loadPAT() {
     pat = localStorage.getItem('mnp_admin_pat') || '';
-    return !!pat;
+    return !!pat || !!ghAdminKey();
   }
 
   function savePAT() {
@@ -2588,7 +2602,7 @@
 
   /* ---- Publish ---- */
   publishBtn.addEventListener('click', async function () {
-    if (!pat) { setStatus('Set up your GitHub token first.', 'err'); return; }
+    if (!pat && !ghAdminKey()) { setStatus('Set up your GitHub token first.', 'err'); return; }
 
     publishBtn.disabled = true;
     setStatus('Publishing...');
