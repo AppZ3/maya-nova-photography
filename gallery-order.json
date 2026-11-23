@@ -133,11 +133,11 @@
       "shoot": "greenery"
     },
     {
-      "src": "photos/397a6491.jpg",
-      "alt": "Photograph by Maya Nova",
+      "src": "photos/397a4625.jpg",
+      "alt": "397a4625",
       "category": [],
       "w": 1800,
-      "h": 1201,
+      "h": 1200,
       "shoot": "ocean"
     },
     {
@@ -159,24 +159,43 @@
       "shoot": "ocean"
     },
     {
-      "src": "photos/397a4625.jpg",
-      "alt": "397a4625",
+      "src": "photos/397a6491.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1201,
+      "shoot": "ocean"
+    },
+    {
+      "src": "photos/edited-10.jpg",
+      "alt": "edited 10",
       "category": [],
       "w": 1800,
       "h": 1200,
       "shoot": "ocean"
+    },
+    {
+      "src": "photos/397a4549.jpg",
+      "alt": "397a4549",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/edited-5.jpg",
+      "alt": "edited 5",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean",
+      "focal": "17.3% 34.5%"
     },
     {
       "src": "photos/397a4325.jpg",
       "alt": "397a4325",
-      "category": [],
-      "w": 1800,
-      "h": 1200,
-      "shoot": "ocean"
-    },
-    {
-      "src": "photos/monk-edited-41.jpg",
-      "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1800,
       "h": 1200,
@@ -193,19 +212,39 @@
       "shoot": "ocean"
     },
     {
-      "src": "photos/edited-5.jpg",
-      "alt": "edited 5",
-      "category": [],
-      "w": 1800,
-      "h": 1200,
+      "src": "photos/edited-17.jpg",
+      "alt": "edited 17",
+      "category": [
+        "portrait"
+      ],
+      "w": 1200,
+      "h": 1800,
       "shoot": "ocean"
     },
     {
-      "src": "photos/edited-10.jpg",
-      "alt": "edited 10",
+      "src": "photos/397a6957.jpg",
+      "alt": "397a6957",
+      "hidden": false,
       "category": [],
       "w": 1800,
-      "h": 1200,
+      "h": 1200
+    },
+    {
+      "src": "photos/p6.jpg",
+      "alt": "Natural light portrait",
+      "category": [
+        "portrait"
+      ],
+      "w": 1440,
+      "h": 1800,
+      "hidden": false
+    },
+    {
+      "src": "photos/helena-tom-18.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
       "shoot": "ocean"
     },
     {
@@ -225,14 +264,6 @@
       "shoot": "ocean"
     },
     {
-      "src": "photos/helena-tom-18.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800,
-      "shoot": "ocean"
-    },
-    {
       "src": "photos/helena-tom-10.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
@@ -241,14 +272,28 @@
       "shoot": "ocean"
     },
     {
-      "src": "photos/edited-17.jpg",
-      "alt": "edited 17",
-      "category": [
-        "portrait"
-      ],
+      "src": "photos/helena-tom-9.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
       "w": 1200,
       "h": 1800,
-      "shoot": "ocean"
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/helena-tom-6.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "sunset"
+    },
+    {
+      "src": "photos/edited-14.jpg",
+      "alt": "edited 14",
+      "hidden": false,
+      "category": [],
+      "w": 1200,
+      "h": 1800
     },
     {
       "src": "photos/397a3451.jpg",
@@ -271,6 +316,14 @@
       "h": 1800,
       "shoot": "black-white",
       "bw": true
+    },
+    {
+      "src": "photos/397a5223.jpg",
+      "alt": "397a5223",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "hidden": false
     },
     {
       "src": "photos/397a5553.jpg",
@@ -327,40 +380,6 @@
       "bw": true
     },
     {
-      "src": "photos/397a4549.jpg",
-      "alt": "397a4549",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200,
-      "shoot": "sunset"
-    },
-    {
-      "src": "photos/edited-21.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1800,
-      "h": 1200,
-      "shoot": "sunset"
-    },
-    {
-      "src": "photos/helena-tom-9.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800,
-      "shoot": "sunset"
-    },
-    {
-      "src": "photos/helena-tom-6.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800,
-      "shoot": "sunset"
-    },
-    {
       "src": "photos/397a3319.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
@@ -379,6 +398,14 @@
       "shoot": "sunset"
     },
     {
+      "src": "photos/397a8302.jpg",
+      "alt": "397a8302",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
       "src": "photos/397a4911.jpg",
       "alt": "397a4911",
       "category": [
@@ -391,6 +418,28 @@
       "shoot": "warm-indoor"
     },
     {
+      "src": "photos/397a5012.jpg",
+      "alt": "397a5012",
+      "category": [
+        "events",
+        "social"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/p2.jpg",
+      "alt": "Artistic portrait",
+      "category": [
+        "portrait",
+        "events"
+      ],
+      "w": 1350,
+      "h": 1800,
+      "hidden": false
+    },
+    {
       "src": "photos/397a7586.jpg",
       "alt": "397a7586",
       "category": [
@@ -398,14 +447,6 @@
       ],
       "w": 1800,
       "h": 1200,
-      "shoot": "warm-indoor"
-    },
-    {
-      "src": "photos/397a8302.jpg",
-      "alt": "397a8302",
-      "category": [],
-      "w": 1200,
-      "h": 1800,
       "shoot": "warm-indoor"
     },
     {
@@ -417,7 +458,26 @@
       "shoot": "warm-indoor"
     },
     {
+      "src": "photos/397a7560.jpg",
+      "alt": "397a7560",
+      "category": [
+        "events",
+        "social"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "warm-indoor"
+    },
+    {
       "src": "photos/wildwoman-edited-53.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1200,
+      "h": 1800,
+      "shoot": "warm-indoor"
+    },
+    {
+      "src": "photos/wildwoman-edited-22.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1200,
@@ -441,34 +501,15 @@
       "shoot": "warm-indoor"
     },
     {
-      "src": "photos/wildwoman-edited-22.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1200,
-      "h": 1800,
-      "shoot": "warm-indoor"
-    },
-    {
-      "src": "photos/397a5012.jpg",
-      "alt": "397a5012",
+      "src": "photos/397a3126.jpg",
+      "alt": "397a3126",
       "category": [
         "events",
-        "social"
+        "portrait"
       ],
       "w": 1800,
       "h": 1200,
-      "shoot": "warm-indoor"
-    },
-    {
-      "src": "photos/397a7560.jpg",
-      "alt": "397a7560",
-      "category": [
-        "events",
-        "social"
-      ],
-      "w": 1800,
-      "h": 1200,
-      "shoot": "warm-indoor"
+      "hidden": false
     },
     {
       "src": "photos/edited-4.jpg",
@@ -482,6 +523,22 @@
       "shoot": "warm-indoor"
     },
     {
+      "src": "photos/397a8050.jpg",
+      "alt": "397a8050",
+      "hidden": false,
+      "category": [],
+      "w": 1800,
+      "h": 1368
+    },
+    {
+      "src": "photos/edited-6.jpg",
+      "alt": "edited 6",
+      "hidden": false,
+      "category": [],
+      "w": 1800,
+      "h": 1200
+    },
+    {
       "src": "photos/p7.jpg",
       "alt": "Documentary portrait",
       "category": [
@@ -489,16 +546,15 @@
       ],
       "w": 1440,
       "h": 1440,
-      "hidden": true
+      "hidden": false
     },
     {
-      "src": "photos/p6.jpg",
-      "alt": "Natural light portrait",
-      "category": [
-        "portrait"
-      ],
-      "w": 1440,
-      "h": 1800,
+      "src": "photos/monk-edited-41.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "ocean",
       "hidden": true
     },
     {
@@ -529,17 +585,6 @@
       ],
       "w": 1440,
       "h": 1351,
-      "hidden": true
-    },
-    {
-      "src": "photos/p2.jpg",
-      "alt": "Artistic portrait",
-      "category": [
-        "portrait",
-        "events"
-      ],
-      "w": 1350,
-      "h": 1800,
       "hidden": true
     },
     {
@@ -599,17 +644,6 @@
       "h": 1800
     },
     {
-      "src": "photos/397a3126.jpg",
-      "alt": "397a3126",
-      "category": [
-        "events",
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200,
-      "hidden": true
-    },
-    {
       "src": "photos/397a3214-2.jpg",
       "alt": "397a3214 2",
       "category": [
@@ -665,14 +699,6 @@
       "hidden": true,
       "w": 1800,
       "h": 1200
-    },
-    {
-      "src": "photos/397a5223.jpg",
-      "alt": "397a5223",
-      "category": [],
-      "w": 1800,
-      "h": 1200,
-      "hidden": true
     },
     {
       "src": "photos/397a5355.jpg",
@@ -762,14 +788,6 @@
       "hidden": true
     },
     {
-      "src": "photos/397a6957.jpg",
-      "alt": "397a6957",
-      "hidden": true,
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
       "src": "photos/397a6977.jpg",
       "alt": "397a6977",
       "hidden": true,
@@ -831,14 +849,6 @@
       "h": 1200
     },
     {
-      "src": "photos/397a8050.jpg",
-      "alt": "397a8050",
-      "hidden": true,
-      "category": [],
-      "w": 1800,
-      "h": 1368
-    },
-    {
       "src": "photos/397a8222.jpg",
       "alt": "397a8222",
       "hidden": true,
@@ -892,14 +902,6 @@
       "h": 1800
     },
     {
-      "src": "photos/edited-6.jpg",
-      "alt": "edited 6",
-      "hidden": true,
-      "category": [],
-      "w": 1800,
-      "h": 1200
-    },
-    {
       "src": "photos/edited-7.jpg",
       "alt": "edited 7",
       "category": [
@@ -930,15 +932,7 @@
     {
       "src": "photos/edited-13.jpg",
       "alt": "edited 13",
-      "hidden": true,
-      "category": [],
-      "w": 1200,
-      "h": 1800
-    },
-    {
-      "src": "photos/edited-14.jpg",
-      "alt": "edited 14",
-      "hidden": true,
+      "hidden": false,
       "category": [],
       "w": 1200,
       "h": 1800
