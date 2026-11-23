@@ -481,6 +481,9 @@
       align-items: center;
       justify-content: center;
     }
+    /* Shrink-wraps the photo so crosshair % = photo %, not % of the
+       (wider) black frame around portrait photos */
+    .focal-frame { position: relative; display: block; line-height: 0; max-width: 100%; }
     .focal-modal-img-wrap img {
       display: block;
       max-width: 100%;
@@ -1266,8 +1269,10 @@
     <div class="focal-modal-title">Set focal point</div>
     <div class="focal-modal-hint">Click the subject -- this stays centered no matter what shape tile the photo lands in on the gallery grid.</div>
     <div class="focal-modal-img-wrap" id="focal-img-wrap">
-      <img id="focal-modal-img" src="" alt="">
-      <div class="focal-crosshair" id="focal-crosshair"></div>
+      <div class="focal-frame">
+        <img id="focal-modal-img" src="" alt="">
+        <div class="focal-crosshair" id="focal-crosshair"></div>
+      </div>
     </div>
     <div class="focal-modal-actions">
       <button class="btn-ghost" id="focal-reset-btn">Reset to Center</button>
@@ -2108,6 +2113,7 @@
       imgEl.src = img.src;
       imgEl.alt = img.alt || '';
       imgEl.loading = 'lazy';
+      if (img.focal) imgEl.style.objectPosition = img.focal;
       imgEl.decoding = 'async';
 
       var label = document.createElement('div');
