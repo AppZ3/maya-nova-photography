@@ -1292,22 +1292,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   will-change: transform;
 }
 
-/* Photos tab: uniform grid, every tile the same square, in exactly the
-   admin order (no dense packing). Videos keep the shaped bento. */
-.bento-gallery.is-uniform {
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: auto;
-  grid-auto-flow: row;
-}
-.bento-gallery.is-uniform .bento-cell {
-  grid-column: auto;
-  grid-row: auto;
-  aspect-ratio: 1 / 1;
-}
-@media (max-width: 960px) {
-  .bento-gallery.is-uniform { grid-template-columns: repeat(2, 1fr); }
-}
-
 .bento-cell img {
   width: 100%;
   height: 100%;
@@ -2869,7 +2853,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     function renderFiltered() {
       var grid = document.getElementById('galleryGrid');
       if (!grid) return;
-      grid.classList.toggle('is-uniform', currentCat !== 'videos');
       if (currentCat === 'videos') { renderVideos(grid); return; }
       var list = allImages.filter(function (img) { return !img.hidden; });
       if (!list.length) {
