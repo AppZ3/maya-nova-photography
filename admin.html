@@ -731,6 +731,72 @@
     #app.tab-galleries #grid,
     #app.tab-galleries .portfolio-only { display: none !important; }
     #galleries-section { display: none; }
+
+    /* ---- VIDEOS TAB ---- */
+    #app.tab-videos #status,
+    #app.tab-videos #pat-setup,
+    #app.tab-videos #grid,
+    #app.tab-videos .portfolio-only { display: none !important; }
+    #videos-section { display: none; padding: 20px 32px 64px; }
+    #app.tab-videos #videos-section { display: block; }
+    .v-top { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .v-top .btn-publish:disabled { opacity: 0.45; cursor: default; }
+    .v-hint { font-size: 12px; color: var(--mid); margin: 12px 0 4px; line-height: 1.5; max-width: 760px; }
+    .v-status { font-size: 13px; color: var(--mid); min-height: 18px; margin: 6px 0 10px; }
+    .v-status.err { color: var(--danger); }
+    .v-status.ok { color: #3c7a3a; }
+    #v-jobs { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .v-job { border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; background: #fff; }
+    .v-job-top { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+    .v-job-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+    .v-job-stage { color: var(--mid); white-space: nowrap; }
+    .v-job-bar { height: 5px; border-radius: 3px; background: rgba(138,88,32,0.12); margin-top: 8px; overflow: hidden; }
+    .v-job-bar i { display: block; height: 100%; width: 0; background: #8a5820; transition: width 0.25s; }
+    .v-job.err { border-color: rgba(192,57,43,0.4); }
+    .v-job.err .v-job-stage { color: var(--danger); white-space: normal; }
+    .v-job.done .v-job-bar i { background: #3c7a3a; }
+    .v-job-x { border: none; background: none; color: var(--mid); font-size: 18px; cursor: pointer; padding: 0 4px; }
+    #vgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .vcard {
+      position: relative; border-radius: 6px; overflow: hidden; background: #111;
+      aspect-ratio: 9 / 16; cursor: grab; user-select: none; -webkit-user-select: none;
+      -webkit-touch-callout: none; border: 2px solid transparent;
+    }
+    .vcard.land { aspect-ratio: 9 / 16; }
+    .vcard img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .vcard.land img { object-fit: contain; }
+    .vcard.is-hidden img { opacity: 0.35; filter: grayscale(60%); }
+    .vcard .v-tag {
+      position: absolute; left: 8px; bottom: 8px; font-size: 11px; color: #fff;
+      background: rgba(0,0,0,0.55); padding: 3px 7px; border-radius: 10px;
+    }
+    .vcard .v-hidden-tag { left: auto; right: 8px; background: rgba(192,57,43,0.85); display: none; }
+    .vcard.is-hidden .v-hidden-tag { display: block; }
+    .vcard .v-num { position: absolute; left: 8px; top: 8px; font-size: 11px; color: #fff; background: rgba(0,0,0,0.55); padding: 2px 7px; border-radius: 10px; }
+    .vcard .v-btn {
+      position: absolute; top: 6px; width: 32px; height: 32px; border-radius: 50%; border: none;
+      background: rgba(0,0,0,0.55); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 16px; line-height: 1; touch-action: manipulation;
+    }
+    .vcard .v-del { right: 6px; }
+    .vcard .v-hide { right: 44px; }
+    .vcard .v-btn:hover { background: rgba(0,0,0,0.8); }
+    .vcard.v-dragging { opacity: 0.3; }
+    .v-ghost {
+      position: fixed !important; left: 0; top: 0; z-index: 999; pointer-events: none; opacity: 0.92;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35); will-change: transform;
+    }
+    #v-modal { position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; padding: 16px; }
+    #v-modal.open { display: flex; }
+    .v-modal-box { background: #fff; border-radius: 8px; padding: 14px; max-width: 720px; width: 100%; }
+    #v-modal-video { width: 100%; max-height: 62vh; background: #000; border-radius: 4px; display: block; }
+    .v-modal-hint { font-size: 12px; color: var(--mid); margin: 10px 0; }
+    .v-modal-actions { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+    @media (max-width: 640px) {
+      #videos-section { padding: 14px 14px 64px; }
+      #vgrid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .v-top .btn-upload-label, .v-top .btn-publish { flex: 1 1 0; justify-content: center; min-height: 44px; }
+    }
     #app.tab-galleries #galleries-section { display: block; }
 
     /* ---- SETTINGS TAB ---- */
@@ -1065,6 +1131,7 @@
     <p class="hint portfolio-only">Drag to reorder &middot; Click photo to assign category &middot; Hover: eye to hide from gallery / &times; to delete &middot; Changes go live ~30s after publishing</p>
     <nav class="tab-bar">
       <button class="tab-btn active" id="tab-portfolio" data-tab="portfolio" type="button">Portfolio</button>
+      <button class="tab-btn" id="tab-videos" data-tab="videos" type="button">Videos</button>
       <button class="tab-btn" id="tab-galleries" data-tab="galleries" type="button">Client Galleries</button>
       <button class="tab-btn" id="tab-settings" data-tab="settings" type="button">Settings</button>
     </nav>
@@ -1198,6 +1265,35 @@
   <!-- =========================================================
        SETTINGS
        ========================================================= -->
+  <!-- =========================================================
+       VIDEOS (site Videos tab: video-order.json + Blob files)
+       ========================================================= -->
+  <div id="videos-section">
+    <div class="v-top">
+      <label class="btn-upload-label" for="v-file-input">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Add videos
+      </label>
+      <input type="file" id="v-file-input" accept="video/*" multiple style="display:none">
+      <button class="btn-publish" id="v-publish-btn" type="button">Publish videos</button>
+    </div>
+    <p class="v-hint">Add from your phone, computer or Google Drive. Each video is resized to 720p on this device before it uploads, so keep this screen open until it finishes. Drag to reorder (on a phone, press and hold first). Tap a video to preview it or pick its cover. Changes go live about 30s after Publish.</p>
+    <p class="v-status" id="v-status"></p>
+    <div id="v-jobs"></div>
+    <div id="vgrid"></div>
+  </div>
+
+  <div id="v-modal">
+    <div class="v-modal-box">
+      <video id="v-modal-video" controls playsinline preload="metadata"></video>
+      <p class="v-modal-hint">Pause on the frame you want, then use it as the cover.</p>
+      <div class="v-modal-actions">
+        <button class="btn-ghost" id="v-modal-close" type="button">Close</button>
+        <button class="btn-sm" id="v-modal-cover" type="button">Use this frame as cover</button>
+      </div>
+    </div>
+  </div>
+
   <div id="settings-section">
 
     <!-- Change password -->
@@ -2917,6 +3013,8 @@ tabBtns.forEach(function (btn) {
     var tab = btn.dataset.tab;
     appEl.classList.toggle('tab-galleries', tab === 'galleries');
     appEl.classList.toggle('tab-settings', tab === 'settings');
+    appEl.classList.toggle('tab-videos', tab === 'videos');
+    if (tab === 'videos' && window.__enterVideos) window.__enterVideos();
     if (tab === 'galleries') enterGalleries();
     if (tab === 'settings') loadStorageOverview();
   });
@@ -3441,6 +3539,435 @@ async function loadStorageOverview() {
     storageEl.textContent = 'Could not load storage info: ' + e.message;
   }
 }
+</script>
+
+<!-- =========================================================
+     VIDEOS TAB
+     List lives in video-order.json (GitHub, read via /api/gh so it is
+     always the freshest copy, not the deployed one). New films are
+     converted ON THIS DEVICE to H.264 720p (short edge), ~2.2 Mbps,
+     max 30fps, AAC audio, using Mediabunny (WebCodecs), then uploaded
+     to Vercel Blob under site-videos/. Removed Blob films are deleted
+     only after a successful Publish.
+     ========================================================= -->
+<script type="module">
+var MB_URL = '/vendor/mediabunny-1.66.3.min.mjs';
+var BLOB_CLIENT_URL = 'https://esm.sh/@vercel/blob@2.6.1/client';
+var ORDER = 'video-order.json';
+var VIDEO_BITRATE = 2200000;
+var SHORT_EDGE = 720;
+
+var sec = document.getElementById('videos-section');
+var grid = document.getElementById('vgrid');
+var statusEl = document.getElementById('v-status');
+var jobsEl = document.getElementById('v-jobs');
+var fileInput = document.getElementById('v-file-input');
+var publishBtn = document.getElementById('v-publish-btn');
+var modal = document.getElementById('v-modal');
+var modalVideo = document.getElementById('v-modal-video');
+
+var videos = [];
+var sha = null;
+var loaded = false;
+var dirty = false;
+var busy = 0;                 /* running conversion/upload jobs */
+var pendingDeletes = [];      /* blob urls to delete after publish */
+var modalIdx = null;
+
+function key() { try { return localStorage.getItem('mnp_admin_key') || ''; } catch (e) { return ''; } }
+function setStatus(t, cls) { statusEl.textContent = t || ''; statusEl.className = 'v-status' + (cls ? ' ' + cls : ''); }
+function markDirty() { dirty = true; updatePublish(); setStatus('Unpublished changes. Click Publish videos to go live.'); }
+function updatePublish() {
+  publishBtn.disabled = !dirty || busy > 0;
+  publishBtn.textContent = busy > 0 ? 'Processing...' : 'Publish videos';
+}
+
+/* ---- GitHub (via server proxy) ---- */
+async function ghGetOrder() {
+  var r = await fetch('/api/gh?path=' + ORDER + '&t=' + Date.now(), { headers: { 'x-admin-key': key() } });
+  if (r.status === 404) return { videos: [], sha: null };
+  if (!r.ok) throw new Error('Could not load the video list (' + r.status + ')');
+  var j = await r.json();
+  var bin = atob(j.content.replace(/\s/g, ''));
+  var bytes = new Uint8Array(bin.length);
+  for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  var data = JSON.parse(new TextDecoder().decode(bytes));
+  return { videos: data.videos || [], sha: j.sha };
+}
+async function ghPutOrder(list, prevSha) {
+  var json = JSON.stringify({ videos: list }, null, 2) + '\n';
+  var bytes = new TextEncoder().encode(json), bin = '';
+  for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  var body = { message: 'Update video order', content: btoa(bin), branch: 'main' };
+  if (prevSha) body.sha = prevSha;
+  var r = await fetch('/api/gh?path=' + ORDER, {
+    method: 'PUT', headers: { 'x-admin-key': key(), 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+  });
+  var j = await r.json().catch(function () { return {}; });
+  if (!r.ok) throw new Error(j.message || j.error || ('GitHub error ' + r.status));
+  return j.content && j.content.sha;
+}
+
+/* ---- Load ---- */
+async function load() {
+  setStatus('Loading videos...');
+  try {
+    var d = await ghGetOrder();
+    videos = d.videos; sha = d.sha; loaded = true; dirty = false; pendingDeletes = [];
+    render(); updatePublish();
+    setStatus(videos.length + ' video' + (videos.length === 1 ? '' : 's') + '. ' + videos.filter(function (v) { return !v.hidden; }).length + ' showing on the site.');
+  } catch (e) { setStatus(e.message, 'err'); }
+}
+window.__enterVideos = function () { if (!loaded && !busy) load(); };
+
+/* ---- Render ---- */
+function fmtDur(s) { if (!s && s !== 0) return ''; s = Math.round(s); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+function absUrl(u) { return /^(https?:|blob:)/.test(u) ? u : '/' + u.replace(/^\//, ''); }
+function render() {
+  grid.innerHTML = '';
+  if (!videos.length) { grid.innerHTML = '<p class="gal-empty">No videos yet. Tap Add videos to start.</p>'; return; }
+  videos.forEach(function (v, i) {
+    var c = document.createElement('div');
+    c.className = 'vcard' + (v.hidden ? ' is-hidden' : '') + ((v.w && v.h && v.w > v.h) ? ' land' : '');
+    c.dataset.i = i;
+    c.innerHTML = '<img alt="" draggable="false">' +
+      '<span class="v-num">' + (i + 1) + '</span>' +
+      (v.dur ? '<span class="v-tag">' + fmtDur(v.dur) + '</span>' : '') +
+      '<span class="v-tag v-hidden-tag">Hidden</span>' +
+      '<button class="v-btn v-hide" type="button" title="' + (v.hidden ? 'Show on site' : 'Hide from site') + '" aria-label="Hide or show">' +
+        (v.hidden ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10 10 0 0 1 12 20C5 20 1 12 1 12a18 18 0 0 1 5.06-5.94M9.9 4.24A9 9 0 0 1 12 4c7 0 11 8 11 8a18 18 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                  : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>') +
+      '</button>' +
+      '<button class="v-btn v-del" type="button" title="Delete" aria-label="Delete">&times;</button>';
+    c.querySelector('img').src = absUrl(v.poster);
+    grid.appendChild(c);
+  });
+}
+
+grid.addEventListener('click', function (e) {
+  if (Date.now() < suppressClickUntil) return;
+  var c = e.target.closest('.vcard'); if (!c) return;
+  var i = +c.dataset.i, v = videos[i];
+  if (e.target.closest('.v-hide')) { v.hidden = !v.hidden; if (!v.hidden) delete v.hidden; render(); markDirty(); return; }
+  if (e.target.closest('.v-del')) {
+    if (!confirm('Delete this video? It is removed from the site when you Publish.')) return;
+    if (/^https?:/.test(v.src)) pendingDeletes.push(v.src, v.poster);
+    videos.splice(i, 1); render(); markDirty(); return;
+  }
+  openModal(i);
+});
+
+/* ---- Reorder: mouse drags straight away, touch needs a 350ms hold ---- */
+var drag = null, suppressClickUntil = 0;
+grid.addEventListener('pointerdown', function (e) {
+  var c = e.target.closest('.vcard');
+  if (!c || e.target.closest('.v-btn') || busy) return;
+  if (e.pointerType === 'mouse' && e.button !== 0) return;
+  drag = { card: c, id: e.pointerId, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY,
+           touch: e.pointerType !== 'mouse', lifted: false, timer: null };
+  if (drag.touch) drag.timer = setTimeout(lift, 350);
+});
+function lift() {
+  if (!drag) return;
+  drag.timer = null; drag.lifted = true;
+  if (navigator.vibrate) { try { navigator.vibrate(25); } catch (e) {} }
+  var r = drag.card.getBoundingClientRect();
+  drag.dx = drag.x - r.left; drag.dy = drag.y - r.top;
+  var g = drag.card.cloneNode(true);
+  g.className = drag.card.className + ' v-ghost';
+  g.style.width = r.width + 'px'; g.style.height = r.height + 'px';
+  document.body.appendChild(g); drag.ghost = g;
+  drag.card.classList.add('v-dragging');
+  moveGhost(); scrollLoop.start();
+}
+function moveGhost() { if (drag && drag.ghost) drag.ghost.style.transform = 'translate(' + (drag.x - drag.dx) + 'px,' + (drag.y - drag.dy) + 'px) scale(1.04)'; }
+function preview() {
+  var el = document.elementFromPoint(drag.x, drag.y);
+  var t = el && el.closest ? el.closest('.vcard') : null;
+  if (!t || t === drag.card || t.parentNode !== grid) return;
+  var after = !!(drag.card.compareDocumentPosition(t) & Node.DOCUMENT_POSITION_FOLLOWING);
+  grid.insertBefore(drag.card, after ? t.nextSibling : t);
+}
+window.addEventListener('pointermove', function (e) {
+  if (!drag || e.pointerId !== drag.id) return;
+  drag.x = e.clientX; drag.y = e.clientY;
+  var dist = Math.hypot(drag.x - drag.x0, drag.y - drag.y0);
+  if (!drag.lifted) {
+    if (drag.touch && dist > 10) { clearTimeout(drag.timer); drag = null; return; }  /* it is a scroll */
+    if (!drag.touch && dist > 6) lift(); else return;
+  }
+  moveGhost(); preview();
+});
+/* Once lifted, stop the page from panning under the finger */
+document.addEventListener('touchmove', function (e) { if (drag && drag.lifted) e.preventDefault(); }, { passive: false });
+function endDrag(commit) {
+  if (!drag) return;
+  clearTimeout(drag.timer); scrollLoop.stop();
+  if (drag.lifted) {
+    suppressClickUntil = Date.now() + 400;
+    if (drag.ghost) drag.ghost.remove();
+    drag.card.classList.remove('v-dragging');
+    if (commit) {
+      var order = Array.prototype.map.call(grid.querySelectorAll('.vcard'), function (c) { return +c.dataset.i; });
+      var changed = order.some(function (o, k) { return o !== k; });
+      if (changed) { videos = order.map(function (o) { return videos[o]; }); markDirty(); }
+    }
+    render();
+  }
+  drag = null;
+}
+window.addEventListener('pointerup', function (e) { if (drag && e.pointerId === drag.id) endDrag(true); });
+window.addEventListener('pointercancel', function (e) { if (drag && e.pointerId === drag.id) endDrag(!!drag.lifted); });
+grid.addEventListener('contextmenu', function (e) { if (drag) e.preventDefault(); });
+
+/* Gentle edge auto-scroll (same feel as the Photos tab): eased, ramps up
+   over 0.6s, time based, max ~720px/s */
+var scrollLoop = (function () {
+  var raf = null, last = 0, enteredAt = 0, lastDir = 0;
+  function step(t) {
+    if (!drag || !drag.lifted) { raf = null; return; }
+    var h = window.innerHeight, zone = drag.touch ? 90 : 110;
+    var hdr = document.querySelector('header');
+    var top = hdr ? Math.max(0, hdr.getBoundingClientRect().bottom) : 0;
+    var d = 0;
+    if (drag.y < top + zone) d = -Math.min(1, (top + zone - drag.y) / zone);
+    else if (drag.y > h - zone) d = Math.min(1, (drag.y - (h - zone)) / zone);
+    var dir = d < 0 ? -1 : d > 0 ? 1 : 0;
+    if (dir && dir !== lastDir) enteredAt = t;
+    lastDir = dir;
+    var dt = last ? Math.min(50, t - last) : 16; last = t;
+    if (d) {
+      var ramp = Math.min(1, (t - enteredAt) / 600);
+      var pxS = (40 + 680 * d * d) * (0.25 + 0.75 * ramp);
+      window.scrollBy(0, (d < 0 ? -1 : 1) * pxS * dt / 1000);
+      preview();
+    }
+    raf = requestAnimationFrame(step);
+  }
+  return {
+    start: function () { if (!raf) { last = 0; lastDir = 0; raf = requestAnimationFrame(step); } },
+    stop: function () { if (raf) cancelAnimationFrame(raf); raf = null; }
+  };
+})();
+
+/* ---- Preview + cover picker ---- */
+function openModal(i) {
+  modalIdx = i;
+  var v = videos[i];
+  modalVideo.crossOrigin = 'anonymous';
+  modalVideo.src = absUrl(v.src);
+  modalVideo.poster = absUrl(v.poster);
+  modal.classList.add('open');
+}
+function closeModal() { modal.classList.remove('open'); modalVideo.pause(); modalVideo.removeAttribute('src'); modalVideo.load(); modalIdx = null; }
+document.getElementById('v-modal-close').addEventListener('click', closeModal);
+modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+document.getElementById('v-modal-cover').addEventListener('click', async function () {
+  if (modalIdx === null) return;
+  var btn = this, v = videos[modalIdx];
+  btn.disabled = true; btn.textContent = 'Saving cover...';
+  try {
+    modalVideo.pause();
+    var jpg = await frameToJpeg(modalVideo);
+    var path = 'site-videos/' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8) + '.jpg';
+    var res = await uploadBlob(path, jpg, null);
+    if (/^https?:/.test(v.poster)) pendingDeletes.push(v.poster);
+    v.poster = res.url;
+    closeModal(); render(); markDirty();
+  } catch (e) {
+    alert('Could not save the cover: ' + e.message);
+  } finally { btn.disabled = false; btn.textContent = 'Use this frame as cover'; }
+});
+
+function frameToJpeg(video) {
+  var vw = video.videoWidth, vh = video.videoHeight;
+  if (!vw || !vh) return Promise.reject(new Error('Video not ready yet'));
+  var scale = Math.min(1, SHORT_EDGE / Math.min(vw, vh));
+  var cv = document.createElement('canvas');
+  cv.width = Math.round(vw * scale); cv.height = Math.round(vh * scale);
+  cv.getContext('2d').drawImage(video, 0, 0, cv.width, cv.height);
+  return new Promise(function (res, rej) {
+    try { cv.toBlob(function (b) { b ? res(b) : rej(new Error('Could not capture frame')); }, 'image/jpeg', 0.84); }
+    catch (e) { rej(e); }
+  });
+}
+
+/* Seek a (blob URL) video to t seconds and grab a JPEG */
+function posterFrom(blob, t) {
+  return new Promise(function (resolve, reject) {
+    var url = URL.createObjectURL(blob);
+    var v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    var done = false;
+    function finish(err, val) { if (done) return; done = true; clearTimeout(to); URL.revokeObjectURL(url); err ? reject(err) : resolve(val); }
+    var to = setTimeout(function () { finish(new Error('Timed out making the cover')); }, 20000);
+    v.addEventListener('error', function () { finish(new Error('This device could not play the converted video')); });
+    v.addEventListener('loadedmetadata', function () {
+      var target = Math.min(t, Math.max(0, (v.duration || 1) * 0.3));
+      v.addEventListener('seeked', function () {
+        frameToJpeg(v).then(function (b) { finish(null, b); }, function (e) { finish(e); });
+      }, { once: true });
+      v.currentTime = target;
+      /* iOS sometimes needs a nudge before it will decode a frame */
+      setTimeout(function () { if (!done && v.readyState < 2) v.play().then(function () { v.pause(); }).catch(function () {}); }, 1500);
+    });
+    v.src = url;
+  });
+}
+
+/* ---- Blob upload ---- */
+var uploadFn = null;
+async function uploadBlob(path, blob, onProgress) {
+  if (!uploadFn) uploadFn = (await import(BLOB_CLIENT_URL)).upload;
+  var opts = {
+    access: 'public',
+    handleUploadUrl: '/api/upload',
+    clientPayload: JSON.stringify({ adminKey: key() }),
+    contentType: blob.type,
+    multipart: blob.size > 8 * 1024 * 1024
+  };
+  if (onProgress) opts.onUploadProgress = function (p) { onProgress(p.percentage / 100); };
+  return uploadFn(path, blob, opts);
+}
+
+/* ---- Convert on device ---- */
+var MB = null;
+async function convert(file, onProgress, job) {
+  if (!MB) MB = await import(MB_URL);
+  if (typeof VideoEncoder === 'undefined') throw new Error('This browser cannot convert video. Try Chrome, or Safari on iOS 16.4 or newer.');
+  var input = new MB.Input({ formats: MB.ALL_FORMATS, source: new MB.BlobSource(file) });
+  var vt = await input.getPrimaryVideoTrack();
+  if (!vt) throw new Error('No video found in this file');
+  var dw = await vt.getDisplayWidth(), dh = await vt.getDisplayHeight();
+  var scale = Math.min(1, SHORT_EDGE / Math.min(dw, dh));
+  var tw = Math.round(dw * scale / 2) * 2, th = Math.round(dh * scale / 2) * 2;
+  var fps = 30;
+  try { var st = await vt.computePacketStats(90); if (st && st.averagePacketRate) fps = st.averagePacketRate; } catch (e) {}
+  var duration = await input.computeDuration();
+  var output = new MB.Output({ format: new MB.Mp4OutputFormat({ fastStart: 'in-memory' }), target: new MB.BufferTarget() });
+  var vopts = { width: tw, height: th, fit: 'fill', codec: 'avc', quality: new MB.Quality({ bitrate: VIDEO_BITRATE }), forceTranscode: true };
+  if (fps > 31) vopts.frameRate = 30;
+  var conv = await MB.Conversion.init({
+    input: input, output: output, video: vopts,
+    /* Phone audio (AAC) is copied untouched. Anything else (e.g. Sony
+       cameras' PCM) is converted to AAC, or Opus where AAC encoding is
+       unavailable; only if neither works is the sound dropped. */
+    audio: async function (track) {
+      if (track.codec === 'aac') return {};
+      if (await MB.canEncodeAudio('aac')) return { codec: 'aac', quality: new MB.Quality({ bitrate: 160000 }) };
+      if (await MB.canEncodeAudio('opus')) return { codec: 'opus', quality: new MB.Quality({ bitrate: 128000 }) };
+      return { discard: true };
+    }
+  });
+  var lostVideo = conv.discardedTracks.some(function (d) { return d.track.type === 'video'; });
+  if (!conv.isValid || lostVideo) {
+    var why = conv.discardedTracks.map(function (d) { return d.track.type + ': ' + d.reason; }).join(', ');
+    throw new Error('This video could not be converted on this device (' + (why || 'unsupported') + '). Try it on the computer in Chrome.');
+  }
+  var noAudio = conv.discardedTracks.some(function (d) { return d.track.type === 'audio'; });
+  job.cancel = function () { conv.cancel(); };
+  conv.onProgress = onProgress;
+  await conv.execute();
+  job.cancel = null;
+  return { blob: new Blob([output.target.buffer], { type: 'video/mp4' }), w: tw, h: th, dur: duration, noAudio: noAudio };
+}
+
+/* ---- Jobs ---- */
+function newJob(file) {
+  var el = document.createElement('div');
+  el.className = 'v-job';
+  el.innerHTML = '<div class="v-job-top"><span class="v-job-name"></span><span class="v-job-stage">Waiting</span><button class="v-job-x" type="button" aria-label="Cancel">&times;</button></div><div class="v-job-bar"><i></i></div>';
+  el.querySelector('.v-job-name').textContent = file.name;
+  jobsEl.appendChild(el);
+  var job = { el: el, cancelled: false, cancel: null, finished: false };
+  el.querySelector('.v-job-x').addEventListener('click', function () {
+    if (job.finished) { el.remove(); return; }
+    job.cancelled = true; if (job.cancel) job.cancel(); stage(job, 'Cancelled'); job.el.classList.add('err');
+  });
+  return job;
+}
+function stage(job, text, frac) {
+  job.el.querySelector('.v-job-stage').textContent = text;
+  if (frac !== undefined) job.el.querySelector('.v-job-bar i').style.width = Math.round(frac * 100) + '%';
+}
+
+var queue = Promise.resolve();
+var wakeLock = null;
+async function holdWake() { try { if (navigator.wakeLock && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', function () { wakeLock = null; }); } } catch (e) {} }
+function dropWake() { if (busy === 0 && wakeLock) { wakeLock.release().catch(function () {}); wakeLock = null; } }
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && busy) holdWake(); });
+
+fileInput.addEventListener('change', function () {
+  var files = Array.prototype.slice.call(fileInput.files || []);
+  fileInput.value = '';
+  if (!files.length) return;
+  if (!loaded) { setStatus('Still loading the video list, try again in a moment.', 'err'); return; }
+  files.forEach(function (f) {
+    var job = newJob(f);
+    busy++; updatePublish();
+    queue = queue.then(function () { return processFile(f, job); });
+  });
+  holdWake();
+  setStatus('Processing. Keep this screen open until every video says Ready.');
+});
+
+async function processFile(file, job) {
+  try {
+    if (job.cancelled) return;
+    var t0 = Date.now();
+    stage(job, 'Resizing 0%', 0);
+    var out = await convert(file, function (p) {
+      var el = (Date.now() - t0) / 1000, left = p > 0.03 ? el / p - el : 0;
+      stage(job, 'Resizing ' + Math.round(p * 100) + '%' + (left > 5 ? ' (about ' + (left > 90 ? Math.round(left / 60) + ' min' : Math.round(left) + 's') + ' left)' : ''), p * 0.8);
+    }, job);
+    if (job.cancelled) return;
+    stage(job, 'Making cover', 0.8);
+    var poster = await posterFrom(out.blob, 1);
+    var base = 'site-videos/' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+    stage(job, 'Uploading 0%', 0.82);
+    var mp4 = await uploadBlob(base + '.mp4', out.blob, function (p) { stage(job, 'Uploading ' + Math.round(p * 100) + '%', 0.82 + p * 0.16); });
+    var jpg = await uploadBlob(base + '.jpg', poster, null);
+    var entry = { src: mp4.url, poster: jpg.url, alt: 'Film by Maya Nova', w: out.w, h: out.h, dur: Math.round(out.dur * 10) / 10 };
+    videos.unshift(entry);   /* new films go first; drag to move */
+    render(); dirty = true;
+    job.finished = true; job.el.classList.add('done');
+    stage(job, 'Ready (' + (out.blob.size / 1048576).toFixed(1) + ' MB, was ' + (file.size / 1048576).toFixed(0) + ' MB)' + (out.noAudio ? '. No sound: this device could not convert the audio' : ''), 1);
+  } catch (e) {
+    if (job.cancelled || (e && e.name === 'ConversionCanceledError')) { stage(job, 'Cancelled'); }
+    else { stage(job, e.message || String(e)); }
+    job.finished = true; job.el.classList.add('err');
+  } finally {
+    busy--; updatePublish(); dropWake();
+    if (busy === 0) {
+      var ok = jobsEl.querySelectorAll('.v-job.done').length;
+      if (dirty) setStatus((ok ? 'Videos ready. ' : '') + 'Click Publish videos to put them on the site.');
+    }
+  }
+}
+
+/* ---- Publish ---- */
+publishBtn.addEventListener('click', async function () {
+  if (!dirty || busy) return;
+  publishBtn.disabled = true; setStatus('Publishing...');
+  try {
+    var cur = await ghGetOrder();       /* fresh sha in case it moved */
+    sha = await ghPutOrder(videos, cur.sha);
+    dirty = false;
+    var dels = pendingDeletes.filter(function (u) { return /^https?:/.test(u) && !videos.some(function (v) { return v.src === u || v.poster === u; }); });
+    pendingDeletes = [];
+    if (dels.length) {
+      fetch('/api/videos', { method: 'DELETE', headers: { 'x-admin-key': key(), 'Content-Type': 'application/json' }, body: JSON.stringify({ urls: dels }) }).catch(function () {});
+    }
+    setStatus('Published. The site updates in about 30 seconds.', 'ok');
+  } catch (e) {
+    setStatus('Publish failed: ' + e.message + '. Your changes are still here, try again.', 'err');
+  } finally { updatePublish(); }
+});
+
+window.addEventListener('beforeunload', function (e) {
+  if (dirty || busy) { e.preventDefault(); e.returnValue = ''; }
+});
+updatePublish();
 </script>
 </body>
 </html>

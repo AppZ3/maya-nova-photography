@@ -1,6 +1,9 @@
 import { handleUpload } from '@vercel/blob/client';
 
 const PATH_RE = /^galleries\/[a-f0-9]{16}\/(photos|thumbs)\/[a-z0-9._-]+$/;
+// Site Videos tab: converted 720p films + their cover frames
+const VIDEO_RE = /^site-videos\/[a-z0-9-]+\.mp4$/;
+const POSTER_RE = /^site-videos\/[a-z0-9-]+\.jpg$/;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -26,6 +29,23 @@ export default async function handler(req, res) {
           payload.adminKey !== process.env.ADMIN_KEY
         ) {
           throw new Error('Unauthorized');
+        }
+
+        if (VIDEO_RE.test(pathname)) {
+          return {
+            allowedContentTypes: ['video/mp4'],
+            maximumSizeInBytes: 400 * 1024 * 1024,
+            addRandomSuffix: false,
+            allowOverwrite: false,
+          };
+        }
+        if (POSTER_RE.test(pathname)) {
+          return {
+            allowedContentTypes: ['image/jpeg'],
+            maximumSizeInBytes: 10 * 1024 * 1024,
+            addRandomSuffix: false,
+            allowOverwrite: true,
+          };
         }
 
         if (!PATH_RE.test(pathname)) {
