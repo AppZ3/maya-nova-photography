@@ -557,7 +557,28 @@
     .filter-chip:hover { border-color: var(--gold); }
     .filter-chip.active { background: var(--dark); border-color: var(--dark); color: #fff; font-weight: 600; }
     .reorder-note { font-size: 12px; color: var(--mid); }
-    .toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .size-ctl { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 0 4px; }
+    .size-ctl input[type=range] { width: 140px; accent-color: #8a5820; cursor: pointer; }
+    .size-step {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1px solid var(--border); background: #fff; color: var(--dark);
+      font-size: 18px; line-height: 1; cursor: pointer; touch-action: manipulation;
+    }
+    .size-step:hover { border-color: var(--gold); }
+    .size-lbl { font-size: 12px; color: var(--mid); min-width: 58px; white-space: nowrap; }
+    #grid.grid-dense { gap: 6px; }
+    #grid.grid-dense .img-label, #grid.grid-dense .cat-badge, #grid.grid-dense .meta-badges { display: none; }
+    /* Touch: chips are always visible, so on tiny tiles they go entirely.
+       Bump the size up to hide, delete or set focus. */
+    @media (hover: none) {
+      #grid.grid-dense .delete-btn, #grid.grid-dense .hide-btn, #grid.grid-dense .focal-btn, #grid.grid-dense .focal-indicator { display: none; }
+    }
+    #grid.grid-dense .delete-btn, #grid.grid-dense .hide-btn, #grid.grid-dense .focal-btn { transform: scale(0.78); transform-origin: top right; }
+    @media (max-width: 640px) {
+      .size-ctl { margin-left: 0; width: 100%; }
+      .size-ctl input[type=range] { flex: 1; width: auto; }
+    }
     .toolbar-actions .btn-ghost.active { border-color: var(--gold); background: rgba(200,168,130,0.14); color: #8a5820; font-weight: 600; }
     #bulk-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
     #bulk-count { font-size: 13px; color: var(--mid); white-space: nowrap; }
@@ -1074,6 +1095,12 @@
       <button class="btn-ghost" id="group-shoot-btn" type="button">Group by shoot</button>
       <button class="btn-ghost" id="detect-bw-btn" type="button">Detect B&amp;W</button>
       <button class="btn-ghost" id="detect-bw-cancel" type="button" style="display:none">Cancel</button>
+      <div class="size-ctl" title="Photo size: smaller fits more on screen for arranging">
+        <button class="size-step" id="size-smaller" type="button" aria-label="Smaller photos">&minus;</button>
+        <input type="range" id="size-slider" min="1" max="9" step="1" aria-label="Photo size">
+        <button class="size-step" id="size-bigger" type="button" aria-label="Bigger photos">+</button>
+        <span class="size-lbl" id="size-lbl"></span>
+      </div>
     </div>
     <div id="bulk-bar" style="display:none">
       <span id="bulk-count">0 selected</span>
@@ -1302,6 +1329,44 @@
   var zipInput    = document.getElementById('zip-input');
   var publishBtn  = document.getElementById('publish-btn');
   var gridEl     = document.getElementById('grid');
+
+  /* ---- Photo size (columns) ----
+     Slider runs small -> big; it maps to a column count. Phones and
+     desktops keep separate saved sizes (localStorage) because the same
+     column count means very different photo sizes on each. */
+  (function () {
+    var slider = document.getElementById('size-slider');
+    var lbl = document.getElementById('size-lbl');
+    if (!slider) return;
+    function mobile() { return window.innerWidth <= 640; }
+    function range() { return mobile() ? { min: 1, max: 5, def: 2 } : { min: 2, max: 10, def: 3 }; }
+    function key() { return 'mnp_grid_cols_' + (mobile() ? 'm' : 'd'); }
+    function getCols() {
+      var r = range(), v = parseInt(localStorage.getItem(key()), 10);
+      return isNaN(v) ? r.def : Math.max(r.min, Math.min(r.max, v));
+    }
+    function apply(cols) {
+      var r = range();
+      cols = Math.max(r.min, Math.min(r.max, cols));
+      try { localStorage.setItem(key(), String(cols)); } catch (e) {}
+      gridEl.style.gridTemplateColumns = 'repeat(' + cols + ', minmax(0, 1fr))';
+      gridEl.classList.toggle('grid-dense', cols >= (mobile() ? 4 : 6));
+      slider.min = 1; slider.max = r.max - r.min + 1;
+      slider.value = r.max - cols + 1;
+      lbl.textContent = cols + ' across';
+    }
+    slider.addEventListener('input', function () {
+      var r = range();
+      apply(r.max - parseInt(slider.value, 10) + 1);
+    });
+    document.getElementById('size-smaller').addEventListener('click', function () { apply(getCols() + 1); });
+    document.getElementById('size-bigger').addEventListener('click', function () { apply(getCols() - 1); });
+    var lastMobile = mobile();
+    window.addEventListener('resize', function () {
+      if (mobile() !== lastMobile) { lastMobile = mobile(); apply(getCols()); }
+    });
+    apply(getCols());
+  })();
   var focalModal    = document.getElementById('focal-modal');
   var focalImgWrap  = document.getElementById('focal-img-wrap');
   var focalModalImg = document.getElementById('focal-modal-img');
@@ -2174,26 +2239,42 @@
     });
   }
 
-  /* ---- Auto-scroll while dragging ---- */
+  /* ---- Auto-scroll while dragging ----
+     Gentle and time-based so it reads the same on 60Hz and 120Hz screens.
+     The edge zone starts below the sticky header. Speed grows with how
+     deep into the zone the pointer is (eased, so the outer part is a slow
+     creep) and ramps up over ~0.6s after entering, so a drag that only
+     brushes the edge barely moves the page. Max ~720px/s. */
   (function () {
     var rafId = null;
-    var scrollSpeed = 0;
-    var ZONE = 200;
+    var depth = 0;          /* -1..1: negative = up, 0 = not in a zone */
+    var enteredAt = 0;
+    var lastT = 0;
+    var ZONE = 110;
+    var MIN_PX_S = 40, MAX_PX_S = 720, RAMP_MS = 600;
 
-    function step() {
-      if (!scrollSpeed) { rafId = null; return; }
-      window.scrollBy(0, scrollSpeed);
+    function step(t) {
+      if (!depth || draggingIdx === null) { rafId = null; lastT = 0; return; }
+      var dt = lastT ? Math.min(50, t - lastT) : 16;
+      lastT = t;
+      var ramp = Math.min(1, (t - enteredAt) / RAMP_MS);
+      var d = Math.abs(depth);
+      var pxS = (MIN_PX_S + (MAX_PX_S - MIN_PX_S) * d * d) * (0.25 + 0.75 * ramp);
+      window.scrollBy(0, (depth < 0 ? -1 : 1) * pxS * dt / 1000);
       rafId = requestAnimationFrame(step);
     }
 
     function updateFromY(y) {
-      if (draggingIdx === null) { scrollSpeed = 0; return; }
+      if (draggingIdx === null) { depth = 0; return; }
       var h = window.innerHeight;
-      var spd = 0;
-      if (y > 0 && y < ZONE) spd = -((120 * (1 - y / ZONE)) + 15) | 0;
-      else if (y > h - ZONE && y < h) spd = ((120 * (1 - (h - y) / ZONE)) + 15) | 0;
-      scrollSpeed = spd;
-      if (spd && !rafId) rafId = requestAnimationFrame(step);
+      var hdr = document.querySelector('header');
+      var top = hdr ? Math.max(0, hdr.getBoundingClientRect().bottom) : 0;
+      var nd = 0;
+      if (y > 0 && y < top + ZONE) nd = -Math.min(1, (top + ZONE - y) / ZONE);
+      else if (y > h - ZONE && y < h) nd = Math.min(1, (y - (h - ZONE)) / ZONE);
+      if (nd && (!depth || (nd < 0) !== (depth < 0))) enteredAt = performance.now();
+      depth = nd;
+      if (depth && !rafId) rafId = requestAnimationFrame(step);
     }
 
     /* 'drag' fires on the source element, works even over non-droppable areas
@@ -2209,8 +2290,9 @@
     });
 
     document.addEventListener('dragend', function () {
-      scrollSpeed = 0;
+      depth = 0;
       if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      lastT = 0;
     });
   })();
 
@@ -2240,6 +2322,7 @@
     var suppressUntil = 0;
     var scrollRaf = null;
     var scrollSpeed = 0;
+    var scrollEnteredAt = 0;
 
     function findTouch(e) {
       for (var i = 0; i < e.changedTouches.length; i++) {
@@ -2290,7 +2373,7 @@
     /* Near-edge auto-scroll, touch mirror of the desktop drag version */
     function scrollStep() {
       if (!scrollSpeed || !lifted) { scrollRaf = null; return; }
-      window.scrollBy(0, scrollSpeed);
+      window.scrollBy(0, scrollSpeed * (0.3 + 0.7 * Math.min(1, (Date.now() - scrollEnteredAt) / 600)));
       reorderPreview();
       scrollRaf = requestAnimationFrame(scrollStep);
     }
@@ -2303,8 +2386,10 @@
       var hdr = document.querySelector('header');
       if (hdr) topEdge = Math.min(h * 0.45, hdr.getBoundingClientRect().bottom + 60);
       var spd = 0;
-      if (curY < topEdge) spd = -Math.ceil(((topEdge - curY) / topEdge) * 18 + 4);
-      else if (curY > h - zone) spd = Math.ceil(((curY - (h - zone)) / zone) * 18 + 4);
+      /* Eased so the outer edge is a slow creep; ramps up over ~0.6s */
+      if (curY < topEdge) { var dt = Math.min(1, (topEdge - curY) / zone); spd = -(1 + 9 * dt * dt); }
+      else if (curY > h - zone) { var db = Math.min(1, (curY - (h - zone)) / zone); spd = 1 + 9 * db * db; }
+      if (spd && (!scrollSpeed || (spd < 0) !== (scrollSpeed < 0))) scrollEnteredAt = Date.now();
       scrollSpeed = spd;
       if (spd && !scrollRaf) scrollRaf = requestAnimationFrame(scrollStep);
     }
