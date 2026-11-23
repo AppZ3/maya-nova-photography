@@ -8,22 +8,8 @@
       "h": 1280
     },
     {
-      "src": "vid/gallery/film-05.mp4",
-      "poster": "vid/gallery/film-05.jpg",
-      "alt": "Film by Maya Nova",
-      "w": 1280,
-      "h": 720
-    },
-    {
       "src": "vid/gallery/film-01.mp4",
       "poster": "vid/gallery/film-01.jpg",
-      "alt": "Film by Maya Nova",
-      "w": 720,
-      "h": 1280
-    },
-    {
-      "src": "vid/gallery/film-06.mp4",
-      "poster": "vid/gallery/film-06.jpg",
       "alt": "Film by Maya Nova",
       "w": 720,
       "h": 1280
@@ -43,6 +29,13 @@
       "h": 1280
     },
     {
+      "src": "vid/gallery/film-09.mp4",
+      "poster": "vid/gallery/film-09.jpg",
+      "alt": "Film by Maya Nova",
+      "w": 720,
+      "h": 1280
+    },
+    {
       "src": "vid/gallery/film-03.mp4",
       "poster": "vid/gallery/film-03.jpg",
       "alt": "Film by Maya Nova",
@@ -50,18 +43,25 @@
       "h": 1280
     },
     {
-      "src": "vid/gallery/film-08.mp4",
-      "poster": "vid/gallery/film-08.jpg",
+      "src": "vid/gallery/film-06.mp4",
+      "poster": "vid/gallery/film-06.jpg",
+      "alt": "Film by Maya Nova",
+      "w": 720,
+      "h": 1280
+    },
+    {
+      "src": "vid/gallery/film-05.mp4",
+      "poster": "vid/gallery/film-05.jpg",
       "alt": "Film by Maya Nova",
       "w": 1280,
       "h": 720
     },
     {
-      "src": "vid/gallery/film-09.mp4",
-      "poster": "vid/gallery/film-09.jpg",
+      "src": "vid/gallery/film-08.mp4",
+      "poster": "vid/gallery/film-08.jpg",
       "alt": "Film by Maya Nova",
-      "w": 720,
-      "h": 1280
+      "w": 1280,
+      "h": 720
     },
     {
       "src": "vid/gallery/film-10.mp4",
