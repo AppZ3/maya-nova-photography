@@ -2463,9 +2463,22 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   var WHEEL_THRESHOLD = 80;
   var wheelTimer = null;
 
+  /* Gallery (1) and Videos (2) are nav-only: scrolling must never flip
+     them to another section (wheel at the gallery's top/bottom, trackpad
+     momentum, or a wheel over the header/tabs used to jump to About). */
+  function inScrollSequence() { return scrollSequence.indexOf(currentIndex) !== -1; }
+  var galleryScrollEl = document.getElementById('galleryScroll');
+
   window.addEventListener('wheel', function (e) {
     e.preventDefault();
     if (isTransitioning) return;
+    if (!inScrollSequence()) {
+      /* Wheel anywhere on the gallery page scrolls the gallery */
+      if (currentIndex === 1 && galleryScrollEl && !galleryScrollEl.contains(e.target)) {
+        galleryScrollEl.scrollTop += e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+      }
+      return;
+    }
 
     wheelAccum += e.deltaY;
     clearTimeout(wheelTimer);
@@ -2490,6 +2503,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
   window.addEventListener('touchend', function (e) {
     if (touchStartY === null) return;
+    if (!inScrollSequence()) { touchStartY = null; return; }
     var dy = touchStartY - e.changedTouches[0].clientY;
     if (Math.abs(dy) > 50) {
       var dir = dy > 0 ? 1 : -1;
@@ -2503,6 +2517,7 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
      5. KEYBOARD
      ============================================================ */
   document.addEventListener('keydown', function (e) {
+    if (!inScrollSequence()) return;
     if (e.key === 'ArrowDown' || e.key === 'PageDown') {
       e.preventDefault();
       var newPos = Math.min(scrollSequence.length - 1, scrollPos + 1);
