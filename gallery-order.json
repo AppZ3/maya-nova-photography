@@ -9,6 +9,24 @@
       "shoot": "greenery"
     },
     {
+      "src": "photos/397a6528.jpg",
+      "alt": "397a6528",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a6533.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1201,
+      "h": 1800,
+      "shoot": "greenery"
+    },
+    {
       "src": "photos/397a3485.jpg",
       "alt": "397a3485",
       "category": [
@@ -19,10 +37,12 @@
       "shoot": "greenery"
     },
     {
-      "src": "photos/397a6533.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1201,
+      "src": "photos/397a2713.jpg",
+      "alt": "397a2713",
+      "category": [
+        "portrait"
+      ],
+      "w": 1200,
       "h": 1800,
       "shoot": "greenery"
     },
@@ -35,7 +55,25 @@
       "shoot": "greenery"
     },
     {
-      "src": "photos/397a6792.jpg",
+      "src": "photos/397a6363.jpg",
+      "alt": "397a6363",
+      "category": [
+        "portrait"
+      ],
+      "w": 1800,
+      "h": 1200,
+      "shoot": "greenery"
+    },
+    {
+      "src": "photos/397a3422.jpg",
+      "alt": "397a3422",
+      "category": [],
+      "hidden": false,
+      "w": 1800,
+      "h": 1200
+    },
+    {
+      "src": "photos/397a6438.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1201,
@@ -51,39 +89,19 @@
       "shoot": "greenery"
     },
     {
+      "src": "photos/397a6792.jpg",
+      "alt": "Photograph by Maya Nova",
+      "category": [],
+      "w": 1201,
+      "h": 1800,
+      "shoot": "greenery"
+    },
+    {
       "src": "photos/397a6817.jpg",
       "alt": "Photograph by Maya Nova",
       "category": [],
       "w": 1201,
       "h": 1800,
-      "shoot": "greenery"
-    },
-    {
-      "src": "photos/397a2713.jpg",
-      "alt": "397a2713",
-      "category": [
-        "portrait"
-      ],
-      "w": 1200,
-      "h": 1800,
-      "shoot": "greenery"
-    },
-    {
-      "src": "photos/397a6438.jpg",
-      "alt": "Photograph by Maya Nova",
-      "category": [],
-      "w": 1201,
-      "h": 1800,
-      "shoot": "greenery"
-    },
-    {
-      "src": "photos/397a6363.jpg",
-      "alt": "397a6363",
-      "category": [
-        "portrait"
-      ],
-      "w": 1800,
-      "h": 1200,
       "shoot": "greenery"
     },
     {
@@ -110,16 +128,6 @@
       "src": "photos/397a6851.jpg",
       "alt": "397a6851",
       "category": [],
-      "w": 1800,
-      "h": 1200,
-      "shoot": "greenery"
-    },
-    {
-      "src": "photos/397a6528.jpg",
-      "alt": "397a6528",
-      "category": [
-        "portrait"
-      ],
       "w": 1800,
       "h": 1200,
       "shoot": "greenery"
@@ -629,14 +637,6 @@
       "w": 1200,
       "h": 1800,
       "hidden": true
-    },
-    {
-      "src": "photos/397a3422.jpg",
-      "alt": "397a3422",
-      "category": [],
-      "hidden": true,
-      "w": 1800,
-      "h": 1200
     },
     {
       "src": "photos/397a3438.jpg",
