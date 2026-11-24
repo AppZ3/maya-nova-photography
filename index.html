@@ -1374,14 +1374,17 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   border-radius: 4px; overflow: hidden;
 }
 .services-portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-/* ---- Booking page side spacing mockups (?mock=a / ?mock=b), desktop only ----
-   A: the same small 40px margin on both sides, form widens to fill.
-   B: photo + form centred as a group, equal (larger) margins both sides. */
+/* ---- Booking page, desktop: one fixed composition (photo + form centred
+   with equal margins, designed at 1440x900) scaled as a unit by
+   __fitBooking to fit any screen, so proportions never change. ---- */
 @media (min-width: 961px) {
-  html.mock-a .services-layout { padding: 0 40px; }
-  html.mock-a .services-right { max-width: none; padding-right: 0; }
-  html.mock-b .services-layout { justify-content: center; }
-  html.mock-b .services-right { padding-right: 0; }
+  #section-4 { align-items: flex-start; padding-top: 88px; }
+  #section-4 .services-layout {
+    flex: none; width: 1440px; height: 788px; padding: 0 78px; gap: 48px;
+    justify-content: center; overflow: visible; zoom: var(--bk-zoom, 1);
+  }
+  #section-4 .services-portrait { flex: 0 0 38%; height: 788px; margin-top: 0; top: auto; position: relative; }
+  #section-4 .services-right { flex: 0 1 720px; max-width: 720px; height: 788px; padding: 6px 0 0 0; }
 }
 /* ---- Testimonials: rotating quote over the booking photo ---- */
 .services-portrait { position: sticky; }
@@ -1420,16 +1423,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
 /* Shorter desktop screens: narrower photo (form gets wider, pills wrap less)
    and tighter vertical rhythm, so the fit-to-screen scale stays close to 1. */
-@media (min-width: 961px) and (max-height: 860px) {
-  .services-layout { gap: 36px; }
-  .services-portrait { flex-basis: 30%; }
-  .services-right { max-width: 800px; padding-top: 84px; padding-bottom: 16px; }
-  .services-book .contact-eyebrow { margin-bottom: 6px; }
-  .services-book .contact-h2 { font-size: 28px; margin-bottom: 8px; }
-  .book-form { gap: 8px; }
-  .book-textarea { min-height: 50px; }
-  .services-book .contact-direct { margin-top: 12px !important; }
-}
 #servicesScroll { overflow-y: auto; height: 100%; }
 
 .services-book {
@@ -1764,6 +1757,10 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 
   .about-layout { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .about-right, #section-3 .about-right { height: 250px; flex: 0 0 250px; order: -1; }
+  /* Photo starts below the fixed 58px nav and is cropped from the top,
+     so Maya's head is never under the menu or cut off. */
+  #section-3 .about-right { height: 300px; flex: 0 0 300px; margin-top: 58px; }
+  #section-3 .about-right img { object-position: 50% 0%; }
   .about-left { padding: 40px 28px 40px; }
   .about-cols { columns: 1; }
 
@@ -2099,7 +2096,6 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
 <!-- ============================================================
      SECTION 3: SERVICES
      ============================================================ -->
-<script>(function(){var m=(location.search.match(/[?&]mock=([ab])/)||[])[1];if(m)document.documentElement.classList.add('mock-'+m);})();</script>
 <section class="section" id="section-4" aria-label="Book a session">
   <div class="services-layout" id="servicesScroll">
 
@@ -3179,11 +3175,17 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     var right = document.querySelector('#section-4 .services-right');
     if (!book || !right) return;
     var MIN = 0.62;
+    var layout = document.querySelector('#section-4 .services-layout');
+    var DESIGN_W = 1440, DESIGN_H = 788, TOP = 88, BOTTOM = 24;
     function fit() {
       book.style.zoom = '';
-      if (window.innerWidth <= 960) return;
+      if (window.innerWidth <= 960) { layout.style.removeProperty('--bk-zoom'); return; }
+      /* Whole composition scales to the screen (same proportions everywhere) */
+      var z = Math.min(window.innerWidth / DESIGN_W, (window.innerHeight - TOP - BOTTOM) / DESIGN_H);
+      layout.style.setProperty('--bk-zoom', z.toFixed(4));
+      /* Inside the composition the form still shrinks if it is taller than its column */
       var cs = getComputedStyle(right);
-      var avail = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      var avail = DESIGN_H - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
       var h = book.offsetHeight;
       if (h > avail) book.style.zoom = Math.max(MIN, avail / h).toFixed(3);
     }
