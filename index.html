@@ -806,6 +806,40 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
   stroke-linecap: round;
 }
 
+/* Clear way back from any enlarged photo or video (phone + desktop) */
+.lb-back {
+  position: fixed;
+  top: max(18px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left));
+  z-index: 2;
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 44px; padding: 0 18px 0 14px;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: rgba(20,14,6,0.55);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  color: #fffef8;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+  cursor: pointer; touch-action: manipulation;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s ease, background 0.2s;
+}
+.lb-back svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lb-back:hover { background: rgba(20,14,6,0.8); }
+.gallery-lightbox.open .lb-back { opacity: 1; pointer-events: all; }
+.gallery-lightbox-close {
+  z-index: 2;
+  top: max(24px, env(safe-area-inset-top)) !important;
+  background: rgba(20,14,6,0.55) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+}
+.gallery-lightbox-close svg { stroke: #fffef8 !important; }
+@media (max-width: 960px) {
+  /* Media sits below the back button so the button never covers it */
+  .gallery-lightbox-img { max-width: 100vw; max-height: calc(100vh - 150px); }
+  .gallery-lightbox .video-lightbox-player { max-width: 100vw; max-height: calc(100vh - 150px); }
+  .gallery-lightbox-close { right: max(18px, env(safe-area-inset-right)) !important; }
+}
+
 /* Video tiles in the video gallery section */
 .video-wrap video {
   width: 100%;
@@ -3163,6 +3197,47 @@ img[src="photos/avatar.jpg"] { object-position: center 25%; }
     if (lightbox) lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && lightbox && lightbox.classList.contains('open')) closeLightbox();
+    });
+  })();
+
+
+  /* ============================================================
+     LIGHTBOX WAY BACK
+     Every .gallery-lightbox gets a labelled Back button (same action as
+     its close X), and opening one adds a browser history entry so the
+     phone's back gesture / button closes the photo or video instead of
+     leaving the site. Closing with the button pops that entry again.
+     ============================================================ */
+  (function () {
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.gallery-lightbox'));
+    /* Lift each lightbox to <body>: inside a section it stacks under the
+       fixed nav, which then covers (and steals taps from) its top edge. */
+    boxes.forEach(function (box) { if (box.parentNode !== document.body) document.body.appendChild(box); });
+    var openBox = null, pushed = false;
+    function closeBtn(box) { return box.querySelector('.gallery-lightbox-close'); }
+    boxes.forEach(function (box) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'lb-back';
+      b.setAttribute('aria-label', box.id === 'galleryLightbox' ? 'Back to gallery' : 'Back');
+      b.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg><span>' + (box.id === 'galleryLightbox' ? 'Back to gallery' : 'Back') + '</span>';
+      b.addEventListener('click', function (e) { e.stopPropagation(); var c = closeBtn(box); if (c) c.click(); });
+      box.appendChild(b);
+      new MutationObserver(function () {
+        var isOpen = box.classList.contains('open');
+        if (isOpen && openBox !== box) {
+          openBox = box;
+          try { history.pushState({ mnLightbox: 1 }, ''); pushed = true; } catch (e) { pushed = false; }
+        } else if (!isOpen && openBox === box) {
+          openBox = null;
+          if (pushed) { pushed = false; try { history.back(); } catch (e) {} }
+        }
+      }).observe(box, { attributes: true, attributeFilter: ['class'] });
+    });
+    window.addEventListener('popstate', function () {
+      if (!openBox) return;
+      pushed = false;              /* the entry is already gone */
+      var c = closeBtn(openBox);
+      if (c) c.click();
     });
   })();
 
